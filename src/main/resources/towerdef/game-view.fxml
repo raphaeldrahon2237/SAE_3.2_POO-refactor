@@ -20,7 +20,7 @@
       <Pane prefHeight="518.0" prefWidth="137.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER" />
    </left>
    <center>
-      <TilePane fx:id="TilePane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER" />
+      <TilePane fx:id="tilePane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
       <HBox alignment="CENTER" prefHeight="31.0" prefWidth="1170.0" spacing="1000.0" BorderPane.alignment="CENTER">
