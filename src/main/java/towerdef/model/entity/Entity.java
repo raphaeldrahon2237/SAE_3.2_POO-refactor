@@ -13,7 +13,9 @@ public abstract class Entity {
         this.atkSpeed=atkSpeed;
     }
 
-    public boolean isAlive(){return hp<0;}
+    public boolean isAlive(){
+        return hp > 0;
+    }
 
 
 }
