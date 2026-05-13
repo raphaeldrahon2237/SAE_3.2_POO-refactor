@@ -50,24 +50,18 @@ public class GameController implements Initializable {
                 ImageView iv= new ImageView();
                 if (map[i][j] == 1) {
                     iv.setImage(green_tile);
-                    //tilePane.getChildren().add(imageViewGreen);
                 }
                 else if (map[i][j] == 2) {
                     iv.setImage(yellow_tile);
-                    System.out.println("image yellow add");
-                    //tilePane.getChildren().add(imageViewYellow);
                 }
                 else if (map[i][j] == 3) {
                     iv.setImage(blue_tile);
-                    //tilePane.getChildren().add(imageViewBlue);
                 }
                 else if (map[i][j] == 4) {
                     iv.setImage(red_tile);
-                    //tilePane.getChildren().add(imageViewRed);
                 }
                 else if (map[i][j] == 5) {
                     iv.setImage(gray_tile);
-                    //tilePane.getChildren().add(imageViewGray);
                 }
                 tilePane.getChildren().add(iv);
             }
