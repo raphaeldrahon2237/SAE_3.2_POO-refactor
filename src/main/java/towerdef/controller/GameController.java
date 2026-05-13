@@ -18,22 +18,14 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         remplirTerrain();
-        
     }
 
     public void remplirTerrain () {
-        Image blue_tile = new Image("file:images/blue-tile.png");
-        Image gray_tile = new Image("file:images/gray-tile.png");
-        Image red_tile = new Image("file:images/red-tile.png");
-        Image yellow_tile = new Image("file:images/yellow-tile.png");
-        Image green_tile = new Image("file:images/green-tile.png");
-
-        /*
-        ImageView imageViewBlue = new ImageView(blue_tile);
-        ImageView imageViewGray = new ImageView(gray_tile);
-        ImageView imageViewRed = new ImageView(red_tile);
-        ImageView imageViewGreen = new ImageView(green_tile);
-        ImageView imageViewYellow = new ImageView(yellow_tile);*/
+        Image blue_tile = new Image(getClass().getResourceAsStream("/images/blue-tile.png"));
+        Image gray_tile = new Image(getClass().getResourceAsStream("/images/gray-tile.png"));
+        Image red_tile = new Image(getClass().getResourceAsStream("/images/red-tile.png"));
+        Image yellow_tile = new Image(getClass().getResourceAsStream("/images/yellow-tile.png"));
+        Image green_tile = new Image(getClass().getResourceAsStream("/images/green-tile.png"));
 
         int[][] map = { //grass=1 path=2 water=3 base=4 mountains=5
                 {1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1},
@@ -82,4 +74,3 @@ public class GameController implements Initializable {
         }
     }
 }
-
