@@ -1,6 +1,7 @@
 module towerdef {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
 
     opens towerdef.controller to javafx.fxml;
 
@@ -9,5 +10,4 @@ module towerdef {
     exports towerdef.model;
     exports towerdef.model.map;
     exports towerdef.model.entity;
-    exports towerdef.model.tower;
 }
