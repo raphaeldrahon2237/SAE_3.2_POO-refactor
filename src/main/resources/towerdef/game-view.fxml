@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="towerdef.controller.GameController">
+<BorderPane prefHeight="839.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
+   <top>
+      <VBox prefHeight="30.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField alignment="CENTER" text="TOWER DEFENSE" />
+         </children>
+      </VBox>
+   </top>
+   <left>
+      <Pane prefHeight="518.0" prefWidth="137.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <TilePane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="1170.0" spacing="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
+            <Label contentDisplay="RIGHT" text="gold" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
