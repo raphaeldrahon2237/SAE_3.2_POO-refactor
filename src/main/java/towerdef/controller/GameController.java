@@ -5,6 +5,8 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -31,6 +33,8 @@ public class GameController implements Initializable {
     @FXML
     private TilePane tilePane;
 
+    private DoubleProperty xProperty = new SimpleDoubleProperty();
+    private DoubleProperty yProperty = new SimpleDoubleProperty();
     private Timeline gameLoop;
     private Timeline movementTimeline;
     private MapGrid mapGrid;
@@ -120,3 +124,4 @@ public class GameController implements Initializable {
         movementTimeline.play();
     }
 }
+
