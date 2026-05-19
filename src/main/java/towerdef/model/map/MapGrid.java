@@ -1,5 +1,8 @@
 package towerdef.model.map;
+import javafx.geometry.Point2D;
 
+import java.util.ArrayList;
+import java.util.List;
 public class MapGrid {
 
     private int[][] map;
@@ -30,6 +33,29 @@ public class MapGrid {
                 };
     }
 
+    public List<Point2D> getChemin() {
+        List<Point2D> chemin = new ArrayList<>();
+
+        ajouterLigneHorizontale(chemin, 1, 7, 0);
+        ajouterLigneVerticale(chemin, 1, 5, 7);
+        ajouterLigneHorizontale(chemin, 8, 11, 5);
+        ajouterLigneVerticale(chemin, 6, 10, 11);
+        ajouterLigneHorizontale(chemin, 12, 15, 10);
+
+        return chemin;
+    }
+
+    private void ajouterLigneHorizontale(List<Point2D> chemin, int xDebut, int xFin, int y) {
+        for (int x = xDebut; x <= xFin; x++) {
+            chemin.add(new Point2D(x, y));
+        }
+    }
+
+    private void ajouterLigneVerticale(List<Point2D> chemin, int yDebut, int yFin, int x) {
+        for (int y = yDebut; y <= yFin; y++) {
+            chemin.add(new Point2D(x, y));
+        }
+    }
     public int[][] getMap() {
         return map;
     }
