@@ -1,57 +1,87 @@
 package towerdef.model.entity;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+
 public abstract class Entity {
     private int hp;
     private int damage;
     private int armor;
     private int atkSpeed;
-    private int x;
-    private int y;
 
-    public Entity(int hp, int damage, int armor, int atkSpeed, int x, int y){
-        this.hp=hp;
-        this.damage=damage;
-        this.armor=armor;
-        this.atkSpeed=atkSpeed;
-        this.x=x;
-        this.y=y;
+    private  DoubleProperty x = new SimpleDoubleProperty();
+    private  DoubleProperty y = new SimpleDoubleProperty();
+
+    public Entity(int hp, int damage, int armor, int atkSpeed, double x, double y) {
+        this.hp = hp;
+        this.damage = damage;
+        this.armor = armor;
+        this.atkSpeed = atkSpeed;
+        this.x.set(x);
+        this.y.set(y);
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return hp > 0;
     }
 
-    public int getX() {
+    public double getX() {
+        return x.get();
+    }
+
+    public double getY() {
+        return y.get();
+    }
+
+    public DoubleProperty xProperty() {
         return x;
     }
 
-    public int getY() {
+    public DoubleProperty yProperty() {
         return y;
     }
 
-    public void moveUp(int dy) {
-        y -= dy;
+    public void setX(double x) {
+        this.x.set(x);
     }
 
-    public void moveDown(int dy) {
-        y += dy;
+    public void setY(double y) {
+        this.y.set(y);
     }
 
-    public void moveLeft(int dx) {
-        x -= dx;
+    public void moveUp(double dy) {
+        setY(getY() - dy);
     }
 
-    public void moveRight(int dx) {
-        x += dx;
+    public void moveDown(double dy) {
+        setY(getY() + dy);
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void moveLeft(double dx) {
+        setX(getX() - dx);
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void moveRight(double dx) {
+        setX(getX() + dx);
     }
 
+    public int getHp() {
+        return hp;
+    }
 
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getAtkSpeed() {
+        return atkSpeed;
+    }
 }
