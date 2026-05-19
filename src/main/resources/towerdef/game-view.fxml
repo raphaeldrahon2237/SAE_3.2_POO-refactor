@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="704.0" prefWidth="1184.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
+<BorderPane prefHeight="672.0" prefWidth="1184.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
    <top>
       <VBox prefHeight="32.0" BorderPane.alignment="CENTER">
          <children>
