@@ -59,7 +59,6 @@ public class GameController implements Initializable {
 
         Deplacement deplacement = new Deplacement(recruit, mapGrid.getChemin(), 0.35);
         deplacement.start();
-        gamePane.getChildren().add(cible);
     }
 
     private void initAnimation() {
