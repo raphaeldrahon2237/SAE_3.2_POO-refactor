@@ -25,7 +25,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         MapGrid mapGrid = new MapGrid();
-        int map[][] = mapGrid.getMap();
+        int[][] map = mapGrid.getMap();
         ViewTerrain.renderMap(tilePane, map);
 
         Recruit recruit = new Recruit();

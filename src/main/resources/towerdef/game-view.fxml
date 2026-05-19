@@ -8,30 +8,26 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="839.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
+<BorderPane prefHeight="704.0" prefWidth="1184.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
    <top>
-      <VBox prefHeight="30.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="32.0" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER" text="TOWER DEFENSE" />
          </children>
       </VBox>
    </top>
    <left>
-      <Pane prefHeight="518.0" prefWidth="137.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER" />
+      <Pane prefWidth="160.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER" />
    </left>
    <center>
-      <Pane fx:id="gamePane" prefWidth="512.0" prefHeight="512.0">
+      <Pane fx:id="gamePane" prefHeight="640.0" prefWidth="1024.0">
          <children>
-            <TilePane fx:id="tilePane"
-                      prefWidth="512.0"
-                      prefHeight="512.0"
-                      prefTileWidth="32.0"
-                      prefTileHeight="32.0" />
+            <TilePane fx:id="tilePane" prefHeight="640.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1024.0" />
          </children>
       </Pane>
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="1170.0" spacing="1000.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1184.0" spacing="1000.0" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
             <Label contentDisplay="RIGHT" text="gold" />

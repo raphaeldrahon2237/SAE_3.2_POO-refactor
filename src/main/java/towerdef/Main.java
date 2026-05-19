@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("game-view.fxml"));
-        Scene scene = new Scene(loader.load(), 1280, 720);
+        Scene scene = new Scene(loader.load(), 1184, 704);
 
         stage.setTitle("TowerDef");
         stage.setScene(scene);
@@ -20,4 +20,3 @@ public class Main extends Application {
         launch(args);
     }
 }
-
