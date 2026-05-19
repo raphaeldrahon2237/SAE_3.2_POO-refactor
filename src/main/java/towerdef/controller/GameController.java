@@ -28,12 +28,12 @@ public class GameController implements Initializable {
         int[][] map = mapGrid.getMap();
         ViewTerrain.renderMap(tilePane, map);
 
-        Recruit recruit = new Recruit();
+        Recruit recruit = new Recruit(10,10);
         Circle circle = new Circle(10);
         circle.setFill(Color.BLUE);
 
-        circle.setCenterX(recruit.getPos().getX() * TILESIZE + TILESIZE / 2.0);
-        circle.setCenterY(recruit.getPos().getY() * TILESIZE + TILESIZE / 2.0);
+        circle.setCenterX(recruit.getX() * TILESIZE + TILESIZE / 2.0);
+        circle.setCenterY(recruit.getY() * TILESIZE + TILESIZE / 2.0);
 
         gamePane.getChildren().add(circle);
 
