@@ -1,18 +1,20 @@
 package towerdef.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import towerdef.View.ViewTerrain;
-import towerdef.model.Core.Deplacement;
+import towerdef.model.core.Movement;
 import towerdef.model.entity.Recruit;
 import towerdef.model.map.MapGrid;
 
@@ -29,12 +31,13 @@ public class GameController implements Initializable {
     @FXML
     private TilePane tilePane;
 
-    private DoubleProperty xProperty = new SimpleDoubleProperty();
-    private DoubleProperty yProperty = new SimpleDoubleProperty();
     private Timeline gameLoop;
+    private Timeline movementTimeline;
     private MapGrid mapGrid;
-    private int temps;
-
+    private Recruit recruit;
+    private Movement movement;
+    private int time;
+    private double secondsPerTile;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,7 +45,7 @@ public class GameController implements Initializable {
         int[][] map = mapGrid.getMap();
         ViewTerrain.renderMap(tilePane, map);
 
-        Recruit recruit = new Recruit(1, 0);
+        recruit = new Recruit(1, 0);
 
         Circle circle = new Circle(10);
         circle.setFill(Color.BLUE);
@@ -57,32 +60,63 @@ public class GameController implements Initializable {
 
         gamePane.getChildren().add(circle);
 
-        Deplacement deplacement = new Deplacement(recruit, mapGrid.getChemin(), 0.35);
-        deplacement.start();
+        secondsPerTile = 0.35;
+        movement = new Movement(recruit, mapGrid.getPath());
+        movement.start();
+        initAnimation();
     }
 
     private void initAnimation() {
         gameLoop = new Timeline();
-        temps=0;
+        time = 0;
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
-        KeyFrame kf = new KeyFrame(
-                // on définit le FPS (nbre de frame par seconde)
+        KeyFrame keyFrame = new KeyFrame(
+                // on definit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
-                // on définit ce qui se passe à chaque frame
+                // on definit ce qui se passe a chaque frame
                 // c'est un eventHandler d'ou le lambda
-                (ev ->{
-                    if(temps==100){
-                        System.out.println("fini");
-                        gameLoop.stop();
-                    }
-                    else if (temps%5==0){
-                        System.out.println("un tour");
-                    }
-                    temps++;
+                (ev -> {
+                    updateMovement();
+                    time++;
                 })
         );
-        gameLoop.getKeyFrames().add(kf);
+        gameLoop.getKeyFrames().add(keyFrame);
+        gameLoop.play();
+    }
+
+    private void updateMovement() {
+        if (movementTimeline != null && movementTimeline.getStatus() == Animation.Status.RUNNING) {
+            return;
+        }
+
+        Point2D target = movement.getNextTarget();
+
+        if (target == null) {
+            gameLoop.stop();
+            return;
+        }
+
+        movementTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(secondsPerTile),
+
+                        // On anime la propriete x de la troupe jusqu'au x de la cible
+                        new KeyValue(
+                                recruit.xProperty(),
+                                target.getX(),
+                                Interpolator.LINEAR
+                        ),
+
+                        // pareil pour Y
+                        new KeyValue(
+                                recruit.yProperty(),
+                                target.getY(),
+                                Interpolator.LINEAR
+                        )
+                )
+        );
+
+        movementTimeline.play();
     }
 }
-
