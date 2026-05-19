@@ -2,8 +2,6 @@ package towerdef.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
@@ -29,17 +27,17 @@ public class GameController implements Initializable {
     @FXML
     private TilePane tilePane;
 
-    private DoubleProperty xProperty = new SimpleDoubleProperty();
-    private DoubleProperty yProperty = new SimpleDoubleProperty();
     private Timeline gameLoop;
     private MapGrid mapGrid;
     private int temps;
 
+    private Deplacement deplacement;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mapGrid = new MapGrid();
         int[][] map = mapGrid.getMap();
+
         ViewTerrain.renderMap(tilePane, map);
 
         Recruit recruit = new Recruit(1, 0);
@@ -57,32 +55,34 @@ public class GameController implements Initializable {
 
         gamePane.getChildren().add(circle);
 
-        Deplacement deplacement = new Deplacement(recruit, mapGrid.getChemin(), 0.35);
+        deplacement = new Deplacement(recruit, mapGrid.getChemin(), 0.05);
         deplacement.start();
+
+        initAnimation();
+        gameLoop.play();
     }
 
     private void initAnimation() {
         gameLoop = new Timeline();
-        temps=0;
+        temps = 0;
+
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                // on définit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
-                // on définit ce qui se passe à chaque frame
-                // c'est un eventHandler d'ou le lambda
-                (ev ->{
-                    if(temps==100){
+                ev -> {
+                    deplacement.update();
+
+                    if (temps == 100) {
                         System.out.println("fini");
-                        gameLoop.stop();
-                    }
-                    else if (temps%5==0){
+                    } else if (temps % 5 == 0) {
                         System.out.println("un tour");
                     }
+
                     temps++;
-                })
+                }
         );
+
         gameLoop.getKeyFrames().add(kf);
     }
 }
-

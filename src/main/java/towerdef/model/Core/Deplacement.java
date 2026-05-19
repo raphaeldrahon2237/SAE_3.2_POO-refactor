@@ -1,14 +1,6 @@
 package towerdef.model.Core;
 
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-
 import javafx.geometry.Point2D;
-
-import javafx.util.Duration;
-
 import towerdef.model.entity.Troop;
 
 import java.util.ArrayList;
@@ -16,95 +8,92 @@ import java.util.List;
 
 public class Deplacement {
 
+    // La troupe que l'on veut déplacer
     private Troop troop;
 
-    // Chaque Point2D représente une case avec x et y
     private List<Point2D> chemin;
 
-    private double dureeParCase;
-
-    private Timeline timeline;
+    private double vitesse;
 
     private int indexCaseActuelle;
 
-    // Si on ne précise pas la durée, elle sera de 0.35 seconde par case
+    private boolean enCours;
+
     public Deplacement(Troop troop, List<Point2D> chemin) {
-        this(troop, chemin, 0.35);
+        this(troop, chemin, 0.05);
     }
 
-    public Deplacement(Troop troop, List<Point2D> chemin, double dureeParCase) {
+    public Deplacement(Troop troop, List<Point2D> chemin, double vitesse) {
         this.troop = troop;
-
         this.chemin = new ArrayList<>(chemin);
-
-        this.dureeParCase = dureeParCase;
+        this.vitesse = vitesse;
+        this.indexCaseActuelle = 0;
+        this.enCours = false;
     }
 
     public void start() {
-
         if (chemin.isEmpty()) {
             return;
         }
 
-        stop();
-
-        // On récupère la première case du chemin
+        // On place la troupe sur la première case du chemin
         Point2D depart = chemin.get(0);
-
-        // On place la troupe au point de départ
         troop.setX(depart.getX());
         troop.setY(depart.getY());
 
-        // On indique que la troupe est actuellement sur la première case
-        indexCaseActuelle = 0;
+        // La prochaine cible sera la deuxième case du chemin
+        indexCaseActuelle = 1;
 
-        deplacerVersProchaineCase();
+        enCours = true;
     }
 
     public void stop() {
-
-        if (timeline != null) {
-            timeline.stop();
-        }
+        enCours = false;
     }
 
-    private void deplacerVersProchaineCase() {
-
-        // On passe à la case suivante
-        indexCaseActuelle++;
-
-        // Si l'index dépasse la taille du chemin cela veut dire que la troupe est arrivée à la fin
-        if (indexCaseActuelle >= chemin.size()) {
+    public void update() {
+        if (!enCours) {
             return;
         }
 
-        // On récupère la case cible
+        if (indexCaseActuelle >= chemin.size()) {
+            stop();
+            return;
+        }
+
+        // On récupère la prochaine case cible
         Point2D cible = chemin.get(indexCaseActuelle);
 
-        // On crée une animation qui va modifier progressivement x et y
-        timeline = new Timeline(
-                new KeyFrame(
-                        Duration.seconds(dureeParCase),
+        double xActuel = troop.getX();
+        double yActuel = troop.getY();
 
-                        // On anime la propriété x de la troupe jusqu'au x de la cible
-                        new KeyValue(
-                                troop.xProperty(),
-                                cible.getX(),
-                                Interpolator.LINEAR
-                        ),
+        double xCible = cible.getX();
+        double yCible = cible.getY();
 
-                        // pareil pour Y
-                        new KeyValue(
-                                troop.yProperty(),
-                                cible.getY(),
-                                Interpolator.LINEAR
-                        )
-                )
-        );
+        double dx = xCible - xActuel;
+        double dy = yCible - yActuel;
 
-        // on relance automatiquement le déplacement vers la prochaine case
-        timeline.setOnFinished(event -> deplacerVersProchaineCase());
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
-        timeline.play();
+        // Si la troupe est assez proche de la cible,on la place directement sur la case cible
+        if (distance <= vitesse) {
+            troop.setX(xCible);
+            troop.setY(yCible);
+
+            // Puis on passe à la case suivante
+            indexCaseActuelle++;
+            return;
+        }
+
+        // Normalisation du vecteur de déplacement
+        double directionX = dx / distance;
+        double directionY = dy / distance;
+
+        troop.setX(xActuel + directionX * vitesse);
+        troop.setY(yActuel + directionY * vitesse);
+    }
+
+    public boolean isEnCours() {
+        return enCours;
     }
 }
