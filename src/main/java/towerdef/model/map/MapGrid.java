@@ -36,11 +36,12 @@ public class MapGrid {
     public List<Point2D> getPath() {
         List<Point2D> path = new ArrayList<>();
 
-        addHorizontalLine(path, 1, 7, 0);
-        addVerticalLine(path, 1, 5, 7);
-        addHorizontalLine(path, 8, 11, 5);
-        addVerticalLine(path, 6, 10, 11);
-        addHorizontalLine(path, 12, 15, 10);
+        addHorizontalLine(path, 1, 9, 2);
+        addVerticalLine(path, 2, 5, 9);
+        addHorizontalLine(path, 9, 10, 5);
+        addVerticalLine(path, 5, 8, 10);
+        addHorizontalLine(path, 10, 16, 8);
+        addVerticalLine(path, 8, 12, 16);
 
         return path;
     }
