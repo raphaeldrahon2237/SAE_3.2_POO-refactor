@@ -13,11 +13,11 @@ public abstract class Entity {
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
 
-    public static int netxId=0;
+    public static int nextId=0;
 
     public Entity(int hp, int damage, int armor, int atkSpeed, double x, double y) {
-        this.id=netxId;
-        netxId++;
+        this.id=nextId;
+        nextId++;
         this.hp = hp;
         this.damage = damage;
         this.armor = armor;
