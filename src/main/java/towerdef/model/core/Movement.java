@@ -22,18 +22,18 @@ public class Movement {
 
     public void start() {
         if (!path.isEmpty()) {
-            // On recupere la premiere case du chemin
             Point2D start = path.get(0);
 
+            // On place la troupe au point de depart
             troop.setX(start.getX());
             troop.setY(start.getY());
 
-            // On indique que la troupe est actuellement sur la premiere case
             currentTileIndex = 0;
         }
     }
 
     public Point2D getNextTarget() {
+        // On passe a la case suivante
         currentTileIndex++;
 
         Point2D nextTarget = null;
