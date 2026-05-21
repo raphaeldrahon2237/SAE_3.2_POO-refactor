@@ -18,6 +18,7 @@ import towerdef.model.core.Movement;
 import towerdef.model.entity.Recruit;
 import towerdef.model.map.MapGrid;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,6 +31,7 @@ public class GameController implements Initializable {
 
     @FXML
     private TilePane tilePane;
+
 
     private Timeline gameLoop;
     private Timeline movementTimeline;
@@ -80,7 +82,7 @@ public class GameController implements Initializable {
                     updateMovement();
                     time++;
                 })
-        );
+        );  
         gameLoop.getKeyFrames().add(keyFrame);
         gameLoop.play();
     }

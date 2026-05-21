@@ -2,6 +2,7 @@ module towerdef {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires java.desktop;
 
     opens towerdef.controller to javafx.fxml;
 
