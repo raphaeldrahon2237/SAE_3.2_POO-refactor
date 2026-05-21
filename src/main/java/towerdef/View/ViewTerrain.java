@@ -10,7 +10,6 @@ public class ViewTerrain {
         Image grass2 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass2.png"));
         Image grass3 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass3.png"));
 
-        Image gray_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/gray-tile.png"));
 
         Image base = new Image(ViewTerrain.class.getResourceAsStream("/images/base.png"));
 
@@ -40,8 +39,6 @@ public class ViewTerrain {
                     case 3: iv.setImage(grass3);
                         break;
                     case 4: iv.setImage(base);
-                        break;
-                    case 5: iv.setImage(gray_tile);
                         break;
                     case 6: iv.setImage(road_down);
                         break;
