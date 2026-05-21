@@ -49,22 +49,6 @@ public abstract class Entity {
         this.y.set(y);
     }
 
-    public void moveUp(double dy) {
-        setY(getY() - dy);
-    }
-
-    public void moveDown(double dy) {
-        setY(getY() + dy);
-    }
-
-    public void moveLeft(double dx) {
-        setX(getX() - dx);
-    }
-
-    public void moveRight(double dx) {
-        setX(getX() + dx);
-    }
-
     public int getHp() {
         return hp;
     }
