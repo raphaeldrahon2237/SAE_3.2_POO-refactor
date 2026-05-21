@@ -6,11 +6,11 @@ import javafx.scene.layout.TilePane;
 public class ViewTerrain {
 
     public static void renderMap(TilePane tilePane, int[][] map) {
-        Image blue_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/blue-tile.png"));
+        Image grass1 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass1.png"));
+        Image grass2 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass2.png"));
+        Image grass3 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass3.png"));
         Image gray_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/gray-tile.png"));
         Image red_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/red-tile.png"));
-        Image yellow_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/yellow-tile.png"));
-        Image green_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/green-tile.png"));
         Image road_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-vertical.png"));
         Image road_side = new Image(ViewTerrain.class.getResourceAsStream("/images/road-side.png"));
         Image road_turn_down_left = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-left.png"));
@@ -26,11 +26,11 @@ public class ViewTerrain {
             for (int j = 0; j <= map[0].length - 1; j++) {
                 ImageView iv= new ImageView();
                 switch (map[i][j]){
-                    case 1: iv.setImage(green_tile);
+                    case 1: iv.setImage(grass1);
                         break;
-                    case 2: iv.setImage(yellow_tile);
+                    case 2: iv.setImage(grass2);
                         break;
-                    case 3: iv.setImage(blue_tile);
+                    case 3: iv.setImage(grass3);
                         break;
                     case 4: iv.setImage(red_tile);
                         break;
