@@ -5,7 +5,7 @@ public class TileType {
     public static final int GRASS2 = 2;
     public static final int GRASS3 = 3;
     public static final int BASE = 4;
-    public static final int  MONTAIN = 5;
+    public static final int  GRAY = 5;
     public static final int ROADVERTICAL=6;
     public static final int ROADSIDE=7;
     public static final int ROADDOWNLEFT=8;
@@ -15,6 +15,8 @@ public class TileType {
     public static final int CROSSROADDOWN=12;
     public static final int CROSSROADUP=13;
     public static final int CROSSROADFULL=14;
+    public static final int  MOUNTAIN1 = 15;
+    public static final int  MOUNTAIN2 = 16;
     public static final int TILESIZE = 32;
 
 

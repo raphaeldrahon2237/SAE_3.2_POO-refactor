@@ -9,8 +9,11 @@ public class ViewTerrain {
         Image grass1 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass1.png"));
         Image grass2 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass2.png"));
         Image grass3 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass3.png"));
+
         Image gray_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/gray-tile.png"));
-        Image red_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/red-tile.png"));
+
+        Image base = new Image(ViewTerrain.class.getResourceAsStream("/images/base.png"));
+
         Image road_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-vertical.png"));
         Image road_side = new Image(ViewTerrain.class.getResourceAsStream("/images/road-side.png"));
         Image road_turn_down_left = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-left.png"));
@@ -20,6 +23,10 @@ public class ViewTerrain {
         Image road_intersection_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-down.png"));
         Image road_intersection_up = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-up.png"));
         Image road_intersection_full= new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-full.png"));
+
+        Image mountain1 = new Image(ViewTerrain.class.getResourceAsStream("/images/mountain1.png"));
+        Image mountain2 = new Image(ViewTerrain.class.getResourceAsStream("/images/mountain2.png"));
+
 
 
         for (int i = 0; i <= map.length - 1; i++) {
@@ -32,7 +39,7 @@ public class ViewTerrain {
                         break;
                     case 3: iv.setImage(grass3);
                         break;
-                    case 4: iv.setImage(red_tile);
+                    case 4: iv.setImage(base);
                         break;
                     case 5: iv.setImage(gray_tile);
                         break;
@@ -53,6 +60,10 @@ public class ViewTerrain {
                     case 13: iv.setImage(road_intersection_up);
                         break;
                     case 14: iv.setImage(road_intersection_full);
+                        break;
+                    case 15: iv.setImage(mountain1);
+                        break;
+                    case 16: iv.setImage(mountain2);
                         break;
                     default: break;
                 }
