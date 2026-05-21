@@ -88,6 +88,7 @@ public class GameController implements Initializable {
     }
 
     private void updateMovement() {
+
         if (movementTimeline != null && movementTimeline.getStatus() == Animation.Status.RUNNING) {
             return;
         }

@@ -11,12 +11,12 @@ public class ViewTerrain {
         Image red_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/red-tile.png"));
         Image yellow_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/yellow-tile.png"));
         Image green_tile = new Image(ViewTerrain.class.getResourceAsStream("/images/green-tile.png"));
-        Image road_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-down.png"));
+        Image road_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-vertical.png"));
         Image road_side = new Image(ViewTerrain.class.getResourceAsStream("/images/road-side.png"));
         Image road_turn_down_left = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-left.png"));
         Image road_turn_down_right = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-right.png"));
-        Image road_turn_right_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-right-down.png"));
-        Image road_turn_left_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-left-down.png"));
+        Image road_turn_right_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-up-left.png"));
+        Image road_turn_left_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-up-right.png"));
         Image road_intersection_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-down.png"));
         Image road_intersection_up = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-up.png"));
         Image road_intersection_full= new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-full.png"));
