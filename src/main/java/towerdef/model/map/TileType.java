@@ -14,6 +14,7 @@ public class TileType {
     public static final int ROADLEFTDOWN=11;
     public static final int CROSSROADDOWN=12;
     public static final int CROSSROADUP=13;
+    public static final int CROSSROADFULL=14;
     public static final int TILESIZE = 32;
 
 
