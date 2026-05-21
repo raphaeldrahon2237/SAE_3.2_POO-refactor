@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public abstract class Entity {
+    private int id;
     private int hp;
     private int damage;
     private int armor;
@@ -12,7 +13,11 @@ public abstract class Entity {
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
 
+    public static int netxId=0;
+
     public Entity(int hp, int damage, int armor, int atkSpeed, double x, double y) {
+        this.id=netxId;
+        netxId++;
         this.hp = hp;
         this.damage = damage;
         this.armor = armor;
