@@ -19,6 +19,7 @@ public class ViewTerrain {
         Image road_turn_left_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-left-down.png"));
         Image road_intersection_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-down.png"));
         Image road_intersection_up = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-up.png"));
+        Image road_intersection_full= new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-full.png"));
 
 
         for (int i = 0; i <= map.length - 1; i++) {
@@ -50,6 +51,8 @@ public class ViewTerrain {
                     case 12: iv.setImage(road_intersection_down);
                         break;
                     case 13: iv.setImage(road_intersection_up);
+                        break;
+                    case 14: iv.setImage(road_intersection_full);
                         break;
                     default: break;
                 }
