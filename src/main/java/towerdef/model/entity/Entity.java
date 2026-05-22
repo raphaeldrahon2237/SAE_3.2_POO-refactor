@@ -42,6 +42,10 @@ public abstract class Entity {
         return x;
     }
 
+    public void takeDamage(int damage) {
+        hp -= damage;
+    }
+
     public DoubleProperty yProperty() {
         return y;
     }

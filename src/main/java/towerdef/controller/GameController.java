@@ -14,13 +14,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import towerdef.View.ViewTerrain;
+import towerdef.model.Game;
 import towerdef.model.core.Movement;
 import towerdef.model.entity.Recruit;
 import towerdef.model.map.MapGrid;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static towerdef.model.map.TileType.TILESIZE;
 
@@ -34,15 +35,17 @@ public class GameController implements Initializable {
 
 
     private Timeline gameLoop;
-    private Timeline movementTimeline;
     private MapGrid mapGrid;
     private Recruit recruit;
     private Movement movement;
     private int time;
-    private double secondsPerTile;
+    private long lastFrameTime = 0;
+    private double deltaTime;
+    private Game game;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        game = new Game();
         mapGrid = new MapGrid();
         int[][] map = mapGrid.getMap();
         ViewTerrain.renderMap(tilePane, map);
@@ -62,65 +65,42 @@ public class GameController implements Initializable {
 
         gamePane.getChildren().add(circle);
 
-        secondsPerTile = 0.35;
         movement = new Movement(recruit, mapGrid.getPath());
         movement.start();
         initAnimation();
     }
 
+
+
     private void initAnimation() {
-        gameLoop = new Timeline();
         time = 0;
+
+        gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame keyFrame = new KeyFrame(
-                // on definit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
-                // on definit ce qui se passe a chaque frame
-                // c'est un eventHandler d'ou le lambda
-                (ev -> {
-                    updateMovement();
+                ev -> {
+                    long now = System.nanoTime();
+
+                    if (lastFrameTime == 0) {
+                        lastFrameTime = now;
+                        return;
+                    }
+
+                    deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
+
+                    lastFrameTime = now;
+
+                    game.updateStates(deltaTime);
                     time++;
-                })
-        );  
+                }
+        );
+
         gameLoop.getKeyFrames().add(keyFrame);
         gameLoop.play();
     }
 
-    private void updateMovement() {
 
-        if (movementTimeline != null && movementTimeline.getStatus() == Animation.Status.RUNNING) {
-            return;
-        }
-
-        Point2D target = movement.getNextTarget();
-
-        if (target == null) {
-            gameLoop.stop();
-            return;
-        }
-
-        movementTimeline = new Timeline(
-                new KeyFrame(
-                        Duration.seconds(secondsPerTile),
-
-                        // On anime la propriete x de la troupe jusqu'au x de la cible
-                        new KeyValue(
-                                recruit.xProperty(),
-                                target.getX(),
-                                Interpolator.LINEAR
-                        ),
-
-                        // pareil pour Y
-                        new KeyValue(
-                                recruit.yProperty(),
-                                target.getY(),
-                                Interpolator.LINEAR
-                        )
-                )
-        );
-
-        movementTimeline.play();
-    }
 }
 
