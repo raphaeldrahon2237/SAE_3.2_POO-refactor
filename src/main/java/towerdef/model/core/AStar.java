@@ -2,7 +2,6 @@ package towerdef.model.core;
 
 import javafx.geometry.Point2D;
 import towerdef.model.map.MapGrid;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

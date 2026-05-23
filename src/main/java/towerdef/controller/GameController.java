@@ -5,7 +5,6 @@ import javafx.animation.Timeline;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -14,10 +13,9 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import towerdef.View.ViewTerrain;
 import towerdef.model.Game;
-import towerdef.model.core.Movement;
-import towerdef.model.entity.*;
-import towerdef.model.entity.Recruit;
-import towerdef.model.map.MapGrid;
+import towerdef.model.entity.Entity;
+import towerdef.model.entity.Troop;
+
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +33,6 @@ public class GameController implements Initializable {
 
 
     private Timeline gameLoop;
-    private MapGrid mapGrid;
-    private Recruit recruit;
-    private Movement movement;
     private int time;
     private long lastFrameTime = 0;
     private double deltaTime;
@@ -50,6 +45,7 @@ public class GameController implements Initializable {
 
         ViewTerrain.renderMap(tilePane, game.getMapGrid().getMap());
 
+        initPrePoolListener();
         initEntityListener();
 
         game.setInitialState();
@@ -87,6 +83,18 @@ public class GameController implements Initializable {
         gameLoop.play();
     }
 
+
+    private void initPrePoolListener() {
+        game.getPrePool().addListener((ListChangeListener<Troop>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Troop troop : change.getAddedSubList()) {
+                        game.addTroopFromPrePool(troop);
+                    }
+                }
+            }
+        });
+    }
 
     private void initEntityListener() {
         game.getEntities().addListener((ListChangeListener<Entity>) change -> {

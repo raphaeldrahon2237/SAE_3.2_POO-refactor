@@ -9,11 +9,9 @@ import java.util.List;
 public class Movement {
 
     private Troop troop;
-
-    // Chaque Point2D represente une case avec x et y
     private List<Point2D> path;
-
     private int currentTileIndex;
+    private Point2D currentTarget;
 
     public Movement(Troop troop, List<Point2D> path) {
         this.troop = troop;
@@ -44,5 +42,46 @@ public class Movement {
         }
 
         return nextTarget;
+    }
+
+    public void update(double deltaTime) {
+        if (currentTarget == null) {
+            currentTarget = getNextTarget();
+        }
+
+        if (currentTarget == null) {
+            return;
+        }
+
+        double currentX = troop.getX();
+        double currentY = troop.getY();
+
+        double targetX = currentTarget.getX();
+        double targetY = currentTarget.getY();
+
+        double directionX = targetX - currentX;
+        double directionY = targetY - currentY;
+
+        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+
+        if (distance == 0) {
+            currentTarget = null;
+            return;
+        }
+
+        double movementDistance = troop.getMvSpeed() * deltaTime;
+
+        if (movementDistance >= distance) {
+            troop.setX(targetX);
+            troop.setY(targetY);
+            currentTarget = null;
+            return;
+        }
+
+        double normalizedX = directionX / distance;
+        double normalizedY = directionY / distance;
+
+        troop.setX(currentX + normalizedX * movementDistance);
+        troop.setY(currentY + normalizedY * movementDistance);
     }
 }
