@@ -1,23 +1,35 @@
 package towerdef.model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import towerdef.model.entity.Entity;
+import towerdef.model.entity.Recruit;
+import towerdef.model.map.MapGrid;
+
 
 import java.util.ArrayList;
 
 public class Game {
 
-    private ArrayList<Entity> entities;
+    private ObservableList<Entity> entities;
+    private MapGrid mapGrid;
 
     public Game() {
-        entities = new ArrayList<>();
+        entities = FXCollections.observableArrayList();
+        mapGrid = new MapGrid();
+    }
+
+    public MapGrid getMapGrid() {
+        return mapGrid;
+    }
+
+    public void setInitialState() {
+        Recruit recruit = new Recruit(0,0);
+        entities.add(recruit);
     }
 
     public void removeDeadEntities() {
-        for (Entity entity : entities) {
-            if (!entity.isAlive()) {
-                entities.remove(entity);
-            }
-        }
+        entities.removeIf(entity -> !entity.isAlive());
     }
 
     public void addEntity(Entity entity) {
@@ -28,7 +40,7 @@ public class Game {
         entities.remove(entity);
     }
 
-    public ArrayList<Entity> getEntities() {
+    public ObservableList<Entity> getEntities() {
         return entities;
     }
     public void updateStates(double deltaTime) {

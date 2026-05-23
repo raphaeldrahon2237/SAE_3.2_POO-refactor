@@ -57,8 +57,61 @@ public class MapGrid {
             path.add(new Point2D(x, y));
         }
     }
+
     public int[][] getMap() {
         return map;
+    }
+
+    public int getWidth() {
+        return map[0].length;
+    }
+
+    public int getHeight() {
+        return map.length;
+    }
+
+    public boolean isInside(int x, int y) {
+        return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
+    }
+
+    public int getTile(int x, int y) {
+        return map[y][x];
+    }
+
+    public boolean isWalkable(int x, int y) {
+        if (!isInside(x, y)) {
+            return false;
+        }
+
+        int tileId = getTile(x, y);
+        TileType tileType = TileType.fromId(tileId);
+
+        if (tileType == null) {
+            return false;
+        }
+        return tileType.isWalkable();
+    }
+
+    public List<Point2D> getNeighbors(int x, int y) {
+        List<Point2D> neighbors = new ArrayList<>();
+
+        int[][] directions = {
+                {1, 0},   // droite
+                {-1, 0},  // gauche
+                {0, 1},   // bas
+                {0, -1}   // haut
+        };
+
+        for (int[] direction : directions) {
+            int neighborX = x + direction[0];
+            int neighborY = y + direction[1];
+
+            if (isWalkable(neighborX, neighborY)) {
+                neighbors.add(new Point2D(neighborX, neighborY));
+            }
+        }
+
+        return neighbors;
     }
 }
 
