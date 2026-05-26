@@ -80,4 +80,8 @@ public abstract class Entity {
         return atkSpeed;
     }
 
+    public String toString(){
+        return "Entity "+id;
+    }
+
 }
