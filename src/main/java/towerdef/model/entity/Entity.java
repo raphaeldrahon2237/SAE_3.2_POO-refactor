@@ -10,6 +10,7 @@ public abstract class Entity {
     private int armor;
     private int atkSpeed;
     private int range;
+    private Entity target;
 
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
@@ -23,6 +24,7 @@ public abstract class Entity {
         this.damage = damage;
         this.armor = armor;
         this.atkSpeed = atkSpeed;
+        this.range = range;
         this.x.set(x);
         this.y.set(y);
     }
@@ -41,6 +43,10 @@ public abstract class Entity {
 
     public DoubleProperty xProperty() {
         return x;
+    }
+
+    public void attack(){
+        //TODO
     }
 
     //modif
@@ -78,6 +84,18 @@ public abstract class Entity {
 
     public int getAtkSpeed() {
         return atkSpeed;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public Entity getTarget() {
+        return target;
+    }
+
+    public void setTarget(Entity target) {
+        this.target = target;
     }
 
 }
