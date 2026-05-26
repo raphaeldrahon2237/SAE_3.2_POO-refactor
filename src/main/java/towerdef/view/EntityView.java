@@ -21,8 +21,9 @@ public class EntityView {
     private Circle circle;
     private ImageView iv;
 
-    Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf.png"));
-    Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit.png"));
+    private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf.png"));
+    private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit.png"));
+    private final Image archerTowerimg= new Image(EntityView.class.getResourceAsStream("/images/archerTower.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -37,7 +38,7 @@ public class EntityView {
 
 
         if (entity instanceof ArcherTower) {
-            iv.setImage(wolfimg);
+            iv.setImage(archerTowerimg);
         }
         else if (entity instanceof Wolf) {
             iv.setImage(wolfimg);
