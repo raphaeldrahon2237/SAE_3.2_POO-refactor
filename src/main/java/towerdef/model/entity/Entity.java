@@ -97,5 +97,8 @@ public abstract class Entity {
     public void setTarget(Entity target) {
         this.target = target;
     }
+    public String toString(){
+        return "Entity "+id;
+    }
 
 }

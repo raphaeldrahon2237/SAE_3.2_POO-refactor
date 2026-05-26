@@ -8,7 +8,9 @@ public enum EntityType {
     ARTILLERY(2),
     BARRACK(3),
     MAGE(4),
-    SHOCKWAVE(5);
+    SHOCKWAVE(5),
+    RECRUIT(6),
+    WOLF(10);
 
 
     private final int id;
