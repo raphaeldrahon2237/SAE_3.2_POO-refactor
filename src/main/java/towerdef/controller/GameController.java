@@ -14,10 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import towerdef.model.entity.Tower;
-import towerdef.view.ViewTerrain;
+import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.entity.Entity;
-import towerdef.model.entity.Troop;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class GameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         game = new Game();
 
-        ViewTerrain.renderMap(tilePane, game.getMapGrid().getMap());
+        TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
         //modif
         initEntityListener();

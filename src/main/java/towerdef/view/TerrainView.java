@@ -3,28 +3,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 
-public class ViewTerrain {
+public class TerrainView {
 
     public static void renderMap(TilePane tilePane, int[][] map) {
-        Image grass1 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass1.png"));
-        Image grass2 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass2.png"));
-        Image grass3 = new Image(ViewTerrain.class.getResourceAsStream("/images/grass3.png"));
+        Image grass1 = new Image(TerrainView.class.getResourceAsStream("/images/grass1.png"));
+        Image grass2 = new Image(TerrainView.class.getResourceAsStream("/images/grass2.png"));
+        Image grass3 = new Image(TerrainView.class.getResourceAsStream("/images/grass3.png"));
 
 
-        Image base = new Image(ViewTerrain.class.getResourceAsStream("/images/base.png"));
+        Image base = new Image(TerrainView.class.getResourceAsStream("/images/base.png"));
 
-        Image road_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-vertical.png"));
-        Image road_side = new Image(ViewTerrain.class.getResourceAsStream("/images/road-side.png"));
-        Image road_turn_down_left = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-left.png"));
-        Image road_turn_down_right = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-down-right.png"));
-        Image road_turn_right_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-up-left.png"));
-        Image road_turn_left_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-turn-up-right.png"));
-        Image road_intersection_down = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-down.png"));
-        Image road_intersection_up = new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-up.png"));
-        Image road_intersection_full= new Image(ViewTerrain.class.getResourceAsStream("/images/road-intersection-full.png"));
+        Image road_down = new Image(TerrainView.class.getResourceAsStream("/images/road-vertical.png"));
+        Image road_side = new Image(TerrainView.class.getResourceAsStream("/images/road-side.png"));
+        Image road_turn_down_left = new Image(TerrainView.class.getResourceAsStream("/images/road-turn-down-left.png"));
+        Image road_turn_down_right = new Image(TerrainView.class.getResourceAsStream("/images/road-turn-down-right.png"));
+        Image road_turn_right_down = new Image(TerrainView.class.getResourceAsStream("/images/road-turn-up-left.png"));
+        Image road_turn_left_down = new Image(TerrainView.class.getResourceAsStream("/images/road-turn-up-right.png"));
+        Image road_intersection_down = new Image(TerrainView.class.getResourceAsStream("/images/road-intersection-down.png"));
+        Image road_intersection_up = new Image(TerrainView.class.getResourceAsStream("/images/road-intersection-up.png"));
+        Image road_intersection_full= new Image(TerrainView.class.getResourceAsStream("/images/road-intersection-full.png"));
 
-        Image mountain1 = new Image(ViewTerrain.class.getResourceAsStream("/images/mountain1.png"));
-        Image mountain2 = new Image(ViewTerrain.class.getResourceAsStream("/images/mountain2.png"));
+        Image mountain1 = new Image(TerrainView.class.getResourceAsStream("/images/mountain1.png"));
+        Image mountain2 = new Image(TerrainView.class.getResourceAsStream("/images/mountain2.png"));
 
 
 
