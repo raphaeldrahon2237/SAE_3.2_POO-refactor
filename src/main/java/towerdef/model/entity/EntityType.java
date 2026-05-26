@@ -1,0 +1,29 @@
+package towerdef.model.entity;
+
+import towerdef.model.map.TileType;
+
+public enum EntityType {
+
+    ARCHERTOWER(1),
+    ARTILLERY(2),
+    BARRACK(3),
+    MAGE(4),
+    SHOCKWAVE(5);
+
+
+    private final int id;
+
+    EntityType(int id) {
+        this.id = id;
+    }
+
+    public static EntityType fromId(int id) {
+        for (EntityType entityType : values()) {
+            if (entityType.id == id) {
+                return entityType;
+            }
+        }
+        return null;
+    }
+
+}

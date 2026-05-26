@@ -123,7 +123,7 @@ public class GameController implements Initializable {
             int x = (int) (event.getX() / TILESIZE);
             int y = (int) (event.getY() / TILESIZE);
 
-            boolean placed = game.placeArcherTower(x, y);
+            boolean placed = game.placeTower(x, y,1);
 
             if (placed) {
                 System.out.println("ArcherTower placée en : " + x + ", " + y);
@@ -195,22 +195,23 @@ public class GameController implements Initializable {
     //modif
     private void initDestinationTest() {
         gamePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!destinationTestMode) {
-                return;
+
+            while (destinationTestMode){
+                int x = (int) (event.getX() / TILESIZE);
+                int y = (int) (event.getY() / TILESIZE);
+
+                game.changeTroopsDestination(new Point2D(x, y));
+
+                destinationTestMode = false;
+
+                System.out.println("Destination test changée : " + x + ", " + y);
+
+                gamePane.requestFocus();
+
+                event.consume();
             }
 
-            int x = (int) (event.getX() / TILESIZE);
-            int y = (int) (event.getY() / TILESIZE);
 
-            game.changeTroopsDestination(new Point2D(x, y));
-
-            destinationTestMode = false;
-
-            System.out.println("Destination test changée : " + x + ", " + y);
-
-            gamePane.requestFocus();
-
-            event.consume();
         });
     }
 }

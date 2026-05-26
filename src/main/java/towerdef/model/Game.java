@@ -117,6 +117,38 @@ public class Game {
         return true;
     }
 
+
+
+    public boolean placeTower(int x,int y, int idTower){
+        if(!canPlaceTower(x,y)){
+            return false;
+        }
+        EntityType entityType = EntityType.fromId(idTower);
+        if (entityType == null) {
+            return false;
+        }
+        switch (entityType){
+            case ARCHERTOWER ->{
+                ArcherTower archerTower = new ArcherTower(x,y);
+            }
+            case MAGE ->{
+                Mage mage = new Mage(x,y);
+            }
+            case BARRACK ->  {
+                Barrack barrack = new Barrack(x,y);
+            }
+            case ARTILLERY -> {
+                Artillery artillery = new Artillery(x,y);
+            }
+            case SHOCKWAVE -> {
+                Shockwave shockwave = new Shockwave(x,y);
+            }
+        }
+
+
+        return true;
+    }
+
     //modif
     public void changeTroopsDestination(Point2D newDestination) {
         for (Entity entity : entities) {
