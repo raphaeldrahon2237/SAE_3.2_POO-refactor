@@ -13,6 +13,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import towerdef.model.entity.ArcherTower;
 import towerdef.model.entity.Tower;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
@@ -138,7 +139,7 @@ public class GameController implements Initializable {
     private void createEntityView(Entity entity) {
         Circle circle = new Circle();
 
-        if (entity instanceof Tower) {
+        if (entity instanceof ArcherTower) {
             circle.setRadius(14);
             circle.setFill(Color.RED);
         } else {

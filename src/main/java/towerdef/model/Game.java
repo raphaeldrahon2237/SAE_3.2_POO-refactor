@@ -127,24 +127,31 @@ public class Game {
         if (entityType == null) {
             return false;
         }
+
+        Entity tower = null;
+
         switch (entityType){
             case ARCHERTOWER ->{
-                ArcherTower archerTower = new ArcherTower(x,y);
+                 tower = new ArcherTower(x,y);
             }
             case MAGE ->{
-                Mage mage = new Mage(x,y);
+                 tower = new Mage(x,y);
             }
             case BARRACK ->  {
-                Barrack barrack = new Barrack(x,y);
+                 tower = new Barrack(x,y);
             }
             case ARTILLERY -> {
-                Artillery artillery = new Artillery(x,y);
+                 tower = new Artillery(x,y);
             }
             case SHOCKWAVE -> {
-                Shockwave shockwave = new Shockwave(x,y);
+                 tower = new Shockwave(x,y);
             }
         }
 
+        if (tower != null) {
+            entities.add(tower);
+            return true;
+        }
 
         return true;
     }
