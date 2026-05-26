@@ -1,4 +1,4 @@
-package towerdef.model.entity;
+package towerdef.model.entity.tower;
 
 public class ArcherTower extends Tower {
 

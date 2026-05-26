@@ -1,7 +1,7 @@
 package towerdef.model.core;
 
 import javafx.geometry.Point2D;
-import towerdef.model.entity.Troop;
+import towerdef.model.entity.troop.Troop;
 
 import java.util.ArrayList;
 import java.util.List;

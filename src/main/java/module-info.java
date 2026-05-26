@@ -12,4 +12,6 @@ module towerdef {
     exports towerdef.model;
     exports towerdef.model.map;
     exports towerdef.model.entity;
+    exports towerdef.model.entity.tower;
+    exports towerdef.model.entity.troop;
 }

@@ -1,4 +1,6 @@
-package towerdef.model.entity;
+package towerdef.model.entity.tower;
+
+import towerdef.model.entity.Entity;
 
 public abstract class Tower extends Entity {
 

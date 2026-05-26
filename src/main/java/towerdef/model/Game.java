@@ -6,6 +6,9 @@ import javafx.geometry.Point2D;
 import towerdef.model.core.AStar;
 import towerdef.model.core.Movement;
 import towerdef.model.entity.*;
+import towerdef.model.entity.tower.*;
+import towerdef.model.entity.troop.Recruit;
+import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
 
 import java.util.List;

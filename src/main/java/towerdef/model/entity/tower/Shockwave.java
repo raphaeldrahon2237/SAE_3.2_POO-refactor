@@ -1,4 +1,4 @@
-package towerdef.model.entity;
+package towerdef.model.entity.tower;
 
 public class Shockwave extends Tower {
     public Shockwave( int x, int y){
