@@ -80,4 +80,5 @@ public abstract class Entity {
         return atkSpeed;
     }
 
+    public int getRange() {return range;}
 }
