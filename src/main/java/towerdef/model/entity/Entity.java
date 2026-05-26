@@ -9,13 +9,14 @@ public abstract class Entity {
     private int damage;
     private int armor;
     private int atkSpeed;
+    private int range;
 
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
 
     public static int nextId=0;
 
-    public Entity(int hp, int damage, int armor, int atkSpeed, double x, double y) {
+    public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y) {
         this.id=nextId;
         nextId++;
         this.hp = hp;

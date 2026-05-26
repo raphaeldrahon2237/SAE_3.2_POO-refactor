@@ -8,8 +8,8 @@ public abstract class Troop extends Entity {
     private Point2D destination;
     private Movement movement;
 
-    public Troop(int hp, int damage, int armor, int atkSpeed, int x, int y) {
-        super(hp, damage, armor, atkSpeed, x, y);
+    public Troop(int hp, int damage, int armor, int atkSpeed, int range, int x, int y) {
+        super(hp, damage, armor, atkSpeed, range, x, y);
         this.mvSpeed = 1;
     }
 
