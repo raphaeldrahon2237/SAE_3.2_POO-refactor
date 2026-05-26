@@ -1,7 +1,8 @@
 package towerdef.model.entity;
 
-public class ArcherTower extends Entity {
-    public ArcherTower(int hp, int damage, int armor, int atkSpeed, int x, int y){
-        super(hp, damage, armor, atkSpeed, x, y);
+public class ArcherTower extends Tower {
+
+    public ArcherTower(int x, int y) {
+        super(20, 5, 2, 1, x, y);
     }
 }

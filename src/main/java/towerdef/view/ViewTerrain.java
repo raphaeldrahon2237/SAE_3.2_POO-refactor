@@ -1,4 +1,4 @@
-package towerdef.View;
+package towerdef.view;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;

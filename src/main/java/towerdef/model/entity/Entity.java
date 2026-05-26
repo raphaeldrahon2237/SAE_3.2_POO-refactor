@@ -42,8 +42,9 @@ public abstract class Entity {
         return x;
     }
 
+    //modif
     public void takeDamage(int damage) {
-        hp -= damage;
+        hp -= damage-armor;
     }
 
     public DoubleProperty yProperty() {
@@ -77,4 +78,5 @@ public abstract class Entity {
     public int getAtkSpeed() {
         return atkSpeed;
     }
+
 }

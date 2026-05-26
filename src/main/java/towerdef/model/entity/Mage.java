@@ -1,6 +1,6 @@
 package towerdef.model.entity;
 
-public class Mage extends Entity{
+public class Mage extends Tower{
     public Mage(int hp, int damage, int armor, int atkSpeed, int x, int y){
         super(hp, damage, armor, atkSpeed, x, y);
     }

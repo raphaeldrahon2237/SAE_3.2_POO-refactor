@@ -5,13 +5,16 @@ import javafx.animation.Timeline;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import towerdef.View.ViewTerrain;
+import towerdef.model.entity.Tower;
+import towerdef.view.ViewTerrain;
 import towerdef.model.Game;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Troop;
@@ -31,6 +34,8 @@ public class GameController implements Initializable {
     @FXML
     private TilePane tilePane;
 
+    private boolean archerTowerSelected = false;
+    private boolean destinationTestMode = false;
 
     private Timeline gameLoop;
     private int time;
@@ -45,11 +50,16 @@ public class GameController implements Initializable {
 
         ViewTerrain.renderMap(tilePane, game.getMapGrid().getMap());
 
-        initPrePoolListener();
+        //modif
         initEntityListener();
 
-        game.setInitialState();
+        //modif
+        initKeyboardControls();
 
+        game.setInitialState();
+        //modif
+        initTowerPlacement();
+        initDestinationTest();
         initAnimation();
     }
 
@@ -84,17 +94,6 @@ public class GameController implements Initializable {
     }
 
 
-    private void initPrePoolListener() {
-        game.getPrePool().addListener((ListChangeListener<Troop>) change -> {
-            while (change.next()) {
-                if (change.wasAdded()) {
-                    for (Troop troop : change.getAddedSubList()) {
-                        game.addTroopFromPrePool(troop);
-                    }
-                }
-            }
-        });
-    }
 
     private void initEntityListener() {
         game.getEntities().addListener((ListChangeListener<Entity>) change -> {
@@ -114,12 +113,39 @@ public class GameController implements Initializable {
             }
         });
     }
+    //modif
+    private void initTowerPlacement() {
+        gamePane.setOnMouseClicked(event -> {
+            if (!archerTowerSelected) {
+                return;
+            }
 
+            int x = (int) (event.getX() / TILESIZE);
+            int y = (int) (event.getY() / TILESIZE);
+
+            boolean placed = game.placeArcherTower(x, y);
+
+            if (placed) {
+                System.out.println("ArcherTower placée en : " + x + ", " + y);
+                archerTowerSelected = false;
+            } else {
+                System.out.println("Impossible de placer une tour ici : " + x + ", " + y);
+            }
+
+            gamePane.requestFocus();
+        });
+    }
+    //modif
     private void createEntityView(Entity entity) {
         Circle circle = new Circle();
 
-        circle.setRadius(10);
-        circle.setFill(Color.BLUE);
+        if (entity instanceof Tower) {
+            circle.setRadius(14);
+            circle.setFill(Color.RED);
+        } else {
+            circle.setRadius(10);
+            circle.setFill(Color.BLUE);
+        }
 
         circle.centerXProperty().bind(
                 entity.xProperty().multiply(TILESIZE).add(TILESIZE / 2.0)
@@ -131,8 +157,8 @@ public class GameController implements Initializable {
 
         entityViews.put(entity, circle);
         gamePane.getChildren().add(circle);
-    }
 
+    }
     private void removeEntityView(Entity entity) {
         Node node = entityViews.remove(entity);
 
@@ -141,5 +167,51 @@ public class GameController implements Initializable {
         }
     }
 
+    private void initKeyboardControls() {
+        gamePane.setFocusTraversable(true);
+
+        gamePane.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case A:
+                    archerTowerSelected = true;
+                    System.out.println("Mode placement ArcherTower activé");
+                    break;
+                case E:
+                    destinationTestMode = true;
+                    System.out.println("Mode test destination activé : clique sur une case");
+                    break;
+
+
+
+                case ESCAPE:
+                    archerTowerSelected = false;
+                    System.out.println("Placement annulé");
+                    break;
+            }
+        });
+
+        gamePane.requestFocus();
+    }
+    //modif
+    private void initDestinationTest() {
+        gamePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!destinationTestMode) {
+                return;
+            }
+
+            int x = (int) (event.getX() / TILESIZE);
+            int y = (int) (event.getY() / TILESIZE);
+
+            game.changeTroopsDestination(new Point2D(x, y));
+
+            destinationTestMode = false;
+
+            System.out.println("Destination test changée : " + x + ", " + y);
+
+            gamePane.requestFocus();
+
+            event.consume();
+        });
+    }
 }
 

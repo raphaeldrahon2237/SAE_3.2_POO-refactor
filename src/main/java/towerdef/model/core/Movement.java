@@ -83,5 +83,7 @@ public class Movement {
 
         troop.setX(currentX + normalizedX * movementDistance);
         troop.setY(currentY + normalizedY * movementDistance);
+
     }
+
 }
