@@ -134,10 +134,9 @@ public class Game {
 
     public void updateStates(double deltaTime) {
         updateTargets();
+        updateAttacks(deltaTime);
         updateMovements(deltaTime);
     }
-    //modif
-
 
     private void updateTargets() {
         updateTargets(allies);
@@ -147,6 +146,16 @@ public class Game {
     private void updateTargets(ObservableList<Entity> entities) {
         for (Entity entity : entities) {
             entity.setTarget(findNearestTarget(entity));
+        }
+    }
+
+    private void updateAttacks(double deltaTime) {
+        for (Entity ally : allies) {
+            //TODO
+        }
+
+        for (Entity enemy : enemies) {
+            //TODO
         }
     }
 
