@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import towerdef.model.entity.tower.ArcherTower;
+import towerdef.view.EntityView;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.entity.Entity;
@@ -41,7 +42,7 @@ public class GameController implements Initializable {
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
-    private Map<Entity, Node> entityViews = new HashMap<>();
+    //private Map<Entity, Node> entityViews = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -100,13 +101,15 @@ public class GameController implements Initializable {
 
                 if (change.wasAdded()) {
                     for (Entity entity : change.getAddedSubList()) {
-                        createEntityView(entity);
+                        EntityView eV = new EntityView(gamePane, entity);
+                        eV.createEntityView();
                     }
                 }
 
+
                 if (change.wasRemoved()) {
                     for (Entity entity : change.getRemoved()) {
-                        removeEntityView(entity);
+                        System.out.println("Removed: " + entity);
                     }
                 }
             }
@@ -135,36 +138,8 @@ public class GameController implements Initializable {
         });
     }
     //modif
-    private void createEntityView(Entity entity) {
-        Circle circle = new Circle();
 
-        if (entity instanceof ArcherTower) {
-            circle.setRadius(14);
-            circle.setFill(Color.RED);
-        } else {
-            circle.setRadius(10);
-            circle.setFill(Color.BLUE);
-        }
 
-        circle.centerXProperty().bind(
-                entity.xProperty().multiply(TILESIZE).add(TILESIZE / 2.0)
-        );
-
-        circle.centerYProperty().bind(
-                entity.yProperty().multiply(TILESIZE).add(TILESIZE / 2.0)
-        );
-
-        entityViews.put(entity, circle);
-        gamePane.getChildren().add(circle);
-
-    }
-    private void removeEntityView(Entity entity) {
-        Node node = entityViews.remove(entity);
-
-        if (node != null) {
-            gamePane.getChildren().remove(node);
-        }
-    }
 
     private void initKeyboardControls() {
         gamePane.setFocusTraversable(true);

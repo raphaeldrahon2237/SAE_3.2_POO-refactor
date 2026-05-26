@@ -80,5 +80,8 @@ public abstract class Entity {
         return atkSpeed;
     }
 
-    public int getRange() {return range;}
+    public String toString(){
+        return "Entity "+id;
+    }
+
 }
