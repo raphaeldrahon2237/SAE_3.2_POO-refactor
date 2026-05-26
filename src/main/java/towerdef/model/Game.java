@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+
 public class Game {
 
     private ObservableList<Entity> entities;
@@ -26,6 +28,8 @@ public class Game {
     private MapGrid mapGrid;
     private Random random;
 
+    private int score;
+    private String playerName = "ayoube";
     public Game() {
         entities = FXCollections.observableArrayList();
         allies = FXCollections.observableArrayList();
@@ -35,6 +39,7 @@ public class Game {
         mapGrid = new MapGrid();
         random = new Random();
         Base base = new Base(12, 16, 100);
+        score = ScoreManager.loadScore(playerName);
     }
 
     public MapGrid getMapGrid() {
@@ -259,6 +264,20 @@ public class Game {
             troop.setDestination(newDestination);
             assignMovement(troop);
         }
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int points) {
+        score += points;
+        ScoreManager.saveScore(playerName, score);
+    }
+
+    public void resetScore() {
+        score = 0;
+        ScoreManager.saveScore(playerName, score);
     }
 
 }
