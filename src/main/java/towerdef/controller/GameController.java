@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -34,6 +35,9 @@ public class GameController implements Initializable {
     @FXML
     private TilePane tilePane;
 
+    @FXML
+    private Label scoreLabel;
+
     private boolean archerTowerSelected = false;
     private boolean destinationTestMode = false;
 
@@ -47,7 +51,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         game = new Game();
-
+        updateScoreLabel();
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
         //modif
@@ -129,6 +133,10 @@ public class GameController implements Initializable {
 
             if (placed) {
                 System.out.println("ArcherTower placée en : " + x + ", " + y);
+
+                game.addScore(10);
+                updateScoreLabel();
+
                 archerTowerSelected = false;
             } else {
                 System.out.println("Impossible de placer une tour ici : " + x + ", " + y);
@@ -187,6 +195,9 @@ public class GameController implements Initializable {
 
 
         });
+    }
+    private void updateScoreLabel() {
+        scoreLabel.setText("Score : " + game.getScore());
     }
 }
 
