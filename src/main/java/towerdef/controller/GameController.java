@@ -199,5 +199,9 @@ public class GameController implements Initializable {
     private void updateScoreLabel() {
         scoreLabel.setText("Score : " + game.getScore());
     }
+
+    public void onClose() {
+        game.resetScore();
+    }
 }
 
