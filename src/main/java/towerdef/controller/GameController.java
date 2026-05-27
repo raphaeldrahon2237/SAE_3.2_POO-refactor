@@ -38,6 +38,9 @@ public class GameController implements Initializable {
     @FXML
     private Label scoreLabel;
 
+    @FXML
+    private Label goldLabel;
+
     private boolean archerTowerSelected = false;
     private boolean destinationTestMode = false;
 
@@ -54,14 +57,11 @@ public class GameController implements Initializable {
         updateScoreLabel();
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
-        //modif
         initEntityListener();
 
-        //modif
         initKeyboardControls();
 
         game.setInitialState();
-        //modif
         initTowerPlacement();
         initDestinationTest();
         initAnimation();
@@ -119,7 +119,6 @@ public class GameController implements Initializable {
             }
         });
     }
-    //modif
     private void initTowerPlacement() {
         gamePane.setOnMouseClicked(event -> {
             if (!archerTowerSelected) {
@@ -145,7 +144,6 @@ public class GameController implements Initializable {
             gamePane.requestFocus();
         });
     }
-    //modif
 
 
 
@@ -174,7 +172,6 @@ public class GameController implements Initializable {
 
         gamePane.requestFocus();
     }
-    //modif
     private void initDestinationTest() {
         gamePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
@@ -199,6 +196,7 @@ public class GameController implements Initializable {
     private void updateScoreLabel() {
         scoreLabel.setText("Score : " + game.getScore());
     }
+
 
     public void onClose() {
         game.resetScore();

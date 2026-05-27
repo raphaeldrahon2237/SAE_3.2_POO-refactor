@@ -134,8 +134,10 @@ public class Game {
 
     public void updateStates(double deltaTime) {
         updateTargets();
+        updateCollisions();
         updateAttacks(deltaTime);
         updateMovements(deltaTime);
+        removeDeadEntities();
     }
 
     private void updateTargets() {
@@ -151,12 +153,18 @@ public class Game {
 
     private void updateAttacks(double deltaTime) {
         for (Entity ally : allies) {
-            //TODO
+            if (ally.getTarget() != null) {
+                ally.attack();
+            }
         }
 
         for (Entity enemy : enemies) {
-            //TODO
+            if (enemy.getTarget() != null) {
+                enemy.attack();
+            }
         }
+
+        removeDeadEntities();
     }
 
     private Entity findNearestTarget(Entity entity) {
@@ -192,7 +200,6 @@ public class Game {
                 + Math.abs(first.getY() - second.getY());
     }
 
-    //modif
     public boolean canPlaceTower(int x, int y){
         if(!mapGrid.isInside(x,y)) {
             return false;
@@ -205,17 +212,6 @@ public class Game {
                 return false;
             }
         }
-        return true;
-    }
-    //modif
-    public boolean placeArcherTower(int x, int y) {
-        if (!canPlaceTower(x, y)) {
-            return false;
-        }
-
-        ArcherTower tower = new ArcherTower(x, y);
-        addTower(tower);
-
         return true;
     }
 
@@ -287,6 +283,29 @@ public class Game {
     public void resetScore() {
         score = 0;
         ScoreManager.saveScore(playerName, score);
+    }
+
+    //modif
+    private boolean isColliding(Entity entity1, Entity entity2) {
+        double dx = entity1.getX() - entity2.getX();
+        double dy = entity1.getY() - entity2.getY();
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < 0.5;
+    }
+
+    //modif
+    private void updateCollisions() {
+        for (Entity ally : allies) {
+            for (Entity enemy : enemies) {
+                if (isColliding(ally, enemy)) {
+                    ally.setTarget(enemy);
+                    enemy.setTarget(ally);
+                    System.out.println("Collision entre un allié et un ennemi !");
+                }
+            }
+        }
     }
 
 }

@@ -30,7 +30,7 @@
       <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1184.0" spacing="1000.0" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score"  fx:id="scoreLabel" />
-            <Label contentDisplay="RIGHT" text="gold" />
+            <Label contentDisplay="RIGHT" text="gold" fx:id="goldLabel" />
          </children>
       </HBox>
    </bottom>
