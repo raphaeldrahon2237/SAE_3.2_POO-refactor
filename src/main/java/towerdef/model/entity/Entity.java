@@ -2,7 +2,7 @@ package towerdef.model.entity;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-
+import towerdef.model.Game;
 public abstract class Entity {
     private int id;
     private int hp;
@@ -12,6 +12,7 @@ public abstract class Entity {
     private int range;
     //private Entity target;
 
+    private int scoreValue;
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
 
@@ -90,6 +91,10 @@ public abstract class Entity {
 
     public int getAtkSpeed() {
         return atkSpeed;
+    }
+
+    public int getScoreValue() {
+        return scoreValue;
     }
 
     public int getRange() {
