@@ -9,6 +9,7 @@ import javafx.scene.shape.Circle;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.EntityType;
 import towerdef.model.entity.tower.ArcherTower;
+import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Wolf;
 
@@ -21,9 +22,10 @@ public class EntityView {
     private Circle circle;
     private ImageView iv;
 
-    private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf.png"));
-    private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit.png"));
+    private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
+    private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
     private final Image archerTowerimg= new Image(EntityView.class.getResourceAsStream("/images/archerTower.png"));
+    private final Image barrackimg= new Image(EntityView.class.getResourceAsStream("/images/barrack.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -31,6 +33,8 @@ public class EntityView {
         this.circle = new Circle();
         circle.setFill(Color.PURPLE);
         iv = new ImageView();
+        iv.setPreserveRatio(true);
+
     }
 
     public void createEntityView() {
@@ -40,19 +44,23 @@ public class EntityView {
         if (entity instanceof ArcherTower) {
             iv.setImage(archerTowerimg);
         }
+        else if (entity instanceof Barrack) {
+            iv.setImage(barrackimg);
+        }
         else if (entity instanceof Wolf) {
             iv.setImage(wolfimg);
         }
         else if (entity instanceof Recruit) {
             iv.setImage(recruitimg);
         }
-
+        iv.setFitHeight(TILESIZE-5);
+        iv.setFitWidth(TILESIZE-5);
         iv.xProperty().bind(
-                entity.xProperty().multiply(TILESIZE).add(iv.getFitWidth()/2)
+                entity.xProperty().multiply(TILESIZE)
         );
 
         iv.yProperty().bind(
-                entity.yProperty().multiply(TILESIZE).add(iv.getFitHeight()/2)
+                entity.yProperty().multiply(TILESIZE)
         );
 
         gamePane.getChildren().add(iv);

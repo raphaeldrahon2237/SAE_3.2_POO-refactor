@@ -47,15 +47,17 @@ public class Game {
     }
 
     public void setInitialState() {
-        Recruit recruit = new Recruit(0, 2);
+        Recruit recruit = new Recruit(2, 2);
         recruit.setDestination(new Point2D(16, 12));
         spawnAlly(recruit);
-        Wolf wolf = new Wolf(17, 32);
+        Wolf wolf = new Wolf(0, 2);
+        wolf.setDestination(new Point2D(16, 12));
         spawnEnemy(wolf);
     }
 
 
-    private void assignMovement(Troop troop) {
+    private void
+    assignMovement(Troop troop) {
         Point2D source = new Point2D(troop.getX(), troop.getY());
         AStar aStar = new AStar(mapGrid, source, troop.getDestination());
         List<Point2D> path = aStar.getPath();
@@ -105,6 +107,7 @@ public class Game {
     }
 
     private void spawnEnemy(Troop troop) {
+        assignMovement(troop);
         addEnemy(troop);
     }
 
@@ -134,8 +137,8 @@ public class Game {
 
     public void updateStates(double deltaTime) {
         updateTargets();
-        updateAttacks(deltaTime);
         updateMovements(deltaTime);
+        removeDeadEntities();
     }
 
     private void updateTargets() {
@@ -151,12 +154,18 @@ public class Game {
 
     private void updateAttacks(double deltaTime) {
         for (Entity ally : allies) {
-            //TODO
+            if (ally.getTarget() != null) {
+                ally.attack();
+            }
         }
 
         for (Entity enemy : enemies) {
-            //TODO
+            if (enemy.getTarget() != null) {
+                enemy.attack();
+            }
         }
+
+        removeDeadEntities();
     }
 
     private Entity findNearestTarget(Entity entity) {
@@ -192,7 +201,6 @@ public class Game {
                 + Math.abs(first.getY() - second.getY());
     }
 
-    //modif
     public boolean canPlaceTower(int x, int y){
         if(!mapGrid.isInside(x,y)) {
             return false;
@@ -205,17 +213,6 @@ public class Game {
                 return false;
             }
         }
-        return true;
-    }
-    //modif
-    public boolean placeArcherTower(int x, int y) {
-        if (!canPlaceTower(x, y)) {
-            return false;
-        }
-
-        ArcherTower tower = new ArcherTower(x, y);
-        addTower(tower);
-
         return true;
     }
 
@@ -287,6 +284,29 @@ public class Game {
     public void resetScore() {
         score = 0;
         ScoreManager.saveScore(playerName, score);
+    }
+
+    //modif
+    private boolean isColliding(Entity entity1, Entity entity2) {
+        double dx = entity1.getX() - entity2.getX();
+        double dy = entity1.getY() - entity2.getY();
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < 0.5;
+    }
+
+    //modif
+    private void updateCollisions() {
+        for (Entity ally : allies) {
+            for (Entity enemy : enemies) {
+                if (isColliding(ally, enemy)) {
+                    ally.setTarget(enemy);
+                    enemy.setTarget(ally);
+                    System.out.println("Collision entre un allié et un ennemi !");
+                }
+            }
+        }
     }
 
 }

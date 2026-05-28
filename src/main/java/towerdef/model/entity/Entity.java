@@ -45,11 +45,16 @@ public abstract class Entity {
         return x;
     }
 
-    public void attack(){
-        //TODO
+    public void attack() {
+        if (target != null) {
+            target.takeDamage(damage);
+
+            if (!target.isAlive()) {
+                target = null;
+            }
+        }
     }
 
-    //modif
     public void takeDamage(int damage) {
         hp -= damage-armor;
     }
