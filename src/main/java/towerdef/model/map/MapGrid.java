@@ -33,31 +33,6 @@ public class MapGrid {
                 };
     }
 
-    public List<Point2D> getPath() {
-        List<Point2D> path = new ArrayList<>();
-
-        addHorizontalLine(path, 1, 9, 2);
-        addVerticalLine(path, 2, 5, 9);
-        addHorizontalLine(path, 9, 10, 5);
-        addVerticalLine(path, 5, 8, 10);
-        addHorizontalLine(path, 10, 16, 8);
-        addVerticalLine(path, 8, 12, 16);
-
-        return path;
-    }
-
-    private void addHorizontalLine(List<Point2D> path, int startX, int endX, int y) {
-        for (int x = startX; x <= endX; x++) {
-            path.add(new Point2D(x, y));
-        }
-    }
-
-    private void addVerticalLine(List<Point2D> path, int startY, int endY, int x) {
-        for (int y = startY; y <= endY; y++) {
-            path.add(new Point2D(x, y));
-        }
-    }
-
     public int[][] getMap() {
         return map;
     }
@@ -113,5 +88,29 @@ public class MapGrid {
 
         return neighbors;
     }
-}
 
+    public List<Point2D> getPath() {
+        List<Point2D> path = new ArrayList<>();
+
+        addHorizontalLine(path, 1, 9, 2);
+        addVerticalLine(path, 2, 5, 9);
+        addHorizontalLine(path, 9, 10, 5);
+        addVerticalLine(path, 5, 8, 10);
+        addHorizontalLine(path, 10, 16, 8);
+        addVerticalLine(path, 8, 12, 16);
+
+        return path;
+    }
+
+    private void addHorizontalLine(List<Point2D> path, int startX, int endX, int y) {
+        for (int x = startX; x <= endX; x++) {
+            path.add(new Point2D(x, y));
+        }
+    }
+
+    private void addVerticalLine(List<Point2D> path, int startY, int endY, int x) {
+        for (int y = startY; y <= endY; y++) {
+            path.add(new Point2D(x, y));
+        }
+    }
+}

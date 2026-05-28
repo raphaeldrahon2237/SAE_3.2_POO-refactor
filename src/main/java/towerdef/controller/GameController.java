@@ -42,6 +42,7 @@ public class GameController implements Initializable {
 
     @FXML
     private Button buttonBarracks;
+
     @FXML
     private Label scoreLabel;
 
@@ -76,7 +77,6 @@ public class GameController implements Initializable {
         initAnimation();
     }
 
-
     private void initAnimation() {
         time = 0;
 
@@ -106,8 +106,6 @@ public class GameController implements Initializable {
         gameLoop.play();
     }
 
-
-
     private void initEntityListener() {
         game.getEntities().addListener((ListChangeListener<Entity>) change -> {
             while (change.next()) {
@@ -127,32 +125,6 @@ public class GameController implements Initializable {
             }
         });
     }
-    private void initTowerPlacement() {
-        gamePane.setOnMouseClicked(event -> {
-            if (!archerTowerSelected && !barracksSelected) {
-                return;
-            }
-
-            int x = (int) (event.getX() / TILESIZE);
-            int y = (int) (event.getY() / TILESIZE);
-
-            boolean placed=false;
-            if(archerTowerSelected) placed= game.placeTower(x, y,1);
-            else if (barracksSelected) placed= game.placeTower(x, y,3);
-
-            if (placed) {
-                System.out.println("Tower placed in : " + x + ", " + y);
-                game.addScore(10);
-                updateScoreLabel();
-                archerTowerSelected = false;
-            } else {
-                System.out.println("Tower placement impossible : " + x + ", " + y);
-            }
-
-            gamePane.requestFocus();
-        });
-    }
-
 
     private void initButtons(){
         buttonArcherTower.setOnAction(event -> {
@@ -184,13 +156,41 @@ public class GameController implements Initializable {
 
                 case ESCAPE:
                     archerTowerSelected = false;
-                    System.out.println("Placement annulé");
+                    System.out.println("Placement annulÃ©");
                     break;
             }
         });
 
         gamePane.requestFocus();
     }
+
+    private void initTowerPlacement() {
+        gamePane.setOnMouseClicked(event -> {
+            if (!archerTowerSelected && !barracksSelected) {
+                return;
+            }
+
+            int x = (int) (event.getX() / TILESIZE);
+            int y = (int) (event.getY() / TILESIZE);
+
+            boolean placed=false;
+            if(archerTowerSelected) placed= game.placeTower(x, y,1);
+            else if (barracksSelected) placed= game.placeTower(x, y,3);
+
+            if (placed) {
+                System.out.println("Tower placed in : " + x + ", " + y);
+                game.addScore(10);
+                updateScoreLabel();
+                archerTowerSelected = false;
+                barracksSelected = false;
+            } else {
+                System.out.println("Tower placement impossible : " + x + ", " + y);
+            }
+
+            gamePane.requestFocus();
+        });
+    }
+
     private void initDestinationTest() {
         gamePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
@@ -202,7 +202,7 @@ public class GameController implements Initializable {
 
                 destinationTestMode = false;
 
-                System.out.println("Destination test changée : " + x + ", " + y);
+                System.out.println("Destination test changÃ©e : " + x + ", " + y);
 
                 gamePane.requestFocus();
 
@@ -212,13 +212,12 @@ public class GameController implements Initializable {
 
         });
     }
+
     private void updateScoreLabel() {
         scoreLabel.setText("Score : " + game.getScore());
     }
-
 
     public void onClose() {
         game.resetScore();
     }
 }
-

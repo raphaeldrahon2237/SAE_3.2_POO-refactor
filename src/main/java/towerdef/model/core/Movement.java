@@ -30,20 +30,6 @@ public class Movement {
         }
     }
 
-    public Point2D getNextTarget() {
-        // On passe a la case suivante
-        currentTileIndex++;
-
-        Point2D nextTarget = null;
-
-        // Si l'index est encore dans le chemin, on recupere la prochaine cible
-        if (currentTileIndex < path.size()) {
-            nextTarget = path.get(currentTileIndex);
-        }
-
-        return nextTarget;
-    }
-
     public void update(double deltaTime) {
         if (currentTarget == null) {
             currentTarget = getNextTarget();
@@ -84,6 +70,20 @@ public class Movement {
         troop.setX(currentX + normalizedX * movementDistance);
         troop.setY(currentY + normalizedY * movementDistance);
 
+    }
+
+    public Point2D getNextTarget() {
+        // On passe a la case suivante
+        currentTileIndex++;
+
+        Point2D nextTarget = null;
+
+        // Si l'index est encore dans le chemin, on recupere la prochaine cible
+        if (currentTileIndex < path.size()) {
+            nextTarget = path.get(currentTileIndex);
+        }
+
+        return nextTarget;
     }
 
 }
