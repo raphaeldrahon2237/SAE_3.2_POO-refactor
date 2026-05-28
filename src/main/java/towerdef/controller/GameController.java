@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -41,7 +42,6 @@ public class GameController implements Initializable {
 
     @FXML
     private Button buttonBarracks;
-
     @FXML
     private Label scoreLabel;
 
