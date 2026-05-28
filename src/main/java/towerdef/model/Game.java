@@ -7,7 +7,6 @@ import towerdef.model.core.AStar;
 import towerdef.model.core.Movement;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.*;
-import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.entity.troop.Wolf;
 import towerdef.model.map.MapGrid;
@@ -24,10 +23,15 @@ public class Game {
     private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
     private MapGrid mapGrid;
-    private Random random;
-
     private int score;
     private String playerName = "ayoube";
+    private Base base;
+    private int scoreRate;
+    private int gold;
+    private double difficultyTimer;
+    private double spawnInterval;
+    private double spawnTimer;
+    private Random random;
 
     public Game() {
         entities = FXCollections.observableArrayList();
@@ -36,23 +40,42 @@ public class Game {
         troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         mapGrid = new MapGrid();
-        random = new Random();
-        Base base = new Base(12, 16, 100);
+        base = new Base(16, 12, 100);
         score = ScoreManager.loadScore(playerName);
+        gold = 100;
+        scoreRate = 1;
+        difficultyTimer = 0.0;
+        spawnTimer = 0.0;
+        spawnInterval = 10;
+        random = new Random();
     }
 
     public void setInitialState() {
-        Recruit recruit = new Recruit(2, 2);
-        recruit.setDestination(new Point2D(16, 12));
-        spawnAlly(recruit);
-        Wolf wolf = new Wolf(0, 2);
-        wolf.setDestination(new Point2D(16, 12));
-        spawnEnemy(wolf);
+        spawnEnemies(5);
     }
 
     public void updateStates(double deltaTime) {
+
+        difficultyTimer += deltaTime;
+        spawnTimer += deltaTime;
+
+        if (difficultyTimer >= 30.0) {
+            difficultyTimer -= 30.0;
+            scoreRate += 1;
+
+            if (spawnInterval - 1 > 0.0) {
+                spawnInterval -= 1;
+            }
+        }
+
+        if (spawnTimer >= spawnInterval) {
+            spawnTimer -= spawnInterval;
+            spawnEnemies(1);
+        }
+
         updateTargets();
         updateMovements(deltaTime);
+        updateScore(deltaTime);
         removeDeadEntities();
     }
 
@@ -68,14 +91,29 @@ public class Game {
         return score;
     }
 
-    public void addScore(int points) {
-        score += points;
-        ScoreManager.saveScore(playerName, score);
+    public void addScore(int score) {
+        this.score += score;
+    }
+
+    public void updateScore(double deltaTime) {
+        score += deltaTime * scoreRate;
     }
 
     public void resetScore() {
         score = 0;
         ScoreManager.saveScore(playerName, score);
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void addGold(int amount) {
+        gold += amount;
+    }
+
+    public void spendGold(int amount) {
+        gold -= amount;
     }
 
     public void addEntity(Entity entity) {
@@ -138,7 +176,8 @@ public class Game {
             }
         }
 
-        if (tower != null) {
+        if (tower != null && gold >= tower.getCost()) {
+            spendGold(tower.getCost());
             addTower(tower);
             return true;
         }
@@ -197,6 +236,17 @@ public class Game {
                     System.out.println("Collision entre un alliÃ© et un ennemi !");
                 }
             }
+        }
+    }
+
+    private void spawnEnemies(int number) {
+        List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
+
+        for (int i = 0; i < number; i++) {
+            Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
+            Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
+            wolf.setDestination(new Point2D(base.getX(), base.getY()));
+            spawnEnemy(wolf);
         }
     }
 

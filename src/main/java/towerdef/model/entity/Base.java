@@ -10,4 +10,16 @@ public class Base {
         this.y = y;
         this.hp = hp;
     }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getHp() {
+        return hp;
+    }
 }
