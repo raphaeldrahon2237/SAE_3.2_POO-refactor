@@ -47,15 +47,17 @@ public class Game {
     }
 
     public void setInitialState() {
-        Recruit recruit = new Recruit(0, 2);
+        Recruit recruit = new Recruit(2, 2);
         recruit.setDestination(new Point2D(16, 12));
         spawnAlly(recruit);
-        Wolf wolf = new Wolf(17, 32);
+        Wolf wolf = new Wolf(0, 2);
+        wolf.setDestination(new Point2D(16, 12));
         spawnEnemy(wolf);
     }
 
 
-    private void assignMovement(Troop troop) {
+    private void
+    assignMovement(Troop troop) {
         Point2D source = new Point2D(troop.getX(), troop.getY());
         AStar aStar = new AStar(mapGrid, source, troop.getDestination());
         List<Point2D> path = aStar.getPath();
@@ -105,6 +107,7 @@ public class Game {
     }
 
     private void spawnEnemy(Troop troop) {
+        assignMovement(troop);
         addEnemy(troop);
     }
 
