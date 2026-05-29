@@ -17,10 +17,10 @@ import java.util.Random;
 
 public class Game {
 
-    private ObservableList<Entity> entities;
+    //private ObservableList<Entity> entities;//on peut pas avoir 5 listes d'éléments qui se répetent
     private ObservableList<Entity> allies;
-    private ObservableList<Entity> enemies;
-    private ObservableList<Troop> troops;
+    private ObservableList<Troop> enemies;
+    //private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
     private MapGrid mapGrid;
     private int score;
@@ -34,10 +34,10 @@ public class Game {
     private Random random;
 
     public Game() {
-        entities = FXCollections.observableArrayList();
+        //entities = FXCollections.observableArrayList();
         allies = FXCollections.observableArrayList();
         enemies = FXCollections.observableArrayList();
-        troops = FXCollections.observableArrayList();
+        //troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
@@ -73,18 +73,26 @@ public class Game {
             spawnEnemies(1);
         }
 
-        updateTargets();
+        //updateTargets();
         updateMovements(deltaTime);
         updateScore(deltaTime);
-        removeDeadEntities();
+        //removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
         return mapGrid;
     }
 
-    public ObservableList<Entity> getEntities() {
+    /*public ObservableList<Entity> getEntities() {
         return entities;
+    }*/
+
+    public ObservableList<Entity> getAllies() {
+        return allies;
+    }
+
+    public ObservableList<Troop> getEnemies() {
+        return enemies;
     }
 
     public int getScore() {
@@ -116,7 +124,7 @@ public class Game {
         gold -= amount;
     }
 
-    public void addEntity(Entity entity) {
+    /*public void addEntity(Entity entity) {
         entities.add(entity);
     }
 
@@ -127,10 +135,8 @@ public class Game {
     public void removeDeadEntities() {
         entities.removeIf(entity -> !entity.isAlive());
     }
+     */
 
-    public void spawnTroop(Troop troop) {
-        spawnAlly(troop);
-    }
 
     public boolean canPlaceTower(int x, int y){
         if(!mapGrid.isInside(x,y)) {
@@ -185,32 +191,37 @@ public class Game {
         return true;
     }
 
-    public void changeTroopsDestination(Point2D newDestination) {
-        for (Troop troop : troops) {
-            troop.setDestination(newDestination);
-            assignMovement(troop);
+    public void changeEnemiesDestination(Point2D newDestination) {
+        for (Troop enemy: enemies) {
+            enemy.setDestination(newDestination);
+            assignMovement(enemy);
         }
     }
 
+    /*
     private void updateTargets() {
         updateTargets(allies);
         updateTargets(enemies);
     }
 
+
+     */
+    /*
     private void updateTargets(ObservableList<Entity> entities) {
         for (Entity entity : entities) {
             entity.setTarget(findNearestTarget(entity));
         }
-    }
+    }*/
 
     private void updateMovements(double deltaTime) {
-        for (Troop troop : troops) {
-            if (troop.getMovement() != null) {
-                troop.getMovement().update(deltaTime);
+        for (Troop enemy : enemies) {
+            if (enemy.getMovement() != null) {
+                enemy.getMovement().update(deltaTime);
             }
         }
     }
 
+    /*
     private void updateAttacks(double deltaTime) {
         for (Entity ally : allies) {
             if (ally.getTarget() != null) {
@@ -224,9 +235,10 @@ public class Game {
             }
         }
 
-        removeDeadEntities();
-    }
+        //removeDeadEntities();
+    }*/
 
+    /*
     private void updateCollisions() {
         for (Entity ally : allies) {
             for (Entity enemy : enemies) {
@@ -237,7 +249,7 @@ public class Game {
                 }
             }
         }
-    }
+    }*/
 
     private void spawnEnemies(int number) {
         List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
@@ -245,7 +257,7 @@ public class Game {
         for (int i = 0; i < number; i++) {
             Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
             Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
-            wolf.setDestination(new Point2D(base.getX(), base.getY()));
+            wolf.setDestination(new Point2D(base.getX(), base.getY())); //faire uen constante de point2d base
             spawnEnemy(wolf);
         }
     }
@@ -262,20 +274,20 @@ public class Game {
 
     private void addAlly(Troop troop) {
         allies.add(troop);
-        troops.add(troop);
-        entities.add(troop);
+        //troops.add(troop);
+        //entities.add(troop);
     }
 
     private void addEnemy(Troop troop) {
         enemies.add(troop);
-        troops.add(troop);
-        entities.add(troop);
+        //troops.add(troop);
+        //entities.add(troop);
     }
 
     private void addTower(Tower tower) {
         towers.add(tower);
         allies.add(tower);
-        entities.add(tower);
+        //entities.add(tower);
     }
 
     private void assignMovement(Troop troop) {
@@ -288,6 +300,7 @@ public class Game {
         movement.start();
     }
 
+    /*
     private Entity findNearestTarget(Entity entity) {
         if (enemies.contains(entity)) {
             return fixNearestTargetInList(entity, allies);
@@ -314,7 +327,7 @@ public class Game {
         }
 
         return nearestTarget;
-    }
+    }*/
 
     private double manhattanDistance(Entity first, Entity second) {
         return Math.abs(first.getX() - second.getX())

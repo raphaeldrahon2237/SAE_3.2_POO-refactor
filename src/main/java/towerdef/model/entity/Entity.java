@@ -10,7 +10,7 @@ public abstract class Entity {
     private int armor;
     private int atkSpeed;
     private int range;
-    private Entity target;
+    //private Entity target;
 
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
@@ -29,6 +29,7 @@ public abstract class Entity {
         this.y.set(y);
     }
 
+    /*
     public void attack() {
         if (target != null) {
             target.takeDamage(damage);
@@ -37,7 +38,7 @@ public abstract class Entity {
                 target = null;
             }
         }
-    }
+    }*/
 
     public void takeDamage(int damage) {
         hp -= damage-armor;
@@ -95,13 +96,14 @@ public abstract class Entity {
         return range;
     }
 
+    /*
     public Entity getTarget() {
         return target;
     }
 
     public void setTarget(Entity target) {
         this.target = target;
-    }
+    }*/
 
     public String toString(){
         return "Entity "+id;
