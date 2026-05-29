@@ -1,7 +1,9 @@
 package towerdef.controller;
 
 import javafx.collections.ListChangeListener;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import towerdef.model.Game;
 import towerdef.model.entity.Entity;
 import towerdef.view.EntityView;
 import java.util.HashMap;
