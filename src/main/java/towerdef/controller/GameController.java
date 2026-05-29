@@ -58,7 +58,6 @@ public class GameController implements Initializable {
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
-    //private Map<Entity, Node> entityViews = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,6 +97,7 @@ public class GameController implements Initializable {
 
                     lastFrameTime = now;
 
+                    game.runGame();
                     game.updateStates(deltaTime);
                     time++;
                 }

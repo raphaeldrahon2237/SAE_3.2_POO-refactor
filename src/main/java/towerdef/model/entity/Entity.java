@@ -42,7 +42,8 @@ public abstract class Entity {
     }*/
 
     public void takeDamage(int damage) {
-        hp -= damage-armor;
+        System.out.println(this.toString()+"taking damage");
+        hp -= damage;
     }
 
     public boolean isAlive() {
@@ -111,7 +112,7 @@ public abstract class Entity {
     }*/
 
     public String toString(){
-        return "Entity "+id;
+        return ""+id;
     }
 
 }

@@ -54,6 +54,10 @@ public class Game {
         spawnEnemies(5);
     }
 
+    public void runGame() {
+        attackEnemies();
+        removeDeadEntities();
+    }
     public void updateStates(double deltaTime) {
 
         difficultyTimer += deltaTime;
@@ -131,11 +135,12 @@ public class Game {
     public void removeEntity(Entity entity) {
         entities.remove(entity);
     }
-
+    */
     public void removeDeadEntities() {
-        entities.removeIf(entity -> !entity.isAlive());
+        allies.removeIf(ally -> !ally.isAlive());
+        enemies.removeIf(enemy -> !enemy.isAlive());
     }
-     */
+
 
 
     public boolean canPlaceTower(int x, int y){
@@ -195,6 +200,19 @@ public class Game {
         for (Troop enemy: enemies) {
             enemy.setDestination(newDestination);
             assignMovement(enemy);
+        }
+    }
+
+    public void attackEnemies() {
+        for (Tower tower: towers) {
+            for(Troop enemy:enemies) {
+                if(enemy.getX()<= (tower.getX()+tower.getRange()) && enemy.getX()>= (tower.getX()-tower.getRange()) &&
+                enemy.getY()<=(tower.getY()+tower.getRange()) && enemy.getY()>= (tower.getX()-tower.getRange())){
+                    System.out.println("Tower: "+tower.toString()+" attacking "+enemy.toString());
+                    enemy.takeDamage(tower.getDamage());
+                }
+            }
+
         }
     }
 

@@ -36,4 +36,8 @@ public abstract class Troop extends Entity {
     public void setMvSpeed(int mvSpeed) {
         this.mvSpeed = mvSpeed;
     }
+
+    public String toString(){
+        return ""+super.toString();
+    }
 }

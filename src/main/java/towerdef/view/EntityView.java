@@ -38,8 +38,6 @@ public class EntityView {
     }
 
     public void createEntityView() {
-        Circle circle = new Circle();
-
 
         if (entity instanceof ArcherTower) {
             iv.setImage(archerTowerimg);
@@ -66,5 +64,15 @@ public class EntityView {
         gamePane.getChildren().add(iv);
 
     }
+
+    public ImageView getIv() {
+        return iv;
+    }
+
+    public void setImageToNull(){
+        this.iv.setImage(null);
+    }
+
+
 
 }

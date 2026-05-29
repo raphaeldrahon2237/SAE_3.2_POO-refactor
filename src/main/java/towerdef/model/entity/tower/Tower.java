@@ -16,4 +16,9 @@ public abstract class Tower extends Entity {
     public int getCost() {
         return cost;
     }
+
+    @Override
+    public String toString() {
+        return ""+super.toString();
+    }
 }
