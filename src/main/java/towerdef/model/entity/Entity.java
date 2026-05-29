@@ -29,6 +29,20 @@ public abstract class Entity {
         this.y.set(y);
     }
 
+    public void attack() {
+        if (target != null) {
+            target.takeDamage(damage);
+
+            if (!target.isAlive()) {
+                target = null;
+            }
+        }
+    }
+
+    public void takeDamage(int damage) {
+        hp -= damage-armor;
+    }
+
     public boolean isAlive() {
         return hp > 0;
     }
@@ -41,29 +55,20 @@ public abstract class Entity {
         return y.get();
     }
 
-    public DoubleProperty xProperty() {
-        return x;
-    }
-
-    public void attack(){
-        //TODO
-    }
-
-    //modif
-    public void takeDamage(int damage) {
-        hp -= damage-armor;
-    }
-
-    public DoubleProperty yProperty() {
-        return y;
-    }
-
     public void setX(double x) {
         this.x.set(x);
     }
 
     public void setY(double y) {
         this.y.set(y);
+    }
+
+    public DoubleProperty xProperty() {
+        return x;
+    }
+
+    public DoubleProperty yProperty() {
+        return y;
     }
 
     public int getHp() {
@@ -97,6 +102,7 @@ public abstract class Entity {
     public void setTarget(Entity target) {
         this.target = target;
     }
+
     public String toString(){
         return "Entity "+id;
     }

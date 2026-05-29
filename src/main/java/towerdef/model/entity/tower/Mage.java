@@ -2,6 +2,6 @@ package towerdef.model.entity.tower;
 
 public class Mage extends Tower {
     public Mage( int x, int y){
-        super(30, 6, 3, 4,4, x, y);
+        super(30, 6, 3, 4,4, x, y, 10);
     }
 }

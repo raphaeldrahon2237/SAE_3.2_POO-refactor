@@ -25,37 +25,6 @@ public class AStar {
         runAStar();
     }
 
-    private void runAStar() {
-        PriorityQueue<TileCost> queue = new PriorityQueue<>();
-
-        costs.put(source, 0.0);
-        queue.add(new TileCost(source, heuristic(source, target)));
-
-        while (!queue.isEmpty()) {
-            Point2D currentTile = queue.poll().getTile();
-
-            if (currentTile.equals(target)) {
-                return;
-            }
-
-            for (Point2D neighbor : mapGrid.getNeighbors((int) currentTile.getX(), (int) currentTile.getY())) {
-                double newCost = costs.get(currentTile) + 1;
-
-                if (!costs.containsKey(neighbor) || newCost < costs.get(neighbor)) {
-                    costs.put(neighbor, newCost);
-                    predecessors.put(neighbor, currentTile);
-
-                    double priority = newCost + heuristic(neighbor, target);
-                    queue.add(new TileCost(neighbor, priority));
-                }
-            }
-        }
-    }
-
-    private double heuristic(Point2D tile, Point2D target) {
-        return Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
-    }
-
     public ArrayList<Point2D> getPath() {
         ArrayList<Point2D> path = new ArrayList<>();
 
@@ -90,6 +59,37 @@ public class AStar {
         this.target = target;
         clear();
         runAStar();
+    }
+
+    private void runAStar() {
+        PriorityQueue<TileCost> queue = new PriorityQueue<>();
+
+        costs.put(source, 0.0);
+        queue.add(new TileCost(source, heuristic(source, target)));
+
+        while (!queue.isEmpty()) {
+            Point2D currentTile = queue.poll().getTile();
+
+            if (currentTile.equals(target)) {
+                return;
+            }
+
+            for (Point2D neighbor : mapGrid.getNeighbors((int) currentTile.getX(), (int) currentTile.getY())) {
+                double newCost = costs.get(currentTile) + 1;
+
+                if (!costs.containsKey(neighbor) || newCost < costs.get(neighbor)) {
+                    costs.put(neighbor, newCost);
+                    predecessors.put(neighbor, currentTile);
+
+                    double priority = newCost + heuristic(neighbor, target);
+                    queue.add(new TileCost(neighbor, priority));
+                }
+            }
+        }
+    }
+
+    private double heuristic(Point2D tile, Point2D target) {
+        return Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
     }
 
     private void clear() {

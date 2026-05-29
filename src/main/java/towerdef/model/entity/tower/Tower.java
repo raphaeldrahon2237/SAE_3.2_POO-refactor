@@ -2,10 +2,18 @@ package towerdef.model.entity.tower;
 
 import towerdef.model.entity.Entity;
 
+import java.util.PriorityQueue;
+
 public abstract class Tower extends Entity {
 
-    public Tower(int hp, int damage, int armor, int atkSpeed, int range, int x, int y) {
+    private int cost;
+
+    public Tower(int hp, int damage, int armor, int atkSpeed, int range, int x, int y, int cost) {
         super(hp, damage, armor, atkSpeed, range, x, y);
+        this.cost = cost;
     }
 
+    public int getCost() {
+        return cost;
+    }
 }

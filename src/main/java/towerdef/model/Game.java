@@ -7,7 +7,6 @@ import towerdef.model.core.AStar;
 import towerdef.model.core.Movement;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.*;
-import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.entity.troop.Wolf;
 import towerdef.model.map.MapGrid;
@@ -15,8 +14,6 @@ import towerdef.model.map.MapGrid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-
 
 public class Game {
 
@@ -26,10 +23,16 @@ public class Game {
     private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
     private MapGrid mapGrid;
-    private Random random;
-
     private int score;
     private String playerName = "ayoube";
+    private Base base;
+    private int scoreRate;
+    private int gold;
+    private double difficultyTimer;
+    private double spawnInterval;
+    private double spawnTimer;
+    private Random random;
+
     public Game() {
         entities = FXCollections.observableArrayList();
         allies = FXCollections.observableArrayList();
@@ -37,105 +40,156 @@ public class Game {
         troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         mapGrid = new MapGrid();
-        random = new Random();
-        Base base = new Base(12, 16, 100);
+        base = new Base(16, 12, 100);
         score = ScoreManager.loadScore(playerName);
+        gold = 100;
+        scoreRate = 1;
+        difficultyTimer = 0.0;
+        spawnTimer = 0.0;
+        spawnInterval = 10;
+        random = new Random();
+    }
+
+    public void setInitialState() {
+        spawnEnemies(5);
+    }
+
+    public void updateStates(double deltaTime) {
+
+        difficultyTimer += deltaTime;
+        spawnTimer += deltaTime;
+
+        if (difficultyTimer >= 30.0) {
+            difficultyTimer -= 30.0;
+            scoreRate += 1;
+
+            if (spawnInterval - 1 > 0.0) {
+                spawnInterval -= 1;
+            }
+        }
+
+        if (spawnTimer >= spawnInterval) {
+            spawnTimer -= spawnInterval;
+            spawnEnemies(1);
+        }
+
+        updateTargets();
+        updateMovements(deltaTime);
+        updateScore(deltaTime);
+        removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
         return mapGrid;
     }
 
-    public void setInitialState() {
-        Recruit recruit = new Recruit(0, 2);
-        recruit.setDestination(new Point2D(16, 12));
-        spawnAlly(recruit);
-        Wolf wolf = new Wolf(17, 32);
-        spawnEnemy(wolf);
+    public ObservableList<Entity> getEntities() {
+        return entities;
     }
 
-
-    private void assignMovement(Troop troop) {
-        Point2D source = new Point2D(troop.getX(), troop.getY());
-        AStar aStar = new AStar(mapGrid, source, troop.getDestination());
-        List<Point2D> path = aStar.getPath();
-
-        Movement movement = new Movement(troop, path);
-        troop.setMovement(movement);
-        movement.start();
+    public int getScore() {
+        return score;
     }
 
-    public void removeDeadEntities() {
-        entities.removeIf(entity -> !entity.isAlive());
+    public void addScore(int score) {
+        this.score += score;
+    }
+
+    public void updateScore(double deltaTime) {
+        score += deltaTime * scoreRate;
+    }
+
+    public void resetScore() {
+        score = 0;
+        ScoreManager.saveScore(playerName, score);
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void addGold(int amount) {
+        gold += amount;
+    }
+
+    public void spendGold(int amount) {
+        gold -= amount;
     }
 
     public void addEntity(Entity entity) {
         entities.add(entity);
     }
 
-    private void addTower(Tower tower) {
-        towers.add(tower);
-        allies.add(tower);
-        entities.add(tower);
-    }
-
     public void removeEntity(Entity entity) {
         entities.remove(entity);
     }
 
-    public ObservableList<Entity> getEntities() {
-        return entities;
-    }
-
-    private void updateMovements(double deltaTime) {
-        for (Troop troop : troops) {
-            if (troop.getMovement() != null) {
-                troop.getMovement().update(deltaTime);
-            }
-        }
+    public void removeDeadEntities() {
+        entities.removeIf(entity -> !entity.isAlive());
     }
 
     public void spawnTroop(Troop troop) {
         spawnAlly(troop);
     }
 
-    private void spawnAlly(Troop troop) {
-        assignMovement(troop);
-        addAlly(troop);
+    public boolean canPlaceTower(int x, int y){
+        if(!mapGrid.isInside(x,y)) {
+            return false;
+        }
+        if (mapGrid.isWalkable(x, y)){
+            return false;
+        }
+        for (Tower tower : towers){
+            if(tower.getX() == x && tower.getY() == y){
+                return false;
+            }
+        }
+        return true;
     }
 
-    private void spawnEnemy(Troop troop) {
-        addEnemy(troop);
-    }
-
-
-    private List<Point2D> getWalkableEdgeTiles() {
-        List<Point2D> spawnTiles = new ArrayList<>();
-
-        for (int x = 0; x < mapGrid.getWidth(); x++) {
-            addSpawnTileIfWalkable(spawnTiles, x, 0);
-            addSpawnTileIfWalkable(spawnTiles, x, mapGrid.getHeight() - 1);
+    public boolean placeTower(int x,int y, int idTower){
+        if(!canPlaceTower(x,y)){
+            return false;
+        }
+        EntityType entityType = EntityType.fromId(idTower);
+        if (entityType == null) {
+            return false;
         }
 
-        for (int y = 1; y < mapGrid.getHeight() - 1; y++) {
-            addSpawnTileIfWalkable(spawnTiles, 0, y);
-            addSpawnTileIfWalkable(spawnTiles, mapGrid.getWidth() - 1, y);
+        Tower tower = null;
+
+        switch (entityType){
+            case ARCHERTOWER ->{
+                 tower = new ArcherTower(x,y);
+            }
+            case MAGE ->{
+                 tower = new Mage(x,y);
+            }
+            case BARRACK ->  {
+                 tower = new Barrack(x,y);
+            }
+            case ARTILLERY -> {
+                 tower = new Artillery(x,y);
+            }
+            case SHOCKWAVE -> {
+                 tower = new Shockwave(x,y);
+            }
         }
 
-        return spawnTiles;
-    }
-
-    private void addSpawnTileIfWalkable(List<Point2D> spawnTiles, int x, int y) {
-        if (mapGrid.isWalkable(x, y)) {
-            spawnTiles.add(new Point2D(x, y));
+        if (tower != null && gold >= tower.getCost()) {
+            spendGold(tower.getCost());
+            addTower(tower);
+            return true;
         }
+
+        return true;
     }
 
-
-    public void updateStates(double deltaTime) {
-        updateTargets();
-        updateAttacks(deltaTime);
-        updateMovements(deltaTime);
+    public void changeTroopsDestination(Point2D newDestination) {
+        for (Troop troop : troops) {
+            troop.setDestination(newDestination);
+            assignMovement(troop);
+        }
     }
 
     private void updateTargets() {
@@ -149,14 +203,89 @@ public class Game {
         }
     }
 
+    private void updateMovements(double deltaTime) {
+        for (Troop troop : troops) {
+            if (troop.getMovement() != null) {
+                troop.getMovement().update(deltaTime);
+            }
+        }
+    }
+
     private void updateAttacks(double deltaTime) {
         for (Entity ally : allies) {
-            //TODO
+            if (ally.getTarget() != null) {
+                ally.attack();
+            }
         }
 
         for (Entity enemy : enemies) {
-            //TODO
+            if (enemy.getTarget() != null) {
+                enemy.attack();
+            }
         }
+
+        removeDeadEntities();
+    }
+
+    private void updateCollisions() {
+        for (Entity ally : allies) {
+            for (Entity enemy : enemies) {
+                if (isColliding(ally, enemy)) {
+                    ally.setTarget(enemy);
+                    enemy.setTarget(ally);
+                    System.out.println("Collision entre un alliÃ© et un ennemi !");
+                }
+            }
+        }
+    }
+
+    private void spawnEnemies(int number) {
+        List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
+
+        for (int i = 0; i < number; i++) {
+            Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
+            Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
+            wolf.setDestination(new Point2D(base.getX(), base.getY()));
+            spawnEnemy(wolf);
+        }
+    }
+
+    private void spawnAlly(Troop troop) {
+        assignMovement(troop);
+        addAlly(troop);
+    }
+
+    private void spawnEnemy(Troop troop) {
+        assignMovement(troop);
+        addEnemy(troop);
+    }
+
+    private void addAlly(Troop troop) {
+        allies.add(troop);
+        troops.add(troop);
+        entities.add(troop);
+    }
+
+    private void addEnemy(Troop troop) {
+        enemies.add(troop);
+        troops.add(troop);
+        entities.add(troop);
+    }
+
+    private void addTower(Tower tower) {
+        towers.add(tower);
+        allies.add(tower);
+        entities.add(tower);
+    }
+
+    private void assignMovement(Troop troop) {
+        Point2D source = new Point2D(troop.getX(), troop.getY());
+        AStar aStar = new AStar(mapGrid, source, troop.getDestination());
+        List<Point2D> path = aStar.getPath();
+
+        Movement movement = new Movement(troop, path);
+        troop.setMovement(movement);
+        movement.start();
     }
 
     private Entity findNearestTarget(Entity entity) {
@@ -192,101 +321,35 @@ public class Game {
                 + Math.abs(first.getY() - second.getY());
     }
 
-    //modif
-    public boolean canPlaceTower(int x, int y){
-        if(!mapGrid.isInside(x,y)) {
-            return false;
-        }
-        if (mapGrid.isWalkable(x, y)){
-            return false;
-        }
-        for (Tower tower : towers){
-            if(tower.getX() == x && tower.getY() == y){
-                return false;
-            }
-        }
-        return true;
-    }
-    //modif
-    public boolean placeArcherTower(int x, int y) {
-        if (!canPlaceTower(x, y)) {
-            return false;
-        }
+    private boolean isColliding(Entity entity1, Entity entity2) {
+        double dx = entity1.getX() - entity2.getX();
+        double dy = entity1.getY() - entity2.getY();
 
-        ArcherTower tower = new ArcherTower(x, y);
-        addTower(tower);
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
-        return true;
+        return distance < 0.5;
     }
 
-    public boolean placeTower(int x,int y, int idTower){
-        if(!canPlaceTower(x,y)){
-            return false;
-        }
-        EntityType entityType = EntityType.fromId(idTower);
-        if (entityType == null) {
-            return false;
-        }
+    private List<Point2D> getWalkableEdgeTiles() {
+        List<Point2D> spawnTiles = new ArrayList<>();
 
-        Tower tower = null;
-
-        switch (entityType){
-            case ARCHERTOWER ->{
-                 tower = new ArcherTower(x,y);
-            }
-            case MAGE ->{
-                 tower = new Mage(x,y);
-            }
-            case BARRACK ->  {
-                 tower = new Barrack(x,y);
-            }
-            case ARTILLERY -> {
-                 tower = new Artillery(x,y);
-            }
-            case SHOCKWAVE -> {
-                 tower = new Shockwave(x,y);
-            }
+        for (int x = 0; x < mapGrid.getWidth(); x++) {
+            addSpawnTileIfWalkable(spawnTiles, x, 0);
+            addSpawnTileIfWalkable(spawnTiles, x, mapGrid.getHeight() - 1);
         }
 
-        if (tower != null) {
-            addTower(tower);
-            return true;
+        for (int y = 1; y < mapGrid.getHeight() - 1; y++) {
+            addSpawnTileIfWalkable(spawnTiles, 0, y);
+            addSpawnTileIfWalkable(spawnTiles, mapGrid.getWidth() - 1, y);
         }
 
-        return true;
+        return spawnTiles;
     }
 
-    private void addAlly(Troop troop) {
-        allies.add(troop);
-        troops.add(troop);
-        entities.add(troop);
-    }
-
-    private void addEnemy(Troop troop) {
-        enemies.add(troop);
-        troops.add(troop);
-        entities.add(troop);
-    }
-
-    public void changeTroopsDestination(Point2D newDestination) {
-        for (Troop troop : troops) {
-            troop.setDestination(newDestination);
-            assignMovement(troop);
+    private void addSpawnTileIfWalkable(List<Point2D> spawnTiles, int x, int y) {
+        if (mapGrid.isWalkable(x, y)) {
+            spawnTiles.add(new Point2D(x, y));
         }
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void addScore(int points) {
-        score += points;
-        ScoreManager.saveScore(playerName, score);
-    }
-
-    public void resetScore() {
-        score = 0;
-        ScoreManager.saveScore(playerName, score);
     }
 
 }
