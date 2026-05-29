@@ -107,23 +107,8 @@ public class GameController implements Initializable {
     }
 
     private void initEntityListener() {
-        game.getEntities().addListener((ListChangeListener<Entity>) change -> {
-            while (change.next()) {
-
-                if (change.wasAdded()) {
-                    for (Entity entity : change.getAddedSubList()) {
-                        EntityView eV = new EntityView(gamePane, entity);
-                        eV.createEntityView();
-                    }
-                }
-
-                if (change.wasRemoved()) {
-                    for (Entity entity : change.getRemoved()) {
-                        System.out.println("Removed: " + entity);
-                    }
-                }
-            }
-        });
+        game.getAllies().addListener(new listenerEnt(gamePane));
+        game.getEnemies().addListener(new listenerEnt(gamePane));
     }
 
     private void initButtons(){
@@ -198,7 +183,7 @@ public class GameController implements Initializable {
                 int x = (int) (event.getX() / TILESIZE);
                 int y = (int) (event.getY() / TILESIZE);
 
-                game.changeTroopsDestination(new Point2D(x, y));
+                game.changeEnemiesDestination(new Point2D(x, y));
 
                 destinationTestMode = false;
 
