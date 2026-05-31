@@ -187,8 +187,7 @@ public class Game {
             addTower(tower);
             return true;
         }
-
-        return true;
+        return false;
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
