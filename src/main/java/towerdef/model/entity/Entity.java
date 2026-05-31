@@ -8,9 +8,10 @@ public abstract class Entity {
     private int hp;
     private int damage;
     private int armor;
-    private int atkSpeed;
+    private int attackSpeed;
     private int range;
-    //private Entity target;
+    private Entity target;
+    private double attackCooldown;
 
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();
@@ -23,10 +24,11 @@ public abstract class Entity {
         this.hp = hp;
         this.damage = damage;
         this.armor = armor;
-        this.atkSpeed = atkSpeed;
+        this.attackSpeed = atkSpeed;
         this.range = range;
         this.x.set(x);
         this.y.set(y);
+        this.attackCooldown = 0.0;
     }
 
     /*
@@ -89,21 +91,34 @@ public abstract class Entity {
     }
 
     public int getAtkSpeed() {
-        return atkSpeed;
+        return attackSpeed;
     }
 
     public int getRange() {
         return range;
     }
 
-    /*
+    public void updateCooldown(double deltaTime) {
+        if (attackCooldown > 0.0) {
+            attackCooldown -= deltaTime;
+        }
+    }
+
+    public boolean canAttack() {
+        return attackCooldown <= 0.0;
+    }
+    public void resetCooldown() {
+        this.attackCooldown = 1.0 / this.attackSpeed;
+    }
+
+
     public Entity getTarget() {
         return target;
     }
 
     public void setTarget(Entity target) {
         this.target = target;
-    }*/
+    }
 
     public String toString(){
         return "Entity "+id;

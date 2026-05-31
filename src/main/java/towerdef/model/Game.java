@@ -17,11 +17,13 @@ import java.util.Random;
 
 public class Game {
 
-    //private ObservableList<Entity> entities;//on peut pas avoir 5 listes d'éléments qui se répetent
+    private static final double PROJECTILE_SPEED = 8.0;
+    //private ObservableList<Entity> entities;//on peut pas avoir 5 listes d'Ã©lÃ©ments qui se rÃ©petent
     private ObservableList<Entity> allies;
     private ObservableList<Troop> enemies;
     //private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
+    private ObservableList<Projectile> projectiles;
     private MapGrid mapGrid;
     private int score;
     private String playerName = "ayoube";
@@ -39,6 +41,7 @@ public class Game {
         enemies = FXCollections.observableArrayList();
         //troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
+        projectiles = FXCollections.observableArrayList();
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
         score = ScoreManager.loadScore(playerName);
@@ -75,6 +78,7 @@ public class Game {
 
         //updateTargets();
         updateMovements(deltaTime);
+        updateProjectiles(deltaTime);
         updateScore(deltaTime);
         //removeDeadEntities();
     }
@@ -93,6 +97,10 @@ public class Game {
 
     public ObservableList<Troop> getEnemies() {
         return enemies;
+    }
+
+    public ObservableList<Projectile> getProjectiles() {
+        return projectiles;
     }
 
     public int getScore() {
@@ -221,6 +229,16 @@ public class Game {
         }
     }
 
+    private void updateProjectiles(double deltaTime) {
+        for (Projectile projectile : new ArrayList<>(projectiles)) {
+            projectile.updatePosition(deltaTime);
+
+            if (projectile.isFinished()) {
+                projectiles.remove(projectile);
+            }
+        }
+    }
+
     /*
     private void updateAttacks(double deltaTime) {
         for (Entity ally : allies) {
@@ -300,6 +318,11 @@ public class Game {
         movement.start();
     }
 
+    private void shootProjectile(Entity source, Entity target) {
+        List<Point2D> trajectory = computeLineTiles((int) source.getX(), (int) source.getY(), (int) target.getX(), (int) target.getY());
+        projectiles.add(new Projectile(trajectory, target, source.getDamage(), PROJECTILE_SPEED));
+    }
+
     /*
     private Entity findNearestTarget(Entity entity) {
         if (enemies.contains(entity)) {
@@ -341,6 +364,56 @@ public class Game {
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         return distance < 0.5;
+    }
+
+    private List<Point2D> computeLineTiles(int startX, int startY, int targetX, int targetY) {
+        List<Point2D> trajectory = new ArrayList<>();
+
+        int dx = targetX - startX;
+        int dy = targetY - startY;
+
+        if (dx == 0 && dy == 0) {
+            trajectory.add(new Point2D(startX, startY));
+            return trajectory;
+        }
+
+        int absDx = Math.abs(dx);
+        int absDy = Math.abs(dy);
+        int stepX = Integer.compare(dx, 0);
+        int stepY = Integer.compare(dy, 0);
+        int x = startX;
+        int y = startY;
+        int error = 0;
+
+        trajectory.add(new Point2D(x, y));
+
+        if (absDy >= absDx) {
+            while (x != targetX || y != targetY) {
+                y += stepY;
+                error += absDx;
+
+                if (error >= absDy) {
+                    x += stepX;
+                    error -= absDy;
+                }
+
+                trajectory.add(new Point2D(x, y));
+            }
+        } else {
+            while (x != targetX || y != targetY) {
+                x += stepX;
+                error += absDy;
+
+                if (error >= absDx) {
+                    y += stepY;
+                    error -= absDx;
+                }
+
+                trajectory.add(new Point2D(x, y));
+            }
+        }
+
+        return trajectory;
     }
 
     private List<Point2D> getWalkableEdgeTiles() {
