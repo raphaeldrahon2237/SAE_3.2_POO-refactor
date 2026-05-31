@@ -155,7 +155,7 @@ public class GameController implements Initializable {
 
                 destinationTestMode = false;
 
-                System.out.println("Destination test changÃ©e : " + x + ", " + y);
+                System.out.println("Destination test changed : " + x + ", " + y);
 
                 gamePane.requestFocus();
 
