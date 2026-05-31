@@ -231,8 +231,7 @@ public class Game {
                 spawnAlly(recruit);
             }
         }
-
-        return true;
+        return false;
     }
 
 
