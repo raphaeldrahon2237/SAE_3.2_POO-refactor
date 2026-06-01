@@ -2,8 +2,9 @@ package towerdef.model.entity;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import towerdef.model.Game;
+
 public abstract class Entity {
+
     private int id;
     private int hp;
     private int damage;
@@ -11,24 +12,28 @@ public abstract class Entity {
     private int attackSpeed;
     private int range;
     private Entity target;
-    private double attackCooldown;
+    private double attackTimer;
     private int scoreValue;
-    private  DoubleProperty x = new SimpleDoubleProperty();
-    private  DoubleProperty y = new SimpleDoubleProperty();
 
-    public static int nextId=0;
+    private DoubleProperty x = new SimpleDoubleProperty();
+    private DoubleProperty y = new SimpleDoubleProperty();
+
+    public static int nextId = 0;
 
     public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y) {
-        this.id=nextId;
+        this.id = nextId;
         nextId++;
+
         this.hp = hp;
         this.damage = damage;
         this.armor = armor;
         this.attackSpeed = atkSpeed;
         this.range = range;
+
         this.x.set(x);
         this.y.set(y);
-        this.attackCooldown = 0.0;
+
+        this.attackTimer = 0.0;
     }
 
     /*
@@ -40,10 +45,11 @@ public abstract class Entity {
                 target = null;
             }
         }
-    }*/
+    }
+    */
 
     public void takeDamage(int damage) {
-        System.out.println(this.toString()+"taking damage");
+        System.out.println(this + " taking damage");
         hp -= damage;
     }
 
@@ -95,6 +101,10 @@ public abstract class Entity {
         return attackSpeed;
     }
 
+    public int getAttackSpeed() {
+        return attackSpeed;
+    }
+
     public int getScoreValue() {
         return scoreValue;
     }
@@ -103,19 +113,29 @@ public abstract class Entity {
         return range;
     }
 
-    public void updateCooldown(double deltaTime) {
-        if (attackCooldown > 0.0) {
-            attackCooldown -= deltaTime;
+    public void updateAttackTimer(double deltaTime) {
+        if (attackTimer > 0.0) {
+            attackTimer -= deltaTime;
+        }
+
+        if (attackTimer < 0.0) {
+            attackTimer = 0.0;
         }
     }
 
     public boolean canAttack() {
-        return attackCooldown <= 0.0;
-    }
-    public void resetCooldown() {
-        this.attackCooldown = 1.0 / this.attackSpeed;
+        return attackSpeed > 0 && attackTimer <= 0.0;
     }
 
+    public void resetAttackTimer() {
+        if (attackSpeed > 0) {
+            attackTimer = 1.0 / attackSpeed;
+        }
+    }
+
+    public double getAttackTimer() {
+        return attackTimer;
+    }
 
     public Entity getTarget() {
         return target;
@@ -125,8 +145,7 @@ public abstract class Entity {
         this.target = target;
     }
 
-    public String toString(){
-        return ""+id;
+    public String toString() {
+        return "" + id;
     }
-
 }
