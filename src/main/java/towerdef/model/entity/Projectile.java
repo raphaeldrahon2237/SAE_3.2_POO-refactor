@@ -16,7 +16,7 @@ public class Projectile {
     private boolean finished;
 
     public Projectile(List<Point2D> trajectory, Entity target, int damage, double speed) {
-        this.trajectory = new ArrayList<>();
+        this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.damage = damage;
         this.speed = speed;

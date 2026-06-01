@@ -347,7 +347,7 @@ public class Game {
 
     /*
     private Entity findNearestTarget(Entity entity) {
-        if (enemies.contains(entity)) {
+        if (enemies.containsgestion des attaques et mort des ennemis(entity)) {
             return fixNearestTargetInList(entity, allies);
         }
 
