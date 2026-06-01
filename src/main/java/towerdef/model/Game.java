@@ -7,6 +7,7 @@ import towerdef.model.core.AStar;
 import towerdef.model.core.Movement;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.*;
+import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.entity.troop.Wolf;
 import towerdef.model.map.MapGrid;
@@ -186,6 +187,12 @@ public class Game {
             }
             case BARRACK ->  {
                  tower = new Barrack(x,y);
+                 Troop recruit=null;
+                 if(mapGrid.isWalkable(x,y-1)) recruit=new Recruit(x,y-1);
+                 else if(mapGrid.isWalkable(x,y+1)) recruit=new Recruit(x,y+1);
+                 else if(mapGrid.isWalkable(x-1, y)) recruit=new Recruit(x-1,y);
+                 else if(mapGrid.isWalkable(x+1, y)) recruit=new Recruit(x+1,y);
+                 if(recruit!=null)allies.add(recruit);
             }
             case ARTILLERY -> {
                  tower = new Artillery(x,y);
@@ -303,7 +310,6 @@ public class Game {
     }
 
     private void spawnAlly(Troop troop) {
-        assignMovement(troop);
         addAlly(troop);
     }
 
