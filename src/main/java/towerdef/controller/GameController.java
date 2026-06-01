@@ -47,6 +47,7 @@ public class GameController implements Initializable {
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
+    private ProjectileListener projectileListener;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -88,6 +89,7 @@ public class GameController implements Initializable {
 
                     game.runGame();
                     game.updateStates(deltaTime);
+                    projectileListener.updateAll();
                     time++;
                 }
         );
@@ -99,6 +101,9 @@ public class GameController implements Initializable {
     private void initEntityListener() {
         game.getAllies().addListener(new EntListener(gamePane));
         game.getEnemies().addListener(new EntListener(gamePane));
+
+        projectileListener = new ProjectileListener(gamePane);
+        game.getProjectiles().addListener(projectileListener);
     }
 
     private void initButtons(){
@@ -185,6 +190,7 @@ public class GameController implements Initializable {
 
         });
     }
+
 
     private void updateScoreLabel() {
         scoreLabel.setText("Score : " + game.getScore());
