@@ -19,12 +19,12 @@ import java.util.Random;
 public class Game {
 
     private static final double PROJECTILE_SPEED = 8.0;
-    //private ObservableList<Entity> entities;//on peut pas avoir 5 listes d'Ã©lÃ©ments qui se rÃ©petent
+
     private ObservableList<Entity> allies;
     private ObservableList<Troop> enemies;
-    //private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
     private ObservableList<Projectile> projectiles;
+
     private MapGrid mapGrid;
     private int score;
     private String playerName = "ayoube";
@@ -37,20 +37,22 @@ public class Game {
     private Random random;
 
     public Game() {
-        //entities = FXCollections.observableArrayList();
         allies = FXCollections.observableArrayList();
         enemies = FXCollections.observableArrayList();
-        //troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         projectiles = FXCollections.observableArrayList();
+
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
+
         score = ScoreManager.loadScore(playerName);
         gold = 100;
         scoreRate = 1;
+
         difficultyTimer = 0.0;
         spawnTimer = 0.0;
         spawnInterval = 10;
+
         random = new Random();
     }
 
@@ -59,11 +61,10 @@ public class Game {
     }
 
     public void runGame() {
-        attackEnemies();
         removeDeadEntities();
     }
-    public void updateStates(double deltaTime) {
 
+    public void updateStates(double deltaTime) {
         difficultyTimer += deltaTime;
         spawnTimer += deltaTime;
 
@@ -81,20 +82,19 @@ public class Game {
             spawnEnemies(1);
         }
 
-        //updateTargets();
+        updateTowerAttackTimers(deltaTime);
+        attackEnemies();
+
         updateMovements(deltaTime);
         updateProjectiles(deltaTime);
         updateScore(deltaTime);
-        //removeDeadEntities();
+
+        removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
         return mapGrid;
     }
-
-    /*public ObservableList<Entity> getEntities() {
-        return entities;
-    }*/
 
     public ObservableList<Entity> getAllies() {
         return allies;
@@ -137,68 +137,77 @@ public class Game {
         gold -= amount;
     }
 
-    /*public void addEntity(Entity entity) {
-        entities.add(entity);
-    }
-
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
-    }
-    */
     public void removeDeadEntities() {
         allies.removeIf(ally -> !ally.isAlive());
         enemies.removeIf(enemy -> !enemy.isAlive());
     }
 
-
-
-    public boolean canPlaceTower(int x, int y){
-        if(!mapGrid.isInside(x,y)) {
+    public boolean canPlaceTower(int x, int y) {
+        if (!mapGrid.isInside(x, y)) {
             return false;
         }
-        if (mapGrid.isWalkable(x, y)){
+
+        if (mapGrid.isWalkable(x, y)) {
             return false;
         }
-        for (Tower tower : towers){
-            if(tower.getX() == x && tower.getY() == y){
+
+        for (Tower tower : towers) {
+            if (tower.getX() == x && tower.getY() == y) {
                 return false;
             }
         }
+
         return true;
     }
 
-    public boolean placeTower(int x,int y, int idTower){
-        if(!canPlaceTower(x,y)){
+    public boolean placeTower(int x, int y, int idTower) {
+        if (!canPlaceTower(x, y)) {
             return false;
         }
+
         EntityType entityType = EntityType.fromId(idTower);
+
         if (entityType == null) {
             return false;
         }
 
         Tower tower = null;
 
-        switch (entityType){
-            case ARCHERTOWER ->{
-                 tower = new ArcherTower(x,y);
+        switch (entityType) {
+            case ARCHERTOWER -> {
+                tower = new ArcherTower(x, y);
             }
-            case MAGE ->{
-                 tower = new Mage(x,y);
+
+            case MAGE -> {
+                tower = new Mage(x, y);
             }
-            case BARRACK ->  {
-                 tower = new Barrack(x,y);
-                 Troop recruit=null;
-                 if(mapGrid.isWalkable(x,y-1)) recruit=new Recruit(x,y-1);
-                 else if(mapGrid.isWalkable(x,y+1)) recruit=new Recruit(x,y+1);
-                 else if(mapGrid.isWalkable(x-1, y)) recruit=new Recruit(x-1,y);
-                 else if(mapGrid.isWalkable(x+1, y)) recruit=new Recruit(x+1,y);
-                 if(recruit!=null)allies.add(recruit);
+
+            case BARRACK -> {
+                tower = new Barrack(x, y);
+
+                Troop recruit = null;
+
+                if (mapGrid.isWalkable(x, y - 1)) {
+                    recruit = new Recruit(x, y - 1);
+                } else if (mapGrid.isWalkable(x, y + 1)) {
+                    recruit = new Recruit(x, y + 1);
+                } else if (mapGrid.isWalkable(x - 1, y)) {
+                    recruit = new Recruit(x - 1, y);
+                } else if (mapGrid.isWalkable(x + 1, y)) {
+                    recruit = new Recruit(x + 1, y);
+                }
+
+                if (recruit != null) {
+                    allies.add(recruit);
+                }
             }
+
             case ARTILLERY -> {
-                 tower = new Artillery(x,y);
+                tower = new Artillery(x, y);
             }
+
             case SHOCKWAVE -> {
-                 tower = new Shockwave(x,y);
+                tower = new Shockwave(x, y);
             }
         }
 
@@ -208,46 +217,60 @@ public class Game {
             return true;
         }
 
-        return true;
+        return false;
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
-        for (Troop enemy: enemies) {
+        for (Troop enemy : enemies) {
             enemy.setDestination(newDestination);
             assignMovement(enemy);
         }
     }
 
+    private void updateTowerAttackTimers(double deltaTime) {
+        for (Tower tower : towers) {
+            tower.updateAttackTimer(deltaTime);
+        }
+    }
+
     public void attackEnemies() {
-        double dx,dy,distance;
-        for (Tower tower: towers) {
-            for(Troop enemy:enemies) {
-                dx=enemy.getX()-tower.getX();
-                dy=enemy.getY()-tower.getY();
-                distance=Math.sqrt(dx*dx+dy*dy);
-                if(distance<=tower.getRange()){
-                    System.out.println("Tower: "+tower.toString()+" attacking "+enemy.toString());
-                    shootProjectile(tower,enemy);
-                }
+        for (Tower tower : towers) {
+            if (!tower.canAttack()) {
+                continue;
             }
 
+            if (tower.getDamage() <= 0) {
+                continue;
+            }
+
+            Troop target = findEnemyInRange(tower);
+
+            if (target != null) {
+                System.out.println("Tower: " + tower + " attacking " + target);
+
+                shootProjectile(tower, target);
+                tower.resetAttackTimer();
+            }
         }
     }
 
-    /*
-    private void updateTargets() {
-        updateTargets(allies);
-        updateTargets(enemies);
-    }
+    private Troop findEnemyInRange(Tower tower) {
+        Troop closestEnemy = null;
+        double closestDistance = Double.MAX_VALUE;
 
+        for (Troop enemy : enemies) {
+            double dx = enemy.getX() - tower.getX();
+            double dy = enemy.getY() - tower.getY();
+            double distance = Math.sqrt(dx * dx + dy * dy);
 
-     */
-    /*
-    private void updateTargets(ObservableList<Entity> entities) {
-        for (Entity entity : entities) {
-            entity.setTarget(findNearestTarget(entity));
+            if (distance <= tower.getRange() && distance < closestDistance) {
+                closestEnemy = enemy;
+                closestDistance = distance;
+            }
         }
-    }*/
+
+        return closestEnemy;
+    }
 
     private void updateMovements(double deltaTime) {
         for (Troop enemy : enemies) {
@@ -262,49 +285,24 @@ public class Game {
             projectile.updatePosition(deltaTime);
 
             if (projectile.isFinished()) {
-                projectile.getTarget().takeDamage(projectile.getDamage());
+                if (projectile.getTarget() != null && projectile.getTarget().isAlive()) {
+                    projectile.getTarget().takeDamage(projectile.getDamage());
+                }
+
                 projectiles.remove(projectile);
             }
         }
     }
-
-    /*
-    private void updateAttacks(double deltaTime) {
-        for (Entity ally : allies) {
-            if (ally.getTarget() != null) {
-                ally.attack();
-            }
-        }
-
-        for (Entity enemy : enemies) {
-            if (enemy.getTarget() != null) {
-                enemy.attack();
-            }
-        }
-
-        //removeDeadEntities();
-    }*/
-
-    /*
-    private void updateCollisions() {
-        for (Entity ally : allies) {
-            for (Entity enemy : enemies) {
-                if (isColliding(ally, enemy)) {
-                    ally.setTarget(enemy);
-                    enemy.setTarget(ally);
-                    System.out.println("Collision entre un alliÃ© et un ennemi !");
-                }
-            }
-        }
-    }*/
 
     private void spawnEnemies(int number) {
         List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
 
         for (int i = 0; i < number; i++) {
             Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
+
             Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
-            wolf.setDestination(new Point2D(base.getX(), base.getY())); //faire uen constante de point2d base
+            wolf.setDestination(new Point2D(base.getX(), base.getY()));
+
             spawnEnemy(wolf);
         }
     }
@@ -320,24 +318,20 @@ public class Game {
 
     private void addAlly(Troop troop) {
         allies.add(troop);
-        //troops.add(troop);
-        //entities.add(troop);
     }
 
     private void addEnemy(Troop troop) {
         enemies.add(troop);
-        //troops.add(troop);
-        //entities.add(troop);
     }
 
     private void addTower(Tower tower) {
         towers.add(tower);
         allies.add(tower);
-        //entities.add(tower);
     }
 
     private void assignMovement(Troop troop) {
         Point2D source = new Point2D(troop.getX(), troop.getY());
+
         AStar aStar = new AStar(mapGrid, source, troop.getDestination());
         List<Point2D> path = aStar.getPath();
 
@@ -347,38 +341,22 @@ public class Game {
     }
 
     private void shootProjectile(Entity source, Entity target) {
-        List<Point2D> trajectory = computeLineTiles((int) source.getX(), (int) source.getY(), (int) target.getX(), (int) target.getY());
-        projectiles.add(new Projectile(trajectory, target, source.getDamage(), PROJECTILE_SPEED));
+        List<Point2D> trajectory = computeLineTiles(
+                (int) source.getX(),
+                (int) source.getY(),
+                (int) target.getX(),
+                (int) target.getY()
+        );
+
+        Projectile projectile = new Projectile(
+                trajectory,
+                target,
+                source.getDamage(),
+                PROJECTILE_SPEED
+        );
+
+        projectiles.add(projectile);
     }
-
-    /*
-    private Entity findNearestTarget(Entity entity) {
-        if (enemies.containsgestion des attaques et mort des ennemis(entity)) {
-            return fixNearestTargetInList(entity, allies);
-        }
-
-        if (allies.contains(entity)) {
-            return fixNearestTargetInList(entity, enemies);
-        }
-
-        return null;
-    }
-
-    private Entity fixNearestTargetInList(Entity entity, ObservableList<Entity> targets) {
-        Entity nearestTarget = null;
-        double nearestDistance = Double.MAX_VALUE;
-
-        for (Entity target : targets) {
-            double distance = manhattanDistance(entity, target);
-
-            if (distance <= entity.getRange() && distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestTarget = target;
-            }
-        }
-
-        return nearestTarget;
-    }*/
 
     private double manhattanDistance(Entity first, Entity second) {
         return Math.abs(first.getX() - second.getX())
@@ -407,8 +385,10 @@ public class Game {
 
         int absDx = Math.abs(dx);
         int absDy = Math.abs(dy);
+
         int stepX = Integer.compare(dx, 0);
         int stepY = Integer.compare(dy, 0);
+
         int x = startX;
         int y = startY;
         int error = 0;
@@ -465,5 +445,4 @@ public class Game {
             spawnTiles.add(new Point2D(x, y));
         }
     }
-
 }
