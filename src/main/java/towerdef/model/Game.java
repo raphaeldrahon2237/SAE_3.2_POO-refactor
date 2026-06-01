@@ -212,12 +212,15 @@ public class Game {
     }
 
     public void attackEnemies() {
+        double dx,dy,distance;
         for (Tower tower: towers) {
             for(Troop enemy:enemies) {
-                if(enemy.getX()<= (tower.getX()+tower.getRange()) && enemy.getX()>= (tower.getX()-tower.getRange()) &&
-                enemy.getY()<=(tower.getY()+tower.getRange()) && enemy.getY()>= (tower.getX()-tower.getRange())){
+                dx=enemy.getX()-tower.getX();
+                dy=enemy.getY()-tower.getY();
+                distance=Math.sqrt(dx*dx+dy*dy);
+                if(distance<=tower.getRange()){
                     System.out.println("Tower: "+tower.toString()+" attacking "+enemy.toString());
-                    enemy.takeDamage(tower.getDamage());
+                    shootProjectile(tower,enemy);
                 }
             }
 
@@ -252,6 +255,7 @@ public class Game {
             projectile.updatePosition(deltaTime);
 
             if (projectile.isFinished()) {
+                projectile.getTarget().takeDamage(projectile.getDamage());
                 projectiles.remove(projectile);
             }
         }
