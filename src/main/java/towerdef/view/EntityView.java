@@ -50,6 +50,7 @@ public class EntityView {
         }
         iv.setFitHeight(TILESIZE-5);
         iv.setFitWidth(TILESIZE-5);
+        if(entity.getX()>9) iv.setScaleX(-1);
         iv.xProperty().bind(
                 entity.xProperty().multiply(TILESIZE)
         );

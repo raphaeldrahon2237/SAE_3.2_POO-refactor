@@ -19,10 +19,8 @@ import java.util.Random;
 public class Game {
 
     private static final double PROJECTILE_SPEED = 8.0;
-    //private ObservableList<Entity> entities;//on peut pas avoir 5 listes d'Ã©lÃ©ments qui se rÃ©petent
     private ObservableList<Entity> allies;
     private ObservableList<Troop> enemies;
-    //private ObservableList<Troop> troops;
     private ObservableList<Tower> towers;
     private ObservableList<Projectile> projectiles;
     private MapGrid mapGrid;
@@ -37,10 +35,8 @@ public class Game {
     private Random random;
 
     public Game() {
-        //entities = FXCollections.observableArrayList();
         allies = FXCollections.observableArrayList();
         enemies = FXCollections.observableArrayList();
-        //troops = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         projectiles = FXCollections.observableArrayList();
         mapGrid = new MapGrid();
@@ -81,20 +77,15 @@ public class Game {
             spawnEnemies(1);
         }
 
-        //updateTargets();
         updateMovements(deltaTime);
         updateProjectiles(deltaTime);
         updateScore(deltaTime);
-        //removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
         return mapGrid;
     }
 
-    /*public ObservableList<Entity> getEntities() {
-        return entities;
-    }*/
 
     public ObservableList<Entity> getAllies() {
         return allies;
@@ -137,14 +128,6 @@ public class Game {
         gold -= amount;
     }
 
-    /*public void addEntity(Entity entity) {
-        entities.add(entity);
-    }
-
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
-    }
-    */
     public void removeDeadEntities() {
         allies.removeIf(ally -> !ally.isAlive());
         enemies.removeIf(enemy -> !enemy.isAlive());
@@ -234,21 +217,6 @@ public class Game {
         }
     }
 
-    /*
-    private void updateTargets() {
-        updateTargets(allies);
-        updateTargets(enemies);
-    }
-
-
-     */
-    /*
-    private void updateTargets(ObservableList<Entity> entities) {
-        for (Entity entity : entities) {
-            entity.setTarget(findNearestTarget(entity));
-        }
-    }*/
-
     private void updateMovements(double deltaTime) {
         for (Troop enemy : enemies) {
             if (enemy.getMovement() != null) {
@@ -268,35 +236,6 @@ public class Game {
         }
     }
 
-    /*
-    private void updateAttacks(double deltaTime) {
-        for (Entity ally : allies) {
-            if (ally.getTarget() != null) {
-                ally.attack();
-            }
-        }
-
-        for (Entity enemy : enemies) {
-            if (enemy.getTarget() != null) {
-                enemy.attack();
-            }
-        }
-
-        //removeDeadEntities();
-    }*/
-
-    /*
-    private void updateCollisions() {
-        for (Entity ally : allies) {
-            for (Entity enemy : enemies) {
-                if (isColliding(ally, enemy)) {
-                    ally.setTarget(enemy);
-                    enemy.setTarget(ally);
-                    System.out.println("Collision entre un alliÃ© et un ennemi !");
-                }
-            }
-        }
-    }*/
 
     private void spawnEnemies(int number) {
         List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
@@ -320,20 +259,16 @@ public class Game {
 
     private void addAlly(Troop troop) {
         allies.add(troop);
-        //troops.add(troop);
-        //entities.add(troop);
+
     }
 
     private void addEnemy(Troop troop) {
         enemies.add(troop);
-        //troops.add(troop);
-        //entities.add(troop);
     }
 
     private void addTower(Tower tower) {
         towers.add(tower);
         allies.add(tower);
-        //entities.add(tower);
     }
 
     private void assignMovement(Troop troop) {
@@ -351,34 +286,6 @@ public class Game {
         projectiles.add(new Projectile(trajectory, target, source.getDamage(), PROJECTILE_SPEED));
     }
 
-    /*
-    private Entity findNearestTarget(Entity entity) {
-        if (enemies.containsgestion des attaques et mort des ennemis(entity)) {
-            return fixNearestTargetInList(entity, allies);
-        }
-
-        if (allies.contains(entity)) {
-            return fixNearestTargetInList(entity, enemies);
-        }
-
-        return null;
-    }
-
-    private Entity fixNearestTargetInList(Entity entity, ObservableList<Entity> targets) {
-        Entity nearestTarget = null;
-        double nearestDistance = Double.MAX_VALUE;
-
-        for (Entity target : targets) {
-            double distance = manhattanDistance(entity, target);
-
-            if (distance <= entity.getRange() && distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestTarget = target;
-            }
-        }
-
-        return nearestTarget;
-    }*/
 
     private double manhattanDistance(Entity first, Entity second) {
         return Math.abs(first.getX() - second.getX())
