@@ -12,7 +12,6 @@ public abstract class Entity {
     private int range;
     private Entity target;
     private double attackCooldown;
-
     private int scoreValue;
     private  DoubleProperty x = new SimpleDoubleProperty();
     private  DoubleProperty y = new SimpleDoubleProperty();

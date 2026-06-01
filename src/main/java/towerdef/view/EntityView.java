@@ -19,7 +19,6 @@ public class EntityView {
 
     private Pane gamePane;
     private Entity entity;
-    private Circle circle;
     private ImageView iv;
 
     private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
@@ -30,8 +29,6 @@ public class EntityView {
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
-        this.circle = new Circle();
-        circle.setFill(Color.PURPLE);
         iv = new ImageView();
         iv.setPreserveRatio(true);
 
