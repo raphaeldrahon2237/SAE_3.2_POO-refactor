@@ -2,29 +2,19 @@ package towerdef.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import towerdef.model.entity.tower.ArcherTower;
-import towerdef.view.EntityView;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
-import towerdef.model.entity.Entity;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import static towerdef.model.map.TileType.TILESIZE;
@@ -108,8 +98,8 @@ public class GameController implements Initializable {
     }
 
     private void initEntityListener() {
-        game.getAllies().addListener(new listenerEnt(gamePane));
-        game.getEnemies().addListener(new listenerEnt(gamePane));
+        game.getAllies().addListener(new EntListener(gamePane));
+        game.getEnemies().addListener(new EntListener(gamePane));
     }
 
     private void initButtons(){
