@@ -1,18 +1,12 @@
 package towerdef.view;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import towerdef.model.entity.Entity;
-import towerdef.model.entity.EntityType;
 import towerdef.model.entity.tower.ArcherTower;
 import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Wolf;
-
 import static towerdef.model.map.TileType.TILESIZE;
 
 public class EntityView {

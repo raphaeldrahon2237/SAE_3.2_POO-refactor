@@ -358,11 +358,6 @@ public class Game {
         projectiles.add(projectile);
     }
 
-    private double manhattanDistance(Entity first, Entity second) {
-        return Math.abs(first.getX() - second.getX())
-                + Math.abs(first.getY() - second.getY());
-    }
-
     private boolean isColliding(Entity entity1, Entity entity2) {
         double dx = entity1.getX() - entity2.getX();
         double dy = entity1.getY() - entity2.getY();
