@@ -28,10 +28,10 @@ public class TerrainView {
 
 
 
-        for (int i = 0; i <= map.length - 1; i++) {
-            for (int j = 0; j <= map[0].length - 1; j++) {
+        for (int y = 0; y <= map[0].length - 1; y++) {
+            for (int x = 0; x <= map.length - 1; x++) {
                 ImageView iv= new ImageView();
-                switch (map[i][j]){
+                switch (map[x][y]){
                     case 1: iv.setImage(grass1);
                         break;
                     case 2: iv.setImage(grass2);
