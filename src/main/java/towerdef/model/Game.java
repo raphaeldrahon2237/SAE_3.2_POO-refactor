@@ -185,20 +185,10 @@ public class Game {
             case BARRACK -> {
                 tower = new Barrack(x, y);
 
-                Troop recruit = null;
-
-                if (mapGrid.isWalkable(x, y - 1)) {
-                    recruit = new Recruit(x, y - 1);
-                } else if (mapGrid.isWalkable(x, y + 1)) {
-                    recruit = new Recruit(x, y + 1);
-                } else if (mapGrid.isWalkable(x - 1, y)) {
-                    recruit = new Recruit(x - 1, y);
-                } else if (mapGrid.isWalkable(x + 1, y)) {
-                    recruit = new Recruit(x + 1, y);
-                }
+                Troop recruit = createRecruitNextToBarrack(x, y);
 
                 if (recruit != null) {
-                    allies.add(recruit);
+                    spawnAlly(recruit);
                 }
             }
 
@@ -309,6 +299,26 @@ public class Game {
 
     private void spawnAlly(Troop troop) {
         addAlly(troop);
+    }
+
+    private Troop createRecruitNextToBarrack(int x, int y) {
+        int[][] directions = {
+                {0, -1},
+                {0, 1},
+                {-1, 0},
+                {1, 0}
+        };
+
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+
+            if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
+                return new Recruit(newX, newY);
+            }
+        }
+
+        return null;
     }
 
     private void spawnEnemy(Troop troop) {
