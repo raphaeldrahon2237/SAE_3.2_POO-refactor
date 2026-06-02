@@ -65,6 +65,18 @@ public class Game {
     }
 
     public void updateStates(double deltaTime) {
+
+        manageTimer(deltaTime);
+        updateTowerAttackTimers(deltaTime);
+        attackEnemies();
+
+        updateMovements(deltaTime);
+        updateProjectiles(deltaTime);
+        updateScore(deltaTime);
+
+        removeDeadEntities();
+    }
+    public void manageTimer(double deltaTime){
         difficultyTimer += deltaTime;
         spawnTimer += deltaTime;
 
@@ -81,15 +93,6 @@ public class Game {
             spawnTimer -= spawnInterval;
             spawnEnemies(1);
         }
-
-        updateTowerAttackTimers(deltaTime);
-        attackEnemies();
-
-        updateMovements(deltaTime);
-        updateProjectiles(deltaTime);
-        updateScore(deltaTime);
-
-        removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
@@ -225,13 +228,10 @@ public class Game {
 
     public void attackEnemies() {
         for (Tower tower : towers) {
-            if (!tower.canAttack()) {
+            if (tower.canAttack() && tower.getDamage() <= 0) {
                 continue;
             }
 
-            if (tower.getDamage() <= 0) {
-                continue;
-            }
 
             Troop target = findEnemyInRange(tower);
 

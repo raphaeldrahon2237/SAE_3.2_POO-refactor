@@ -127,6 +127,7 @@ public class GameController implements Initializable {
                 case B:
                     towerSelected=3;
                     System.out.println("Placement mode activated: Barracks");
+                    break;
                 case E:
                     destinationTestMode = true;
                     System.out.println("Destination test activated: Destination test mode");
