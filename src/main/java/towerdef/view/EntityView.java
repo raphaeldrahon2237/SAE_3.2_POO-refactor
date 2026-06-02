@@ -19,7 +19,6 @@ public class EntityView {
 
     private Pane gamePane;
     private Entity entity;
-    private Circle circle;
     private ImageView iv;
 
     private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
@@ -30,16 +29,12 @@ public class EntityView {
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
-        this.circle = new Circle();
-        circle.setFill(Color.PURPLE);
         iv = new ImageView();
         iv.setPreserveRatio(true);
 
     }
 
     public void createEntityView() {
-        Circle circle = new Circle();
-
 
         if (entity instanceof ArcherTower) {
             iv.setImage(archerTowerimg);
@@ -55,6 +50,7 @@ public class EntityView {
         }
         iv.setFitHeight(TILESIZE-5);
         iv.setFitWidth(TILESIZE-5);
+        if(entity.getX()>9) iv.setScaleX(-1);
         iv.xProperty().bind(
                 entity.xProperty().multiply(TILESIZE)
         );
@@ -66,5 +62,15 @@ public class EntityView {
         gamePane.getChildren().add(iv);
 
     }
+
+    public ImageView getIv() {
+        return iv;
+    }
+
+    public void setImageToNull(){
+        this.iv.setImage(null);
+    }
+
+
 
 }

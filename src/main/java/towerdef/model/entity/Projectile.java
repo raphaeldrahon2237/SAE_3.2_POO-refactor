@@ -16,7 +16,7 @@ public class Projectile {
     private boolean finished;
 
     public Projectile(List<Point2D> trajectory, Entity target, int damage, double speed) {
-        this.trajectory = new ArrayList<>();
+        this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.damage = damage;
         this.speed = speed;
@@ -34,7 +34,7 @@ public class Projectile {
             currentTileIndex++;
 
             if (currentTileIndex == trajectory.size() - 1) {
-                target.takeDamage(damage);
+                //target.takeDamage(damage);
                 finished = true;
             }
         }
@@ -58,5 +58,13 @@ public class Projectile {
 
     public boolean isFinished() {
         return finished;
+    }
+
+    public Entity getTarget() {
+        return target;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }

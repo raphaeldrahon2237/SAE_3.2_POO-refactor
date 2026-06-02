@@ -8,7 +8,6 @@ public abstract class Troop extends Entity {
     private int mvSpeed;
     private Point2D destination;
     private Movement movement;
-
     public Troop(int hp, int damage, int armor, int atkSpeed, int range, int mvSpeed, int x, int y) {
         super(hp, damage, armor, atkSpeed, range, x, y);
         this.mvSpeed = mvSpeed;
@@ -36,5 +35,9 @@ public abstract class Troop extends Entity {
 
     public void setMvSpeed(int mvSpeed) {
         this.mvSpeed = mvSpeed;
+    }
+
+    public String toString(){
+        return ""+super.toString();
     }
 }

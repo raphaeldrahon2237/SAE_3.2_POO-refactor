@@ -3,6 +3,11 @@ package towerdef.model.entity.tower;
 public class ArcherTower extends Tower {
 
     public ArcherTower(int x, int y) {
-        super(20, 5, 2, 7, 6, x, y, 10);
+        super(20, 5, 2, 7, 3, x, y, 10);
+    }
+
+    @Override
+    public String toString() {
+        return "Archer Tower: "+super.toString();
     }
 }
