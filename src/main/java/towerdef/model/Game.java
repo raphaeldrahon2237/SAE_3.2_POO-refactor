@@ -228,19 +228,19 @@ public class Game {
 
     public void attackEnemies() {
         for (Tower tower : towers) {
-            if (tower.canAttack() && tower.getDamage() <= 0) {
-                continue;
+            if (tower.canAttack() && tower.getDamage() >= 0) {
+                Troop target = findEnemyInRange(tower);
+
+                if (target != null) {
+                    System.out.println("Tower: " + tower + " attacking " + target);
+
+                    shootProjectile(tower, target);
+                    tower.resetAttackTimer();
+                }
             }
 
 
-            Troop target = findEnemyInRange(tower);
 
-            if (target != null) {
-                System.out.println("Tower: " + tower + " attacking " + target);
-
-                shootProjectile(tower, target);
-                tower.resetAttackTimer();
-            }
         }
     }
 
