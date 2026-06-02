@@ -24,8 +24,8 @@ public class ProjectileView {
 
         iv = new ImageView();
         iv.setImage(arrowImg);
-        iv.setFitWidth(TILESIZE / 2.0);
-        iv.setFitHeight(TILESIZE / 2.0);
+        iv.setFitWidth(TILESIZE/1.5);
+        iv.setFitHeight(TILESIZE/1.5);
         iv.setPreserveRatio(true);
     }
 
