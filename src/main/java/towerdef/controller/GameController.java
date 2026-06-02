@@ -79,7 +79,7 @@ public class GameController implements Initializable {
                     long now = System.nanoTime();
 
                     if (lastFrameTime == 0) {
-                        lastFrameTime = now;
+                       lastFrameTime = now;
                         return;
                     }
 
@@ -172,7 +172,8 @@ public class GameController implements Initializable {
     private void initDestinationTest() {
         gamePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
-            while (destinationTestMode){
+
+            if (destinationTestMode){
                 int x = (int) (event.getX() / TILESIZE);
                 int y = (int) (event.getY() / TILESIZE);
 
