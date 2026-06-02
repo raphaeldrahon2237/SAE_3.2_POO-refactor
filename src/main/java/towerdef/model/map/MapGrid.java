@@ -8,7 +8,7 @@ public class MapGrid {
     private int[][] map;
 
     public MapGrid() {
-        this.map = new int[][]
+        int[][] mapRows = new int[][]
                 {
                     {3, 3, 3, 3, 3, 3, 3, 3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 15, 15, 15, 15, 16, 15, 15, 1, 1, 1, 1, 1},
                     {3, 3, 3, 3, 3, 3, 3, 3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 15, 15, 16, 16, 16, 15, 15, 1, 1, 3, 1},
@@ -31,6 +31,8 @@ public class MapGrid {
                     {2, 2, 2, 2, 6, 2, 2, 2, 9, 10, 2, 2, 2, 3, 1, 1, 6, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {2, 2, 2, 2, 6, 2, 2, 2, 2, 6, 2, 2, 2, 2, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
                 };
+
+        this.map = transposeToXY(mapRows);
     }
 
     public int[][] getMap() {
@@ -38,11 +40,11 @@ public class MapGrid {
     }
 
     public int getWidth() {
-        return map[0].length;
+        return map.length;
     }
 
     public int getHeight() {
-        return map.length;
+        return map[0].length;
     }
 
     public boolean isInside(int x, int y) {
@@ -50,7 +52,7 @@ public class MapGrid {
     }
 
     public int getTile(int x, int y) {
-        return map[y][x];
+        return map[x][y];
     }
 
     public boolean isWalkable(int x, int y) {
@@ -112,5 +114,19 @@ public class MapGrid {
         for (int y = startY; y <= endY; y++) {
             path.add(new Point2D(x, y));
         }
+    }
+
+    private int[][] transposeToXY(int[][] mapRows) {
+        int width = mapRows[0].length;
+        int height = mapRows.length;
+        int[][] mapXY = new int[width][height];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                mapXY[x][y] = mapRows[y][x];
+            }
+        }
+
+        return mapXY;
     }
 }
