@@ -52,7 +52,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         game = new Game();
-        updateScoreLabel();
+        updateScoreLabel(); // TODO voir si possible de supprimer
         updateGoldLabel();
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
@@ -89,7 +89,7 @@ public class GameController implements Initializable {
 
                     game.runGame();
                     game.updateStates(deltaTime);
-                    projectileListener.updateAll();
+                    projectileListener.updateAll();  //TODO s'en débarasser avec des bind du projectile modèle vers le projectile vue
                     time++;
                 }
         );
