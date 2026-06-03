@@ -42,9 +42,4 @@ public class ProjectileListener implements ListChangeListener<Projectile> {
         }
     }
 
-    public void updateAll() {
-        for (ProjectileView projectileView : projectileViews.values()) {
-            projectileView.update();
-        }
-    }
 }
