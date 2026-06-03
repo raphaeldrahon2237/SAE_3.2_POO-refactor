@@ -199,11 +199,7 @@ public class Game {
             }
         }
 
-        if (tower == null) {
-            return false;
-        }
-
-        if (gold < tower.getCost()) {
+        if (tower == null && gold <tower.getCost()) {
             return false;
         }
 
