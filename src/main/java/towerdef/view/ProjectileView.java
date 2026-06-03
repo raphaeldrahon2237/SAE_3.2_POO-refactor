@@ -1,6 +1,5 @@
 package towerdef.view;
 
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -30,20 +29,9 @@ public class ProjectileView {
     }
 
     public void createProjectileView() {
-        update();
         gamePane.getChildren().add(iv);
-    }
-
-    public void update() {
-        Point2D current = projectile.getCurrentTile();
-        Point2D next = projectile.getNextTile();
-        double progress = projectile.getProgressToNextTile();
-
-        double x = current.getX() + (next.getX() - current.getX()) * progress;
-        double y = current.getY() + (next.getY() - current.getY()) * progress;
-
-        iv.setLayoutX(x * TILESIZE + TILESIZE / 4.0);
-        iv.setLayoutY(y * TILESIZE + TILESIZE / 4.0);
+        iv.xProperty().bind(projectile.xProperty().multiply(TILESIZE).add(TILESIZE / 4.0));
+        iv.yProperty().bind(projectile.yProperty().multiply(TILESIZE).add(TILESIZE / 4.0));
     }
 
     public ImageView getIv() {
