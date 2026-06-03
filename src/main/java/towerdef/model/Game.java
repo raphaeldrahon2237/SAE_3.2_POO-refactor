@@ -72,8 +72,12 @@ public class Game {
     public void updateStates(double deltaTime) {
 
         manageTimer(deltaTime);
-        updateTowerAttackTimers(deltaTime);
-        attackEnemies();
+
+        updateAlliesAttackTimers(deltaTime);
+        updateEnemiesAttackTimers(deltaTime);
+
+        alliesAttackEnemies();
+        enemiesAttackAllies();
 
         updateMovements(deltaTime);
         updateProjectiles(deltaTime);
@@ -243,40 +247,86 @@ public class Game {
         }
     }
 
-    private void updateTowerAttackTimers(double deltaTime) {
-        for (Tower tower : towers) {
-            tower.updateAttackTimer(deltaTime);
+
+
+    private void updateAlliesAttackTimers(double deltaTime) {
+        for (Entity ally : allies) {
+            ally.updateAttackTimer(deltaTime);
         }
     }
 
-    public void attackEnemies() {
-        for (Tower tower : towers) {
-            if (tower.canAttack() && tower.getDamage() >= 0) {
-                Enemy target = findEnemyInRange(tower);
+
+
+    public void alliesAttackEnemies() {
+        for (Entity ally : allies) {
+            if (ally.canAttack() && ally.getDamage() > 0) {
+                Enemy target = findEnemyInRange(ally);
 
                 if (target != null) {
-                    System.out.println("Tower: " + tower + " attacking " + target);
+                    System.out.println("Ally: " + ally + " attacking " + target);
 
-                    shootProjectile(tower, target);
-                    tower.resetAttackTimer();
+                    shootProjectile(ally, target);
+                    ally.resetAttackTimer();
                 }
             }
+        }
 
-
-
+    }
+    private void updateEnemiesAttackTimers(double deltaTime) {
+        for (Enemy enemy : enemies) {
+            enemy.updateAttackTimer(deltaTime);
         }
     }
 
-    private Enemy findEnemyInRange(Tower tower) {
+    private void enemiesAttackAllies() {
+        for (Enemy enemy : enemies) {
+            if (enemy.canAttack() && enemy.getDamage() > 0) {
+                Entity target = findAllyInRange(enemy);
+
+                if (target != null) {
+                    System.out.println("Enemy: " + enemy + " attacking " + target);
+
+                    shootProjectile(enemy, target);
+                    enemy.resetAttackTimer();
+                }
+            }
+        }
+    }
+
+    private Entity findAllyInRange(Enemy enemy) {
+        Entity closestAlly = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity ally : allies) {
+
+            boolean isRecruit = !towers.contains(ally);
+            boolean canBeAttacked = ally.isAlive();
+
+            if (isRecruit && canBeAttacked) {
+                double dx = ally.getX() - enemy.getX();
+                double dy = ally.getY() - enemy.getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= enemy.getRange() && distance < closestDistance) {
+                    closestAlly = ally;
+                    closestDistance = distance;
+                }
+            }
+        }
+
+        return closestAlly;
+    }
+
+    private Enemy findEnemyInRange(Entity source) {
         Enemy closestEnemy = null;
         double closestDistance = Double.MAX_VALUE;
 
         for (Enemy enemy : enemies) {
-            double dx = enemy.getX() - tower.getX();
-            double dy = enemy.getY() - tower.getY();
+            double dx = enemy.getX() - source.getX();
+            double dy = enemy.getY() - source.getY();
             double distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance <= tower.getRange() && distance < closestDistance) {
+            if (distance <= source.getRange() && distance < closestDistance) {
                 closestEnemy = enemy;
                 closestDistance = distance;
             }
@@ -284,11 +334,31 @@ public class Game {
 
         return closestEnemy;
     }
-
     private void updateMovements(double deltaTime) {
         for (Enemy enemy : enemies) {
-            enemy.updateMovement(deltaTime);
+            if (!isEnemyInCombat(enemy)) {
+                enemy.updateMovement(deltaTime);
+            }
         }
+    }
+    private boolean isEnemyInCombat(Enemy enemy) {
+        for (Entity ally : allies) {
+
+            boolean isRecruitOrTroop = !towers.contains(ally);
+            boolean canFight = ally.isAlive() && ally.getDamage() > 0;
+
+            if (isRecruitOrTroop && canFight) {
+                double dx = enemy.getX() - ally.getX();
+                double dy = enemy.getY() - ally.getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= ally.getRange()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void updateProjectiles(double deltaTime) {
