@@ -23,7 +23,7 @@ public class EntityView {
 
     private final Image wolfimg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
     private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
-    private final Image archerTowerimg= new Image(EntityView.class.getResourceAsStream("/images/archerTower.png"));
+    private final Image archerTowerimg= new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
     private final Image barrackimg= new Image(EntityView.class.getResourceAsStream("/images/barrack.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
