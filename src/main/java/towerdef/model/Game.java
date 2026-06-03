@@ -32,6 +32,7 @@ public class Game {
     private String playerName = "ayoube";
     private Base base;
     private int scoreRate;
+    private double scoreValue;
     private IntegerProperty gold;
     private double difficultyTimer;
     private double spawnInterval;
@@ -43,6 +44,8 @@ public class Game {
         enemies = FXCollections.observableArrayList();
         towers = FXCollections.observableArrayList();
         projectiles = FXCollections.observableArrayList();
+        scoreValue = ScoreManager.loadScore(playerName);
+        score = new SimpleIntegerProperty((int) scoreValue);
 
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
@@ -122,14 +125,17 @@ public class Game {
     }
 
     public void addScore(int amount) {
-        score.set(score.get() + amount);
+        scoreValue += amount;
+        score.set((int) scoreValue);
     }
 
     public void updateScore(double deltaTime) {
-        score.set(score.get() + (int) (deltaTime * scoreRate));
+        scoreValue += deltaTime * scoreRate;
+        score.set((int) scoreValue);
     }
 
     public void resetScore() {
+        scoreValue = 0;
         score.set(0);
         ScoreManager.saveScore(playerName, score.get());
     }
