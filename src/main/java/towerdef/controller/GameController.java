@@ -48,6 +48,8 @@ public class GameController implements Initializable {
     private double deltaTime;
     private Game game;
     private ProjectileListener projectileListener;
+    private EntListener alliesListener;
+    private EntListener enemiesListener;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,13 +58,13 @@ public class GameController implements Initializable {
         updateGoldLabel();
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
-        initEntityListener();
+        initListeners();
 
         initKeyboardControls();
-        initButtons();
+        initButtonControls();
+        initTowerPlacementControls();
 
         game.setInitialState();
-        initTowerPlacement();
         initDestinationTest();
         initAnimation();
     }
@@ -89,6 +91,8 @@ public class GameController implements Initializable {
 
                     game.runGame();
                     game.updateStates(deltaTime);
+                    alliesListener.animations(deltaTime);
+                    enemiesListener.animations(deltaTime);
                     projectileListener.updateAll();  //TODO s'en débarasser avec des bind du projectile modèle vers le projectile vue
                     time++;
                 }
@@ -98,15 +102,17 @@ public class GameController implements Initializable {
         gameLoop.play();
     }
 
-    private void initEntityListener() {
-        game.getAllies().addListener(new EntListener(gamePane));
-        game.getEnemies().addListener(new EntListener(gamePane));
+    private void initListeners() {
+        alliesListener=new EntListener(gamePane);
+        enemiesListener=new EntListener(gamePane);
+        game.getAllies().addListener(alliesListener);
+        game.getEnemies().addListener(enemiesListener);
 
         projectileListener = new ProjectileListener(gamePane);
         game.getProjectiles().addListener(projectileListener);
     }
 
-    private void initButtons(){
+    private void initButtonControls(){
         buttonArcherTower.setOnAction(event -> {
             towerSelected=1;
             System.out.println("Placement mode activated: Archer Tower");});
@@ -145,7 +151,7 @@ public class GameController implements Initializable {
         gamePane.requestFocus();
     }
 
-    private void initTowerPlacement() {
+    private void initTowerPlacementControls() {
         gamePane.setOnMouseClicked(event -> {
 
             if(towerSelected!=0) {
