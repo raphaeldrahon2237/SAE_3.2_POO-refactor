@@ -28,6 +28,7 @@ public class Game {
     private ObservableList<Projectile> projectiles;
 
     private MapGrid mapGrid;
+    private AStar[] aStarList;
     private IntegerProperty score;
     private String playerName = "ayoube";
     private Base base;
@@ -49,6 +50,7 @@ public class Game {
 
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
+        aStarList = createPaths();
 
         score = new SimpleIntegerProperty(ScoreManager.loadScore(playerName));
         gold = new SimpleIntegerProperty(100);
@@ -360,14 +362,44 @@ public class Game {
         allies.add(tower);
     }
 
-    private void assignMovement(Enemy enemy) {
-        Point2D source = new Point2D(enemy.getX(), enemy.getY());
+    private AStar[] createPaths() {
+        List<Point2D> spawnPoints = getWalkableEdgeTiles();
+        AStar[] aStarList = new AStar[spawnPoints.size()];
+        Point2D baseTile = new Point2D(base.getX(), base.getY());
 
-        AStar aStar = new AStar(mapGrid, source, enemy.getDestination());
-        List<Point2D> path = aStar.getPath();
+        for (int i = 0; i < aStarList.length; i++) {
+            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile);
+        }
+        return aStarList;
+    }
+
+    private boolean assignMovement(Enemy enemy) {
+        List<Point2D> path = getCachedPath(enemy);
+
+        if (path == null) {
+            Point2D source = new Point2D(enemy.getX(), enemy.getY());
+            AStar aStar = new AStar(mapGrid, source, enemy.getDestination());
+            path = aStar.getPath();
+        }
 
         enemy.setPath(path);
         enemy.startMovement();
+
+        return !path.isEmpty();
+    }
+
+    private List<Point2D> getCachedPath(Enemy enemy) {
+        if (!new Point2D(base.getX(), base.getY()).equals(enemy.getDestination())) {
+            return null;
+        }
+
+        for (AStar aStar : aStarList) {
+            if (aStar.getSource().getX() == enemy.getX() && aStar.getSource().getY() == enemy.getY()) {
+                return aStar.getPath();
+            }
+        }
+
+        return null;
     }
 
     private void shootProjectile(Entity source, Entity target) {
