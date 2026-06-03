@@ -1,7 +1,5 @@
 package towerdef.model.entity;
 
-import towerdef.model.map.TileType;
-
 public enum EntityType {
 
     ARCHERTOWER(1),

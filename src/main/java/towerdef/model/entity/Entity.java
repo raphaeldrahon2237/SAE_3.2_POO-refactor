@@ -36,18 +36,6 @@ public abstract class Entity {
         this.attackTimer = 0.0;
     }
 
-    /*
-    public void attack() {
-        if (target != null) {
-            target.takeDamage(damage);
-
-            if (!target.isAlive()) {
-                target = null;
-            }
-        }
-    }
-    */
-
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
         hp -= damage;
@@ -95,10 +83,6 @@ public abstract class Entity {
 
     public int getArmor() {
         return armor;
-    }
-
-    public int getAtkSpeed() {
-        return attackSpeed;
     }
 
     public int getAttackSpeed() {

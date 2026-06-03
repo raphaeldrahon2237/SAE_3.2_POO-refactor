@@ -6,7 +6,7 @@ import towerdef.model.entity.troop.Troop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movement {
+public class Movement { //TODO tout ceci concerne le mouvement des ennemis, ça devrait être déplacé dans la classe Enemy
 
     private Troop troop;
     private List<Point2D> path;

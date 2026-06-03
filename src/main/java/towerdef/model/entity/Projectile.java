@@ -34,7 +34,6 @@ public class Projectile {
             currentTileIndex++;
 
             if (currentTileIndex == trajectory.size() - 1) {
-                //target.takeDamage(damage);
                 finished = true;
             }
         }

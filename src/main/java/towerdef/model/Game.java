@@ -65,6 +65,18 @@ public class Game {
     }
 
     public void updateStates(double deltaTime) {
+
+        manageTimer(deltaTime);
+        updateTowerAttackTimers(deltaTime);
+        attackEnemies();
+
+        updateMovements(deltaTime);
+        updateProjectiles(deltaTime);
+        updateScore(deltaTime);
+
+        removeDeadEntities();
+    }
+    public void manageTimer(double deltaTime){
         difficultyTimer += deltaTime;
         spawnTimer += deltaTime;
 
@@ -81,15 +93,6 @@ public class Game {
             spawnTimer -= spawnInterval;
             spawnEnemies(1);
         }
-
-        updateTowerAttackTimers(deltaTime);
-        attackEnemies();
-
-        updateMovements(deltaTime);
-        updateProjectiles(deltaTime);
-        updateScore(deltaTime);
-
-        removeDeadEntities();
     }
 
     public MapGrid getMapGrid() {
@@ -185,21 +188,6 @@ public class Game {
             case BARRACK -> {
                 tower = new Barrack(x, y);
 
-                Troop recruit = null;
-
-                if (mapGrid.isWalkable(x, y - 1)) {
-                    recruit = new Recruit(x, y - 1);
-                } else if (mapGrid.isWalkable(x, y + 1)) {
-                    recruit = new Recruit(x, y + 1);
-                } else if (mapGrid.isWalkable(x - 1, y)) {
-                    recruit = new Recruit(x - 1, y);
-                } else if (mapGrid.isWalkable(x + 1, y)) {
-                    recruit = new Recruit(x + 1, y);
-                }
-
-                if (recruit != null) {
-                    allies.add(recruit);
-                }
             }
 
             case ARTILLERY -> {
@@ -211,14 +199,25 @@ public class Game {
             }
         }
 
-        if (tower != null && gold >= tower.getCost()) {
-            spendGold(tower.getCost());
-            addTower(tower);
-            return true;
+        if (tower == null && gold <tower.getCost()) {
+            return false;
         }
 
-        return false;
+        spendGold(tower.getCost());
+        addTower(tower);
+
+
+        if (entityType == EntityType.BARRACK) {
+            Troop recruit = createRecruitNextToBarrack(x, y);
+
+            if (recruit != null) {
+                spawnAlly(recruit);
+            }
+        }
+
+        return true;
     }
+
 
     public void changeEnemiesDestination(Point2D newDestination) {
         for (Troop enemy : enemies) {
@@ -235,22 +234,19 @@ public class Game {
 
     public void attackEnemies() {
         for (Tower tower : towers) {
-            if (!tower.canAttack()) {
-                continue;
+            if (tower.canAttack() && tower.getDamage() >= 0) {
+                Troop target = findEnemyInRange(tower);
+
+                if (target != null) {
+                    System.out.println("Tower: " + tower + " attacking " + target);
+
+                    shootProjectile(tower, target);
+                    tower.resetAttackTimer();
+                }
             }
 
-            if (tower.getDamage() <= 0) {
-                continue;
-            }
 
-            Troop target = findEnemyInRange(tower);
 
-            if (target != null) {
-                System.out.println("Tower: " + tower + " attacking " + target);
-
-                shootProjectile(tower, target);
-                tower.resetAttackTimer();
-            }
         }
     }
 
@@ -311,6 +307,26 @@ public class Game {
         addAlly(troop);
     }
 
+    private Troop createRecruitNextToBarrack(int x, int y) {
+        int[][] directions = {
+                {0, -1},
+                {0, 1},
+                {-1, 0},
+                {1, 0}
+        };
+
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+
+            if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
+                return new Recruit(newX, newY);
+            }
+        }
+
+        return null;
+    }
+
     private void spawnEnemy(Troop troop) {
         assignMovement(troop);
         addEnemy(troop);
@@ -356,11 +372,6 @@ public class Game {
         );
 
         projectiles.add(projectile);
-    }
-
-    private double manhattanDistance(Entity first, Entity second) {
-        return Math.abs(first.getX() - second.getX())
-                + Math.abs(first.getY() - second.getY());
     }
 
     private boolean isColliding(Entity entity1, Entity entity2) {

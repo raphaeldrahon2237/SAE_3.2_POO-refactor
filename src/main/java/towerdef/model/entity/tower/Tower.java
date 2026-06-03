@@ -1,8 +1,5 @@
 package towerdef.model.entity.tower;
-
 import towerdef.model.entity.Entity;
-
-import java.util.PriorityQueue;
 
 public abstract class Tower extends Entity {
 
