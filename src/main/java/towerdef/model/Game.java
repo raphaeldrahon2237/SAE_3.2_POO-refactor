@@ -4,9 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.core.AStar;
-import towerdef.model.core.Movement;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.*;
+import towerdef.model.entity.troop.Enemy;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.entity.troop.Wolf;
@@ -21,7 +21,7 @@ public class Game {
     private static final double PROJECTILE_SPEED = 8.0;
 
     private ObservableList<Entity> allies;
-    private ObservableList<Troop> enemies;
+    private ObservableList<Enemy> enemies;
     private ObservableList<Tower> towers;
     private ObservableList<Projectile> projectiles;
 
@@ -103,7 +103,7 @@ public class Game {
         return allies;
     }
 
-    public ObservableList<Troop> getEnemies() {
+    public ObservableList<Enemy> getEnemies() {
         return enemies;
     }
 
@@ -221,7 +221,7 @@ public class Game {
 
 
     public void changeEnemiesDestination(Point2D newDestination) {
-        for (Troop enemy : enemies) {
+        for (Enemy enemy : enemies) {
             enemy.setDestination(newDestination);
             assignMovement(enemy);
         }
@@ -270,10 +270,8 @@ public class Game {
     }
 
     private void updateMovements(double deltaTime) {
-        for (Troop enemy : enemies) {
-            if (enemy.getMovement() != null) {
-                enemy.getMovement().update(deltaTime);
-            }
+        for (Enemy enemy : enemies) {
+            enemy.updateMovement(deltaTime);
         }
     }
 
@@ -328,17 +326,17 @@ public class Game {
         return null;
     }
 
-    private void spawnEnemy(Troop troop) {
-        assignMovement(troop);
-        addEnemy(troop);
+    private void spawnEnemy(Enemy enemy) {
+        assignMovement(enemy);
+        addEnemy(enemy);
     }
 
     private void addAlly(Troop troop) {
         allies.add(troop);
     }
 
-    private void addEnemy(Troop troop) {
-        enemies.add(troop);
+    private void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
     }
 
     private void addTower(Tower tower) {
@@ -346,15 +344,14 @@ public class Game {
         allies.add(tower);
     }
 
-    private void assignMovement(Troop troop) {
-        Point2D source = new Point2D(troop.getX(), troop.getY());
+    private void assignMovement(Enemy enemy) {
+        Point2D source = new Point2D(enemy.getX(), enemy.getY());
 
-        AStar aStar = new AStar(mapGrid, source, troop.getDestination());
+        AStar aStar = new AStar(mapGrid, source, enemy.getDestination());
         List<Point2D> path = aStar.getPath();
 
-        Movement movement = new Movement(troop, path);
-        troop.setMovement(movement);
-        movement.start();
+        enemy.setPath(path);
+        enemy.startMovement();
     }
 
     private void shootProjectile(Entity source, Entity target) {
