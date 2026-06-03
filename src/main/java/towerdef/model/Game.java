@@ -188,11 +188,6 @@ public class Game {
             case BARRACK -> {
                 tower = new Barrack(x, y);
 
-                Troop recruit = createRecruitNextToBarrack(x, y);
-
-                if (recruit != null) {
-                    spawnAlly(recruit);
-                }
             }
 
             case ARTILLERY -> {
@@ -204,14 +199,29 @@ public class Game {
             }
         }
 
-        if (tower != null && gold >= tower.getCost()) {
-            spendGold(tower.getCost());
-            addTower(tower);
-            return true;
+        if (tower == null) {
+            return false;
         }
 
-        return false;
+        if (gold < tower.getCost()) {
+            return false;
+        }
+
+        spendGold(tower.getCost());
+        addTower(tower);
+
+
+        if (entityType == EntityType.BARRACK) {
+            Troop recruit = createRecruitNextToBarrack(x, y);
+
+            if (recruit != null) {
+                spawnAlly(recruit);
+            }
+        }
+
+        return true;
     }
+
 
     public void changeEnemiesDestination(Point2D newDestination) {
         for (Troop enemy : enemies) {
