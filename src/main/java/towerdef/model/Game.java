@@ -196,39 +196,14 @@ public class Game {
             return false;
         }
 
-        Tower tower = null;
+        Tower tower = TowerFactory.createTower(entityType, x, y);
 
-        switch (entityType) {
-            case ARCHERTOWER -> {
-                tower = new ArcherTower(x, y);
-            }
-
-            case MAGE -> {
-                tower = new Mage(x, y);
-            }
-
-            case BARRACK -> {
-                tower = new Barrack(x, y);
-
-            }
-
-            case ARTILLERY -> {
-                tower = new Artillery(x, y);
-            }
-
-            case SHOCKWAVE -> {
-                tower = new Shockwave(x, y);
-            }
-        }
-
-        if (tower == null || getGold() <tower.getCost()) {
+        if (tower == null || getGold() < tower.getCost()) {
             return false;
         }
 
-
         spendGold(tower.getCost());
         addTower(tower);
-
 
         if (entityType == EntityType.BARRACK) {
             Troop recruit = createRecruitNextToBarrack(x, y);
