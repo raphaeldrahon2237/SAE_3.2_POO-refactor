@@ -199,9 +199,10 @@ public class Game {
             }
         }
 
-        if (tower == null && gold <tower.getCost()) {
+        if (tower == null || gold <tower.getCost()) {
             return false;
         }
+
 
         spendGold(tower.getCost());
         addTower(tower);
