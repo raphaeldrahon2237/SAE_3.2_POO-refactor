@@ -43,6 +43,10 @@ public class AStar {
         return path;
     }
 
+    public Point2D getSource() {
+        return source;
+    }
+
     public void setSource(Point2D source) {
         this.source = source;
         clear();
