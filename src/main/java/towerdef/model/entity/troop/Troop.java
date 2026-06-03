@@ -1,13 +1,13 @@
 package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
-import towerdef.model.core.Movement;
 import towerdef.model.entity.Entity;
 
 public abstract class Troop extends Entity {
+
     private int mvSpeed;
     private Point2D destination;
-    private Movement movement;
+
     public Troop(int hp, int damage, int armor, int atkSpeed, int range, int mvSpeed, int x, int y) {
         super(hp, damage, armor, atkSpeed, range, x, y);
         this.mvSpeed = mvSpeed;
@@ -21,14 +21,6 @@ public abstract class Troop extends Entity {
         this.destination = destination;
     }
 
-    public Movement getMovement() {
-        return movement;
-    }
-
-    public void setMovement(Movement movement) {
-        this.movement = movement;
-    }
-
     public int getMvSpeed() {
         return mvSpeed;
     }
@@ -37,7 +29,8 @@ public abstract class Troop extends Entity {
         this.mvSpeed = mvSpeed;
     }
 
-    public String toString(){
-        return ""+super.toString();
+    @Override
+    public String toString() {
+        return "" + super.toString();
     }
 }
