@@ -95,7 +95,7 @@ public class GameController implements Initializable {
                     game.updateStates(deltaTime);
                     alliesListener.animations(deltaTime);
                     enemiesListener.animations(deltaTime);
-                    projectileListener.updateAll();  //TODO s'en débarasser avec des bind du projectile modèle vers le projectile vue
+
                     time++;
                 }
         );
