@@ -1,5 +1,7 @@
 package towerdef.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -26,11 +28,11 @@ public class Game {
     private ObservableList<Projectile> projectiles;
 
     private MapGrid mapGrid;
-    private int score;
+    private IntegerProperty score;
     private String playerName = "ayoube";
     private Base base;
     private int scoreRate;
-    private int gold;
+    private IntegerProperty gold;
     private double difficultyTimer;
     private double spawnInterval;
     private double spawnTimer;
@@ -45,8 +47,8 @@ public class Game {
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
 
-        score = ScoreManager.loadScore(playerName);
-        gold = 100;
+        score = new SimpleIntegerProperty(ScoreManager.loadScore(playerName));
+        gold = new SimpleIntegerProperty(100);
         scoreRate = 1;
 
         difficultyTimer = 0.0;
@@ -112,32 +114,40 @@ public class Game {
     }
 
     public int getScore() {
+        return score.get();
+    }
+
+    public IntegerProperty scoreProperty() {
         return score;
     }
 
-    public void addScore(int score) {
-        this.score += score;
+    public void addScore(int amount) {
+        score.set(score.get() + amount);
     }
 
     public void updateScore(double deltaTime) {
-        score += deltaTime * scoreRate;
+        score.set(score.get() + (int) (deltaTime * scoreRate));
     }
 
     public void resetScore() {
-        score = 0;
-        ScoreManager.saveScore(playerName, score);
+        score.set(0);
+        ScoreManager.saveScore(playerName, score.get());
     }
 
     public int getGold() {
+        return gold.get();
+    }
+
+    public IntegerProperty goldProperty() {
         return gold;
     }
 
     public void addGold(int amount) {
-        gold += amount;
+        gold.set(gold.get() + amount);
     }
 
     public void spendGold(int amount) {
-        gold -= amount;
+        gold.set(gold.get() - amount);
     }
 
     public void removeDeadEntities() {
@@ -199,7 +209,7 @@ public class Game {
             }
         }
 
-        if (tower == null || gold <tower.getCost()) {
+        if (tower == null || getGold() <tower.getCost()) {
             return false;
         }
 
@@ -236,7 +246,7 @@ public class Game {
     public void attackEnemies() {
         for (Tower tower : towers) {
             if (tower.canAttack() && tower.getDamage() >= 0) {
-                Troop target = findEnemyInRange(tower);
+                Enemy target = findEnemyInRange(tower);
 
                 if (target != null) {
                     System.out.println("Tower: " + tower + " attacking " + target);
@@ -251,11 +261,11 @@ public class Game {
         }
     }
 
-    private Troop findEnemyInRange(Tower tower) {
-        Troop closestEnemy = null;
+    private Enemy findEnemyInRange(Tower tower) {
+        Enemy closestEnemy = null;
         double closestDistance = Double.MAX_VALUE;
 
-        for (Troop enemy : enemies) {
+        for (Enemy enemy : enemies) {
             double dx = enemy.getX() - tower.getX();
             double dy = enemy.getY() - tower.getY();
             double distance = Math.sqrt(dx * dx + dy * dy);
