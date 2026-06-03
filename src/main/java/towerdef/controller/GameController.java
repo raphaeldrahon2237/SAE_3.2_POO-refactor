@@ -52,8 +52,10 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         game = new Game();
-        updateScoreLabel(); // TODO voir si possible de supprimer
-        updateGoldLabel();
+        game = new Game();
+
+        scoreLabel.textProperty().bind(game.scoreProperty().asString("Score : %d"));
+        goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
         initEntityListener();
@@ -158,8 +160,6 @@ public class GameController implements Initializable {
                 if (placed) {
                     System.out.println("Tower placed in : " + x + ", " + y);
                     game.addScore(10);
-                    updateScoreLabel();
-                    updateGoldLabel();
                     towerSelected=0;
                 } else {
                     System.out.println("Tower placement impossible : " + x + ", " + y);
@@ -194,12 +194,6 @@ public class GameController implements Initializable {
     }
 
 
-    private void updateScoreLabel() {
-        scoreLabel.setText("Score : " + game.getScore());
-    }
-    private void updateGoldLabel() {
-        goldLabel.setText("Gold : " + game.getGold());
-    }
     public void onClose() {
         game.resetScore();
     }
