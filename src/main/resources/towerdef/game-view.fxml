@@ -8,39 +8,52 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="672.0" prefWidth="1184.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdef.controller.GameController">
-   <top>
-      <VBox prefHeight="32.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" text="TOWER DEFENSE" />
-         </children>
-      </VBox>
-   </top>
-   <left>
-      <Pane prefWidth="160.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
-         <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
-                  <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
-                  <Button fx:id="buttonShockwave" focusTraversable="false" mnemonicParsing="false" text="Shockwave" />
-               </children>
-            </VBox>
-         </children></Pane>
-   </left>
-   <center>
-      <Pane fx:id="gamePane" prefHeight="640.0" prefWidth="1024.0">
-         <children>
-            <TilePane fx:id="tilePane" prefHeight="640.0" prefTileHeight="32.0" prefTileWidth="32.0" prefWidth="1024.0" />
-         </children>
-      </Pane>
-   </center>
-   <bottom>
-      <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1184.0" spacing="1000.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score"  fx:id="scoreLabel" />
-            <Label contentDisplay="RIGHT" text="gold" fx:id="goldLabel" />
-         </children>
-      </HBox>
-   </bottom>
+<BorderPane prefHeight="1000.0" prefWidth="1800.0"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="towerdef.controller.GameController">
+
+    <top>
+        <VBox prefHeight="32.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" text="TOWER DEFENSE" />
+            </children>
+        </VBox>
+    </top>
+
+    <left>
+        <Pane prefWidth="160.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
+            <children>
+                <VBox prefHeight="200.0" prefWidth="160.0">
+                    <children>
+                        <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
+                        <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
+                        <Button fx:id="buttonShockwave" focusTraversable="false" mnemonicParsing="false" text="Shockwave" />
+                    </children>
+                </VBox>
+            </children>
+        </Pane>
+    </left>
+
+    <center>
+        <Pane fx:id="gamePane" prefHeight="936.0" prefWidth="1640.0">
+            <children>
+                <TilePane fx:id="tilePane"
+                          prefHeight="936.0"
+                          prefWidth="1640.0"
+                          prefTileHeight="32.0"
+                          prefTileWidth="32.0" />
+            </children>
+        </Pane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1800.0" spacing="1000.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
+                <Label fx:id="goldLabel" contentDisplay="RIGHT" text="gold" />
+            </children>
+        </HBox>
+    </bottom>
+
 </BorderPane>
