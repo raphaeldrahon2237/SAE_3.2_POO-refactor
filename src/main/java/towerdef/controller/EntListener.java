@@ -10,8 +10,13 @@ import java.util.Map;
 public class EntListener implements ListChangeListener<Entity> {
     private Pane gamePane;
     private final Map<Entity, EntityView> mapEntityView= new HashMap<>();
+    private double animationInterval;
+    private double animationTimer;
+
     public EntListener(Pane gamePane) {
         this.gamePane = gamePane;
+        animationInterval=0.2;
+        animationTimer=0;
     }
 
     @Override
@@ -38,5 +43,21 @@ public class EntListener implements ListChangeListener<Entity> {
                 }
             }
         }
+    }
+
+    public void animations(double deltaTime){
+        animationTimer+=deltaTime;
+        if(animationTimer>animationInterval){
+            for(EntityView eV : mapEntityView.values()){
+                eV.switchImage();
+            }
+        }
+        if(animationTimer>animationInterval*2){
+            for(EntityView eV : mapEntityView.values()){
+                eV.switchImage2();
+            }
+            animationTimer=0;
+        }
+
     }
 }

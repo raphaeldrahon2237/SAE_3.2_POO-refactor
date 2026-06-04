@@ -75,6 +75,7 @@ public class Enemy extends Troop {
         setY(currentY + normalizedY * movementDistance);
     }
 
+
     private Point2D getNextTarget() {
         currentTileIndex++;
 
