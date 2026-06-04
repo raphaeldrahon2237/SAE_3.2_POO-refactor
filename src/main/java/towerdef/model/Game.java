@@ -3,9 +3,7 @@ package towerdef.model;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import towerdef.model.entity.Base;
-import towerdef.model.entity.Entity;
-import towerdef.model.entity.Projectile;
+import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
@@ -133,6 +131,23 @@ public class Game {
         }
     }
 
+    public void applyAreaDamage(Projectile projectile) {
+        double impactX = projectile.getTarget().getX();
+        double impactY = projectile.getTarget().getY();
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - impactX;
+                double dy = enemy.getY() - impactY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= projectile.getAoe()) {
+                    enemy.takeDamage(projectile.getDamage());
+                }
+            }
+        }
+    }
+
     private void updateAlliesAttackTimers(double deltaTime) {
         for (Entity ally : gameEntities.getAllies()) {
             ally.updateAttackTimer(deltaTime);
@@ -248,10 +263,13 @@ public class Game {
             projectile.updatePosition(deltaTime);
 
             if (projectile.isFinished()) {
-                if (projectile.getTarget() != null && projectile.getTarget().isAlive()) {
-                    projectile.getTarget().takeDamage(projectile.getDamage());
+                if (projectile.getTarget() != null) {
+                    if (projectile.getAoe() != 0) {
+                        applyAreaDamage(projectile);
+                    } else if (projectile.getTarget().isAlive()) {
+                        projectile.getTarget().takeDamage(projectile.getDamage());
+                    }
                 }
-
                 gameEntities.removeProjectile(projectile);
             }
         }
@@ -269,7 +287,8 @@ public class Game {
                 trajectory,
                 target,
                 source.getDamage(),
-                PROJECTILE_SPEED
+                PROJECTILE_SPEED,
+                source.getZone()
         );
 
         gameEntities.addProjectile(projectile);
