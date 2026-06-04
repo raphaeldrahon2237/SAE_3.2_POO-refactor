@@ -1,17 +1,13 @@
 package towerdef.model;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import towerdef.model.core.AStar;
-import towerdef.model.entity.*;
-import towerdef.model.entity.tower.*;
+import towerdef.model.entity.Base;
+import towerdef.model.entity.Entity;
+import towerdef.model.entity.Projectile;
+import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
-import towerdef.model.entity.troop.Recruit;
-import towerdef.model.entity.troop.Troop;
-import towerdef.model.entity.troop.Wolf;
 import towerdef.model.map.MapGrid;
 
 import java.util.ArrayList;
@@ -22,49 +18,28 @@ public class Game {
 
     private static final double PROJECTILE_SPEED = 8.0;
 
-    private ObservableList<Entity> allies;
-    private ObservableList<Enemy> enemies;
-    private ObservableList<Tower> towers;
-    private ObservableList<Projectile> projectiles;
-
+    private GameEntities gameEntities;
+    private Economy economy;
     private MapGrid mapGrid;
-    private AStar[] aStarList;
-    private IntegerProperty score;
-    private String playerName = "ayoube";
     private Base base;
-    private int scoreRate;
-    private double scoreValue;
-    private IntegerProperty gold;
-    private double difficultyTimer;
-    private double spawnInterval;
-    private double spawnTimer;
-    private Random random;
+    private Path path;
+    private EnemySpawner enemySpawner;
+    private TowerPlacement towerPlacementService;
+    private String playerName = "ayoube";
 
     public Game() {
-        allies = FXCollections.observableArrayList();
-        enemies = FXCollections.observableArrayList();
-        towers = FXCollections.observableArrayList();
-        projectiles = FXCollections.observableArrayList();
-        scoreValue = ScoreManager.loadScore(playerName);
-        score = new SimpleIntegerProperty((int) scoreValue);
+        gameEntities = new GameEntities();
+        economy = new Economy(playerName);
 
         mapGrid = new MapGrid();
         base = new Base(16, 12, 100);
-        aStarList = createPaths();
-
-        score = new SimpleIntegerProperty(ScoreManager.loadScore(playerName));
-        gold = new SimpleIntegerProperty(100);
-        scoreRate = 1;
-
-        difficultyTimer = 0.0;
-        spawnTimer = 0.0;
-        spawnInterval = 10;
-
-        random = new Random();
+        path = new Path(mapGrid, base);
+        enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities);
+        towerPlacementService = new TowerPlacement(mapGrid, gameEntities, economy);
     }
 
     public void setInitialState() {
-        spawnEnemies(5);
+        enemySpawner.spawnEnemies(5);
     }
 
     public void runGame() {
@@ -72,8 +47,7 @@ public class Game {
     }
 
     public void updateStates(double deltaTime) {
-
-        manageTimer(deltaTime);
+        economy.increaseScoreRate(enemySpawner.update(deltaTime));
 
         updateAlliesAttackTimers(deltaTime);
         updateEnemiesAttackTimers(deltaTime);
@@ -87,155 +61,86 @@ public class Game {
 
         removeDeadEntities();
     }
-    public void manageTimer(double deltaTime){
-        difficultyTimer += deltaTime;
-        spawnTimer += deltaTime;
-
-        if (difficultyTimer >= 30.0) {
-            difficultyTimer -= 30.0;
-            scoreRate += 1;
-
-            if (spawnInterval - 1 > 0.0) {
-                spawnInterval -= 1;
-            }
-        }
-
-        if (spawnTimer >= spawnInterval) {
-            spawnTimer -= spawnInterval;
-            spawnEnemies(1);
-        }
-    }
 
     public MapGrid getMapGrid() {
         return mapGrid;
     }
 
     public ObservableList<Entity> getAllies() {
-        return allies;
+        return gameEntities.getAllies();
     }
 
     public ObservableList<Enemy> getEnemies() {
-        return enemies;
+        return gameEntities.getEnemies();
     }
 
     public ObservableList<Projectile> getProjectiles() {
-        return projectiles;
+        return gameEntities.getProjectiles();
     }
 
     public int getScore() {
-        return score.get();
+        return economy.getScore();
     }
 
     public IntegerProperty scoreProperty() {
-        return score;
+        return economy.scoreProperty();
     }
 
     public void addScore(int amount) {
-        scoreValue += amount;
-        score.set((int) scoreValue);
+        economy.addScore(amount);
     }
 
     public void updateScore(double deltaTime) {
-        scoreValue += deltaTime * scoreRate;
-        score.set((int) scoreValue);
+        economy.updateScore(deltaTime);
     }
 
     public void resetScore() {
-        scoreValue = 0;
-        score.set(0);
-        ScoreManager.saveScore(playerName, score.get());
+        economy.resetScore();
     }
 
     public int getGold() {
-        return gold.get();
+        return economy.getGold();
     }
 
     public IntegerProperty goldProperty() {
-        return gold;
+        return economy.goldProperty();
     }
 
     public void addGold(int amount) {
-        gold.set(gold.get() + amount);
+        economy.addGold(amount);
     }
 
     public void spendGold(int amount) {
-        gold.set(gold.get() - amount);
+        economy.spendGold(amount);
     }
 
     public void removeDeadEntities() {
-        allies.removeIf(ally -> !ally.isAlive());
-        enemies.removeIf(enemy -> !enemy.isAlive());
+        gameEntities.removeDeadEntities();
     }
 
     public boolean canPlaceTower(int x, int y) {
-        if (!mapGrid.isInside(x, y)) {
-            return false;
-        }
-
-        if (mapGrid.isWalkable(x, y)) {
-            return false;
-        }
-
-        for (Tower tower : towers) {
-            if (tower.getX() == x && tower.getY() == y) {
-                return false;
-            }
-        }
-
-        return true;
+        return towerPlacementService.canPlaceTower(x, y);
     }
 
     public boolean placeTower(int x, int y, int idTower) {
-        if (!canPlaceTower(x, y)) {
-            return false;
-        }
-
-        EntityType entityType = EntityType.fromId(idTower);
-
-        if (entityType == null) {
-            return false;
-        }
-
-        Tower tower = TowerFactory.createTower(entityType, x, y);
-
-        if (tower == null || getGold() < tower.getCost()) {
-            return false;
-        }
-
-        spendGold(tower.getCost());
-        addTower(tower);
-
-        if (entityType == EntityType.BARRACK) {
-            Troop recruit = createRecruitNextToBarrack(x, y);
-
-            if (recruit != null) {
-                spawnAlly(recruit);
-            }
-        }
-
-        return true;
+        return towerPlacementService.placeTower(x, y, idTower);
     }
-
 
     public void changeEnemiesDestination(Point2D newDestination) {
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
             enemy.setDestination(newDestination);
-            assignMovement(enemy);
+            path.assignMovement(enemy);
         }
     }
 
-
-
     private void updateAlliesAttackTimers(double deltaTime) {
-        for (Entity ally : allies) {
+        for (Entity ally : gameEntities.getAllies()) {
             ally.updateAttackTimer(deltaTime);
         }
     }
 
-
-
     public void alliesAttackEnemies() {
-        for (Entity ally : allies) {
+        for (Entity ally : gameEntities.getAllies()) {
             if (ally.canAttack() && ally.getDamage() > 0) {
                 Enemy target = findEnemyInRange(ally);
 
@@ -247,16 +152,16 @@ public class Game {
                 }
             }
         }
-
     }
+
     private void updateEnemiesAttackTimers(double deltaTime) {
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
             enemy.updateAttackTimer(deltaTime);
         }
     }
 
     private void enemiesAttackAllies() {
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.canAttack() && enemy.getDamage() > 0) {
                 Entity target = findAllyInRange(enemy);
 
@@ -274,9 +179,8 @@ public class Game {
         Entity closestAlly = null;
         double closestDistance = Double.MAX_VALUE;
 
-        for (Entity ally : allies) {
-
-            boolean isRecruit = !towers.contains(ally);
+        for (Entity ally : gameEntities.getAllies()) {
+            boolean isRecruit = !gameEntities.getTowers().contains(ally);
             boolean canBeAttacked = ally.isAlive();
 
             if (isRecruit && canBeAttacked) {
@@ -298,7 +202,7 @@ public class Game {
         Enemy closestEnemy = null;
         double closestDistance = Double.MAX_VALUE;
 
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
             double dx = enemy.getX() - source.getX();
             double dy = enemy.getY() - source.getY();
             double distance = Math.sqrt(dx * dx + dy * dy);
@@ -311,17 +215,18 @@ public class Game {
 
         return closestEnemy;
     }
+
     private void updateMovements(double deltaTime) {
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
             if (!isEnemyInCombat(enemy)) {
                 enemy.updateMovement(deltaTime);
             }
         }
     }
-    private boolean isEnemyInCombat(Enemy enemy) {
-        for (Entity ally : allies) {
 
-            boolean isRecruitOrTroop = !towers.contains(ally);
+    private boolean isEnemyInCombat(Enemy enemy) {
+        for (Entity ally : gameEntities.getAllies()) {
+            boolean isRecruitOrTroop = !gameEntities.getTowers().contains(ally);
             boolean canFight = ally.isAlive() && ally.getDamage() > 0;
 
             if (isRecruitOrTroop && canFight) {
@@ -339,7 +244,7 @@ public class Game {
     }
 
     private void updateProjectiles(double deltaTime) {
-        for (Projectile projectile : new ArrayList<>(projectiles)) {
+        for (Projectile projectile : new ArrayList<>(gameEntities.getProjectiles())) {
             projectile.updatePosition(deltaTime);
 
             if (projectile.isFinished()) {
@@ -347,104 +252,9 @@ public class Game {
                     projectile.getTarget().takeDamage(projectile.getDamage());
                 }
 
-                projectiles.remove(projectile);
+                gameEntities.removeProjectile(projectile);
             }
         }
-    }
-
-    private void spawnEnemies(int number) {
-        List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles();
-
-        for (int i = 0; i < number; i++) {
-            Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
-
-            Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
-            wolf.setDestination(new Point2D(base.getX(), base.getY()));
-
-            spawnEnemy(wolf);
-        }
-    }
-
-    private void spawnAlly(Troop troop) {
-        addAlly(troop);
-    }
-
-    private Troop createRecruitNextToBarrack(int x, int y) {
-        int[][] directions = {
-                {0, -1},
-                {0, 1},
-                {-1, 0},
-                {1, 0}
-        };
-
-        for (int[] direction : directions) {
-            int newX = x + direction[0];
-            int newY = y + direction[1];
-
-            if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
-                return new Recruit(newX, newY);
-            }
-        }
-
-        return null;
-    }
-
-    private void spawnEnemy(Enemy enemy) {
-        assignMovement(enemy);
-        addEnemy(enemy);
-    }
-
-    private void addAlly(Troop troop) {
-        allies.add(troop);
-    }
-
-    private void addEnemy(Enemy enemy) {
-        enemies.add(enemy);
-    }
-
-    private void addTower(Tower tower) {
-        towers.add(tower);
-        allies.add(tower);
-    }
-
-    private AStar[] createPaths() {
-        List<Point2D> spawnPoints = getWalkableEdgeTiles();
-        AStar[] aStarList = new AStar[spawnPoints.size()];
-        Point2D baseTile = new Point2D(base.getX(), base.getY());
-
-        for (int i = 0; i < aStarList.length; i++) {
-            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile);
-        }
-        return aStarList;
-    }
-
-    private boolean assignMovement(Enemy enemy) {
-        List<Point2D> path = getCachedPath(enemy);
-
-        if (path == null) {
-            Point2D source = new Point2D(enemy.getX(), enemy.getY());
-            AStar aStar = new AStar(mapGrid, source, enemy.getDestination());
-            path = aStar.getPath();
-        }
-
-        enemy.setPath(path);
-        enemy.startMovement();
-
-        return !path.isEmpty();
-    }
-
-    private List<Point2D> getCachedPath(Enemy enemy) {
-        if (!new Point2D(base.getX(), base.getY()).equals(enemy.getDestination())) {
-            return null;
-        }
-
-        for (AStar aStar : aStarList) {
-            if (aStar.getSource().getX() == enemy.getX() && aStar.getSource().getY() == enemy.getY()) {
-                return aStar.getPath();
-            }
-        }
-
-        return null;
     }
 
     private void shootProjectile(Entity source, Entity target) {
@@ -462,7 +272,7 @@ public class Game {
                 PROJECTILE_SPEED
         );
 
-        projectiles.add(projectile);
+        gameEntities.addProjectile(projectile);
     }
 
     private boolean isColliding(Entity entity1, Entity entity2) {
@@ -524,27 +334,5 @@ public class Game {
         }
 
         return trajectory;
-    }
-
-    private List<Point2D> getWalkableEdgeTiles() {
-        List<Point2D> spawnTiles = new ArrayList<>();
-
-        for (int x = 0; x < mapGrid.getWidth(); x++) {
-            addSpawnTileIfWalkable(spawnTiles, x, 0);
-            addSpawnTileIfWalkable(spawnTiles, x, mapGrid.getHeight() - 1);
-        }
-
-        for (int y = 1; y < mapGrid.getHeight() - 1; y++) {
-            addSpawnTileIfWalkable(spawnTiles, 0, y);
-            addSpawnTileIfWalkable(spawnTiles, mapGrid.getWidth() - 1, y);
-        }
-
-        return spawnTiles;
-    }
-
-    private void addSpawnTileIfWalkable(List<Point2D> spawnTiles, int x, int y) {
-        if (mapGrid.isWalkable(x, y)) {
-            spawnTiles.add(new Point2D(x, y));
-        }
     }
 }
