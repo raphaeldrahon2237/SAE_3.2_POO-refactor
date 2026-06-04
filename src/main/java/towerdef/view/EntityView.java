@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.ArcherTower;
 import towerdef.model.entity.tower.Barrack;
-import towerdef.model.entity.tower.Shockwave;
+import towerdef.model.entity.tower.Earthquake;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Wolf;
 import static towerdef.model.map.TileType.TILESIZE;
@@ -41,7 +41,7 @@ public class EntityView {
         else if (entity instanceof Barrack) {
             iv.setImage(barrack1img);
         }
-        else if(entity instanceof Shockwave){
+        else if(entity instanceof Earthquake){
             iv.setImage(shockWaveImg);
         }
         else if (entity instanceof Wolf) {
