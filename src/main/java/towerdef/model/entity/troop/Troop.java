@@ -26,7 +26,9 @@ public abstract class Troop extends Entity {
     }
 
     public void setMooveSpeed(int mooveSpeed) {
+        System.out.println("speed before :"+ mooveSpeed);
         this.mooveSpeed = mooveSpeed;
+        System.out.println("speed after :"+ mooveSpeed);
     }
 
     @Override

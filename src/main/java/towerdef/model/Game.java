@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
+import towerdef.model.entity.tower.Shockwave;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -116,11 +117,11 @@ public class Game {
     }
 
     public boolean canPlaceTower(int x, int y) {
-        return towerPlacement.canPlaceTower(x, y);
+        return towerPlacementService.canPlaceTower(x, y);
     }
 
     public boolean placeTower(int x, int y, int idTower) {
-        return towerPlacement.placeTower(x, y, idTower);
+        return towerPlacementService.placeTower(x, y, idTower);
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
@@ -136,18 +137,28 @@ public class Game {
         }
     }
 
-    private void updateEnemiesAttackTimers(double deltaTime) {
+    public void applyShockwave (Shockwave shockWaveTower) {
+
         for (Enemy enemy : gameEntities.getEnemies()) {
-            enemy.updateAttackTimer(deltaTime);
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - shockWaveTower.getX();
+                double dy = enemy.getY() - shockWaveTower.getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= shockWaveTower.getRange()) {
+                    enemy.takeDamage(shockWaveTower.getDamage());
+                    enemy.setMooveSpeed(shockWaveTower.getSlowSpeed());
+                }
+            }
         }
     }
 
     public void alliesAttackEnemies() {
         for (Entity ally : gameEntities.getAllies()) {
-            if (ally.canAttack() && ally.getDamage() > 0) {
+            if (ally.canAttack() && ally.getDamage() >= 0) {
                 switch (ally.getAttackType()) {
                     case SHOCKWAVE:
-                        applyShockwave(ally);
+                        applyShockwave((Shockwave) ally);
                         ally.resetAttackTimer();
                         break;
 
