@@ -16,12 +16,13 @@ public class Projectile {
     private DoubleProperty progressToNextTile = new SimpleDoubleProperty();
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
+    private int aoe;
     private double speed;
     private int damage;
     private Entity target;
     private boolean finished;
 
-    public Projectile(List<Point2D> trajectory, Entity target, int damage, double speed) {
+    public Projectile(List<Point2D> trajectory, Entity target, int damage, double speed,  int aoe) {
         this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.damage = damage;
@@ -30,6 +31,7 @@ public class Projectile {
         this.progressToNextTile.set(0.0);
         updateCoordinates();
         this.finished = trajectory.size() <= 1;
+        this.aoe = aoe;
     }
 
     public void updatePosition(double deltaTime) {
@@ -91,5 +93,13 @@ public class Projectile {
 
     public int getDamage() {
         return damage;
+    }
+
+    public List<Point2D> getTrajectory() {
+        return trajectory;
+    }
+
+    public int getAoe() {
+        return aoe;
     }
 }

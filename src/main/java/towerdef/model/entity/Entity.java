@@ -13,14 +13,20 @@ public abstract class Entity {
     private int range;
     private Entity target;
     private double attackTimer;
-    private int scoreValue;
+    private AttackType attackType;
+    private int zone;
 
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
 
     public static int nextId = 0;
 
+
     public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y) {
+        this(hp, damage, armor, atkSpeed, range, x, y, AttackType.NORMAL, 0);
+    }
+
+    public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y, AttackType attackType, int zone) {
         this.id = nextId;
         nextId++;
 
@@ -34,11 +40,17 @@ public abstract class Entity {
         this.y.set(y);
 
         this.attackTimer = 0.0;
+        this.attackType = attackType;
+        this.zone = zone;
     }
 
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
         hp -= damage;
+    }
+
+    public AttackType getAttackType() {
+        return attackType;
     }
 
     public boolean isAlive() {
@@ -89,12 +101,12 @@ public abstract class Entity {
         return attackSpeed;
     }
 
-    public int getScoreValue() {
-        return scoreValue;
-    }
-
     public int getRange() {
         return range;
+    }
+
+    public int getZone() {
+        return zone;
     }
 
     public void updateAttackTimer(double deltaTime) {
