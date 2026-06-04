@@ -23,6 +23,7 @@
                <children>
                   <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
                   <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
+                  <Button fx:id="buttonShockwave" focusTraversable="false" mnemonicParsing="false" text="Shockwave" />
                </children>
             </VBox>
          </children></Pane>
