@@ -59,7 +59,7 @@ public class Enemy extends Troop {
             return;
         }
 
-        double movementDistance = getMvSpeed() * deltaTime;
+        double movementDistance = getMooveSpeed() * deltaTime;
 
         if (movementDistance >= distance) {
             setX(targetX);

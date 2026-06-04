@@ -5,12 +5,12 @@ import towerdef.model.entity.Entity;
 
 public abstract class Troop extends Entity {
 
-    private int mvSpeed;
+    private int mooveSpeed;
     private Point2D destination;
 
     public Troop(int hp, int damage, int armor, int atkSpeed, int range, int mvSpeed, int x, int y) {
         super(hp, damage, armor, atkSpeed, range, x, y);
-        this.mvSpeed = mvSpeed;
+        this.mooveSpeed = mvSpeed;
     }
 
     public Point2D getDestination() {
@@ -21,12 +21,12 @@ public abstract class Troop extends Entity {
         this.destination = destination;
     }
 
-    public int getMvSpeed() {
-        return mvSpeed;
+    public int getMooveSpeed() {
+        return mooveSpeed;
     }
 
-    public void setMvSpeed(int mvSpeed) {
-        this.mvSpeed = mvSpeed;
+    public void setMooveSpeed(int mooveSpeed) {
+        this.mooveSpeed = mooveSpeed;
     }
 
     @Override
