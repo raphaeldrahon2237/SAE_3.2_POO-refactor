@@ -71,39 +71,6 @@ public class GameController implements Initializable {
         initAnimation();
     }
 
-    private void initAnimation() {
-        time = 0;
-
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-        KeyFrame keyFrame = new KeyFrame(
-                Duration.seconds(0.017),
-                ev -> {
-                    long now = System.nanoTime();
-
-                    if (lastFrameTime == 0) {
-                       lastFrameTime = now;
-                        return;
-                    }
-
-                    deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
-
-                    lastFrameTime = now;
-
-                    game.runGame();
-                    game.updateStates(deltaTime);
-                    alliesListener.animations(deltaTime);
-                    enemiesListener.animations(deltaTime);
-
-                    time++;
-                }
-        );
-
-        gameLoop.getKeyFrames().add(keyFrame);
-        gameLoop.play();
-    }
-
     private void initListeners() {
         alliesListener=new EntListener(gamePane);
         enemiesListener=new EntListener(gamePane);
@@ -199,6 +166,38 @@ public class GameController implements Initializable {
         });
     }
 
+    private void initAnimation() {
+        time = 0;
+
+        gameLoop = new Timeline();
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+
+        KeyFrame keyFrame = new KeyFrame(
+                Duration.seconds(0.017),
+                ev -> {
+                    long now = System.nanoTime();
+
+                    if (lastFrameTime == 0) {
+                       lastFrameTime = now;
+                        return;
+                    }
+
+                    deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
+
+                    lastFrameTime = now;
+
+                    game.runGame();
+                    game.updateStates(deltaTime);
+                    alliesListener.animations(deltaTime);
+                    enemiesListener.animations(deltaTime);
+
+                    time++;
+                }
+        );
+
+        gameLoop.getKeyFrames().add(keyFrame);
+        gameLoop.play();
+    }
 
     public void onClose() {
         game.resetScore();

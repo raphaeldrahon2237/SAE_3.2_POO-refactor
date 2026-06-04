@@ -66,15 +66,6 @@ public class Projectile {
         return progressToNextTile;
     }
 
-    private void updateCoordinates() {
-        Point2D current = getCurrentTile();
-        Point2D next = getNextTile();
-        double progress = progressToNextTile.get();
-
-        x.set(current.getX() + (next.getX() - current.getX()) * progress);
-        y.set(current.getY() + (next.getY() - current.getY()) * progress);
-    }
-
     public DoubleProperty xProperty() {
         return x;
     }
@@ -101,5 +92,14 @@ public class Projectile {
 
     public int getAoe() {
         return aoe;
+    }
+
+    private void updateCoordinates() {
+        Point2D current = getCurrentTile();
+        Point2D next = getNextTile();
+        double progress = progressToNextTile.get();
+
+        x.set(current.getX() + (next.getX() - current.getX()) * progress);
+        y.set(current.getY() + (next.getY() - current.getY()) * progress);
     }
 }
