@@ -21,7 +21,8 @@ public class EntityView {
     private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
     private final Image archerTower1img= new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
     private final Image archerTower2img= new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
-    private final Image barrackimg= new Image(EntityView.class.getResourceAsStream("/images/barrack.png"));
+    private final Image barrack1img= new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
+    private final Image barrack2img= new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -37,7 +38,7 @@ public class EntityView {
             iv.setImage(archerTower1img);
         }
         else if (entity instanceof Barrack) {
-            iv.setImage(barrackimg);
+            iv.setImage(barrack1img);
         }
         else if (entity instanceof Wolf) {
             iv.setImage(wolf1img);
@@ -45,8 +46,8 @@ public class EntityView {
         else if (entity instanceof Recruit) {
             iv.setImage(recruitimg);
         }
-        iv.setFitHeight(TILESIZE);
-        iv.setFitWidth(TILESIZE);
+        iv.setFitHeight(TILESIZE+5);
+        iv.setFitWidth(TILESIZE+5);
         if(entity.getX()>9) iv.setScaleX(-1);
         iv.xProperty().bind(
                 entity.xProperty().multiply(TILESIZE)
@@ -76,6 +77,9 @@ public class EntityView {
         if(entity instanceof Wolf) {
             iv.setImage(wolf2img);
         }
+        if(entity instanceof Barrack) {
+            iv.setImage(barrack2img);
+        }
 
     }
 
@@ -87,7 +91,9 @@ public class EntityView {
         if(entity instanceof Wolf) {
             iv.setImage(wolf1img);
         }
-
+        if(entity instanceof Barrack) {
+            iv.setImage(barrack1img);
+        }
     }
 
 }
