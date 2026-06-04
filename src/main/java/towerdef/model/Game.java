@@ -4,7 +4,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
-import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -154,16 +153,40 @@ public class Game {
         }
     }
 
+    public void applyShockwave (Entity shockWaveTower) {
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - shockWaveTower.getX();
+                double dy = enemy.getY() - shockWaveTower.getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= shockWaveTower.getRange()) {
+                    enemy.takeDamage(shockWaveTower.getDamage());
+                    enemy.setMooveSpeed(1);
+                }
+            }
+        }
+
+    }
+
     public void alliesAttackEnemies() {
         for (Entity ally : gameEntities.getAllies()) {
             if (ally.canAttack() && ally.getDamage() > 0) {
-                Enemy target = findEnemyInRange(ally);
+                switch (ally.getAttackType()) {
+                    case SHOCKWAVE:
+                        applyShockwave(ally);
+                        ally.resetAttackTimer();
+                        break;
 
-                if (target != null) {
-                    System.out.println("Ally: " + ally + " attacking " + target);
-
-                    shootProjectile(ally, target);
-                    ally.resetAttackTimer();
+                    case NORMAL:
+                    case AOE:
+                        Enemy target = findEnemyInRange(ally);
+                        if (target != null) {
+                            shootProjectile(ally, target);
+                            ally.resetAttackTimer();
+                        }
+                        break;
                 }
             }
         }
