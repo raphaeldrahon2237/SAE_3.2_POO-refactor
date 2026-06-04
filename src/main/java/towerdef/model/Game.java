@@ -21,7 +21,7 @@ public class Game {
     private Base base;
     private Path path;
     private EnemySpawner enemySpawner;
-    private TowerPlacement towerPlacementService;
+    private TowerPlacement towerPlacement;
     private String playerName = "ayoube";
 
     public Game() {
@@ -32,7 +32,7 @@ public class Game {
         base = new Base(16, 12, 100);
         path = new Path(mapGrid, base);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities);
-        towerPlacementService = new TowerPlacement(mapGrid, gameEntities, economy);
+        towerPlacement = new TowerPlacement(mapGrid, gameEntities, economy);
     }
 
     public void setInitialState() {
@@ -116,11 +116,11 @@ public class Game {
     }
 
     public boolean canPlaceTower(int x, int y) {
-        return towerPlacementService.canPlaceTower(x, y);
+        return towerPlacement.canPlaceTower(x, y);
     }
 
     public boolean placeTower(int x, int y, int idTower) {
-        return towerPlacementService.placeTower(x, y, idTower);
+        return towerPlacement.placeTower(x, y, idTower);
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
@@ -130,44 +130,16 @@ public class Game {
         }
     }
 
-    public void applyAreaDamage(Projectile projectile) {
-        double impactX = projectile.getTarget().getX();
-        double impactY = projectile.getTarget().getY();
-
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy.isAlive()) {
-                double dx = enemy.getX() - impactX;
-                double dy = enemy.getY() - impactY;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= projectile.getAoe()) {
-                    enemy.takeDamage(projectile.getDamage());
-                }
-            }
-        }
-    }
-
     private void updateAlliesAttackTimers(double deltaTime) {
         for (Entity ally : gameEntities.getAllies()) {
             ally.updateAttackTimer(deltaTime);
         }
     }
 
-    public void applyShockwave (Entity shockWaveTower) {
-
+    private void updateEnemiesAttackTimers(double deltaTime) {
         for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy.isAlive()) {
-                double dx = enemy.getX() - shockWaveTower.getX();
-                double dy = enemy.getY() - shockWaveTower.getY();
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= shockWaveTower.getRange()) {
-                    enemy.takeDamage(shockWaveTower.getDamage());
-                    enemy.setMooveSpeed(1);
-                }
-            }
+            enemy.updateAttackTimer(deltaTime);
         }
-
     }
 
     public void alliesAttackEnemies() {
@@ -192,12 +164,6 @@ public class Game {
         }
     }
 
-    private void updateEnemiesAttackTimers(double deltaTime) {
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            enemy.updateAttackTimer(deltaTime);
-        }
-    }
-
     private void enemiesAttackAllies() {
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.canAttack() && enemy.getDamage() > 0) {
@@ -211,6 +177,23 @@ public class Game {
                 }
             }
         }
+    }
+
+    public void applyShockwave (Entity shockWaveTower) {
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - shockWaveTower.getX();
+                double dy = enemy.getY() - shockWaveTower.getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= shockWaveTower.getRange()) {
+                    enemy.takeDamage(shockWaveTower.getDamage());
+                    enemy.setMooveSpeed(1);
+                }
+            }
+        }
+
     }
 
     private Entity findAllyInRange(Enemy enemy) {
@@ -298,6 +281,23 @@ public class Game {
         }
     }
 
+    public void applyAreaDamage(Projectile projectile) {
+        double impactX = projectile.getTarget().getX();
+        double impactY = projectile.getTarget().getY();
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - impactX;
+                double dy = enemy.getY() - impactY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= projectile.getAoe()) {
+                    enemy.takeDamage(projectile.getDamage());
+                }
+            }
+        }
+    }
+
     private void shootProjectile(Entity source, Entity target) {
         List<Point2D> trajectory = computeLineTiles(
                 (int) source.getX(),
@@ -315,15 +315,6 @@ public class Game {
         );
 
         gameEntities.addProjectile(projectile);
-    }
-
-    private boolean isColliding(Entity entity1, Entity entity2) {
-        double dx = entity1.getX() - entity2.getX();
-        double dy = entity1.getY() - entity2.getY();
-
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        return distance < 0.5;
     }
 
     private List<Point2D> computeLineTiles(int startX, int startY, int targetX, int targetY) {
@@ -376,5 +367,14 @@ public class Game {
         }
 
         return trajectory;
+    }
+
+    private boolean isColliding(Entity entity1, Entity entity2) {
+        double dx = entity1.getX() - entity2.getX();
+        double dy = entity1.getY() - entity2.getY();
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < 0.5;
     }
 }
