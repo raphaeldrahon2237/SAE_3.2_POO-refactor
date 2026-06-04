@@ -4,7 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
-import towerdef.model.entity.tower.Shockwave;
+import towerdef.model.entity.tower.Earthquake;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -154,7 +154,7 @@ public class Game {
         }
     }
 
-    public void applyShockwave (Shockwave shockWaveTower) {
+    public void applyShockwave (Earthquake shockWaveTower) {
 
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {
@@ -166,6 +166,9 @@ public class Game {
                     enemy.takeDamage(shockWaveTower.getDamage());
                     enemy.setMooveSpeed(shockWaveTower.getSlowSpeed());
                 }
+                else {
+                    enemy.resetMooveSpeed();
+                }
             }
         }
 
@@ -176,7 +179,7 @@ public class Game {
             if (ally.canAttack() && ally.getDamage() >= 0) {
                 switch (ally.getAttackType()) {
                     case SHOCKWAVE:
-                        applyShockwave((Shockwave) ally);
+                        applyShockwave((Earthquake) ally);
                         ally.resetAttackTimer();
                         break;
 
