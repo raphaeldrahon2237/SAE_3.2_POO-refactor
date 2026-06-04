@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
+import towerdef.model.entity.tower.Shockwave;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -153,7 +154,7 @@ public class Game {
         }
     }
 
-    public void applyShockwave (Entity shockWaveTower) {
+    public void applyShockwave (Shockwave shockWaveTower) {
 
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {
@@ -163,7 +164,7 @@ public class Game {
 
                 if (distance <= shockWaveTower.getRange()) {
                     enemy.takeDamage(shockWaveTower.getDamage());
-                    enemy.setMooveSpeed(1);
+                    enemy.setMooveSpeed(shockWaveTower.getSlowSpeed());
                 }
             }
         }
@@ -172,10 +173,10 @@ public class Game {
 
     public void alliesAttackEnemies() {
         for (Entity ally : gameEntities.getAllies()) {
-            if (ally.canAttack() && ally.getDamage() > 0) {
+            if (ally.canAttack() && ally.getDamage() >= 0) {
                 switch (ally.getAttackType()) {
                     case SHOCKWAVE:
-                        applyShockwave(ally);
+                        applyShockwave((Shockwave) ally);
                         ally.resetAttackTimer();
                         break;
 
@@ -273,6 +274,7 @@ public class Game {
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= ally.getRange()) {
+                    System.out.println("Loup bloqué par : " + ally);
                     return true;
                 }
             }

@@ -34,6 +34,9 @@ public class GameController implements Initializable {
     private Button buttonBarracks;
 
     @FXML
+    private Button buttonShockwave;
+
+    @FXML
     private Label scoreLabel;
 
     @FXML
@@ -121,6 +124,10 @@ public class GameController implements Initializable {
         buttonBarracks.setOnAction(event -> {
             towerSelected = 3;
             System.out.println("Placement mode activated: Barracks");});
+        buttonShockwave.setOnAction(event -> {
+            towerSelected = 5;
+            System.out.println("Placement mode activated: Shockwave");
+        });
     }
 
     private void initKeyboardControls() {
@@ -136,6 +143,10 @@ public class GameController implements Initializable {
                     towerSelected=3;
                     System.out.println("Placement mode activated: Barracks");
                     break;
+                case S:
+                    towerSelected=5;
+                    System.out.println("Placement mode activated: Shockwave");
+                    break;
                 case E:
                     destinationTestMode = true;
                     System.out.println("Destination test activated: Destination test mode");
@@ -145,7 +156,7 @@ public class GameController implements Initializable {
 
                 case ESCAPE:
                     towerSelected=0;
-                    System.out.println("Placement annulÃ©");
+                    System.out.println("Placement annulé");
                     break;
             }
         });

@@ -12,7 +12,7 @@ public class TowerFactory {
             case MAGE -> tower = new Mage(x, y);
             case BARRACK -> tower = new Barrack(x, y);
             case ARTILLERY -> tower = new Artillery(x, y);
-            case SHOCKWAVE -> tower = new Shockwave(x, y);
+            case SHOCKWAVE -> tower = new Shockwave(x, y,2);
             default -> tower = null;
         }
 

@@ -5,6 +5,7 @@ import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.ArcherTower;
 import towerdef.model.entity.tower.Barrack;
+import towerdef.model.entity.tower.Shockwave;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Wolf;
 import static towerdef.model.map.TileType.TILESIZE;
@@ -21,6 +22,7 @@ public class EntityView {
     private final Image recruitimg= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
     private final Image archerTower1img= new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
     private final Image archerTower2img= new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
+    private final Image shockWaveImg= new Image(EntityView.class.getResourceAsStream("/images/shockwave.png"));
     private final Image barrackimg= new Image(EntityView.class.getResourceAsStream("/images/barrack.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
@@ -38,6 +40,9 @@ public class EntityView {
         }
         else if (entity instanceof Barrack) {
             iv.setImage(barrackimg);
+        }
+        else if(entity instanceof Shockwave){
+            iv.setImage(shockWaveImg);
         }
         else if (entity instanceof Wolf) {
             iv.setImage(wolf1img);
