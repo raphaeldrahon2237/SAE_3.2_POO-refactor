@@ -7,16 +7,19 @@ import javafx.stage.Stage;
 import towerdef.controller.GameController;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("game-view.fxml"));
-        Scene scene = new Scene(loader.load(), 1184, 704);
+
+        Scene scene = new Scene(loader.load(), 1800, 1000);
 
         GameController controller = loader.getController();
 
         stage.setTitle("TowerDef");
         stage.setScene(scene);
         stage.show();
+
         stage.setOnCloseRequest(event -> {
             controller.onClose();
         });
