@@ -210,6 +210,12 @@ public class GameController implements Initializable {
 
                     game.runGame();
                     game.updateStates(deltaTime);
+
+                    if (game.isGameOver()) {
+                        gameLoop.stop();
+                        return;
+                    }
+
                     alliesListener.animations(deltaTime);
                     enemiesListener.animations(deltaTime);
 

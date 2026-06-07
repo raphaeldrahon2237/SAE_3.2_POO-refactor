@@ -22,4 +22,16 @@ public class Base {
     public int getHp() {
         return hp;
     }
+
+    public void takeDamage(int damage) {
+        hp -= damage;
+
+        if (hp < 0) {
+            hp = 0;
+        }
+    }
+
+    public boolean isDestroyed() {
+        return hp <= 0;
+    }
 }
