@@ -75,6 +75,52 @@ public class Enemy extends Troop {
         setY(currentY + normalizedY * movementDistance);
     }
 
+    public Point2D predictPositionAfter(double duration) {
+        double predictionX = getX();
+        double predictionY = getY();
+        double remainingDistance = getMooveSpeed() * duration;
+
+        int targetIndex = currentTileIndex;
+        Point2D target = currentTarget;
+
+        if (target == null) {
+            targetIndex++;
+
+            if (targetIndex < path.size()) {
+                target = path.get(targetIndex);
+            }
+        }
+
+        while (target != null && remainingDistance > 0) {
+            double directionX = target.getX() - predictionX;
+            double directionY = target.getY() - predictionY;
+            double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+
+            if (distance == 0) {
+                targetIndex++;
+            } else if (remainingDistance >= distance) {
+                predictionX = target.getX();
+                predictionY = target.getY();
+                remainingDistance -= distance;
+                targetIndex++;
+            } else {
+                double normalizedX = directionX / distance;
+                double normalizedY = directionY / distance;
+
+                predictionX += normalizedX * remainingDistance;
+                predictionY += normalizedY * remainingDistance;
+                remainingDistance = 0;
+            }
+
+            if (targetIndex < path.size()) {
+                target = path.get(targetIndex);
+            } else {
+                target = null;
+            }
+        }
+
+        return new Point2D(predictionX, predictionY);
+    }
 
     private Point2D getNextTarget() {
         currentTileIndex++;
