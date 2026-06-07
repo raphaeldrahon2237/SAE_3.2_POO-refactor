@@ -304,12 +304,47 @@ public class Game {
         }
     }
 
+    private void shootProjectile(Entity source, Enemy target) {
+        Point2D impactTile = computePreshotTile(source, target);
+
+        createProjectile(source, target, impactTile);
+    }
+
     private void shootProjectile(Entity source, Entity target) {
+        Point2D impactTile = toTilePosition(target.getX(), target.getY());
+
+        createProjectile(source, target, impactTile);
+    }
+
+    private Point2D computePreshotTile(Entity source, Enemy target) {
+        Point2D impactTile = toTilePosition(target.getX(), target.getY());
+        double projectileTravelTime = computeProjectileTravelTime(source, impactTile);
+        Point2D predictedPosition = target.predictPositionAfter(projectileTravelTime);
+
+        return toTilePosition(predictedPosition.getX(), predictedPosition.getY());
+    }
+
+    private double computeProjectileTravelTime(Entity source, Point2D impactTile) {
         List<Point2D> trajectory = computeLineTiles(
                 (int) source.getX(),
                 (int) source.getY(),
-                (int) target.getX(),
-                (int) target.getY()
+                (int) impactTile.getX(),
+                (int) impactTile.getY()
+        );
+
+        return (trajectory.size() - 1) / PROJECTILE_SPEED;
+    }
+
+    private Point2D toTilePosition(double x, double y) {
+        return new Point2D(Math.round(x), Math.round(y));
+    }
+
+    private void createProjectile(Entity source, Entity target, Point2D impactTile) {
+        List<Point2D> trajectory = computeLineTiles(
+                (int) source.getX(),
+                (int) source.getY(),
+                (int) impactTile.getX(),
+                (int) impactTile.getY()
         );
 
         Projectile projectile = new Projectile(
