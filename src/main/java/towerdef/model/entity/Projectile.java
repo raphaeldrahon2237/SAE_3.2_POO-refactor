@@ -62,6 +62,10 @@ public class Projectile {
         return trajectory.get(currentTileIndex.get() + 1);
     }
 
+    public Point2D getImpactTile() {
+        return trajectory.get(trajectory.size() - 1);
+    }
+
     public DoubleProperty getProgressToNextTile() {
         return progressToNextTile;
     }

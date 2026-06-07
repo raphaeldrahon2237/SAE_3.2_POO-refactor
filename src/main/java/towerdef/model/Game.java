@@ -132,8 +132,9 @@ public class Game {
     }
 
     public void applyAreaDamage(Projectile projectile) {
-        double impactX = projectile.getTarget().getX();
-        double impactY = projectile.getTarget().getY();
+        Point2D impactTile = projectile.getImpactTile();
+        double impactX = impactTile.getX();
+        double impactY = impactTile.getY();
 
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {

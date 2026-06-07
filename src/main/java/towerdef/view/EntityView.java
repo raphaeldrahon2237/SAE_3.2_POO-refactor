@@ -4,6 +4,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.ArcherTower;
+import towerdef.model.entity.tower.Artillery;
 import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.tower.Earthquake;
 import towerdef.model.entity.troop.Recruit;
@@ -37,6 +38,9 @@ public class EntityView {
 
         if (entity instanceof ArcherTower) {
             iv.setImage(archerTower1img);
+        }
+        else if (entity instanceof Artillery) {
+            iv.setImage(archerTower2img);
         }
         else if (entity instanceof Barrack) {
             iv.setImage(barrackimg);
