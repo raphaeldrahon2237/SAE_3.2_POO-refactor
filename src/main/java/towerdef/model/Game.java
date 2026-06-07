@@ -131,6 +131,24 @@ public class Game {
         }
     }
 
+    public void applyAreaDamage(Projectile projectile) {
+        Point2D impactTile = projectile.getImpactTile();
+        double impactX = impactTile.getX();
+        double impactY = impactTile.getY();
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            if (enemy.isAlive()) {
+                double dx = enemy.getX() - impactX;
+                double dy = enemy.getY() - impactY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= projectile.getAoe()) {
+                    enemy.takeDamage(projectile.getDamage());
+                }
+            }
+        }
+    }
+
     private void updateAlliesAttackTimers(double deltaTime) {
         for (Entity ally : gameEntities.getAllies()) {
             ally.updateAttackTimer(deltaTime);
@@ -270,6 +288,7 @@ public class Game {
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= ally.getRange()) {
+                    System.out.println("Loup bloqué par : " + ally);
                     return true;
                 }
             }
