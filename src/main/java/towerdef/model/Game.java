@@ -48,7 +48,7 @@ public class Game {
         economy.increaseScoreRate(enemySpawner.update(deltaTime));
 
         updateAlliesAttackTimers(deltaTime);
-        //updateEnemiesAttackTimers(deltaTime);
+        updateEnemiesAttackTimers(deltaTime);
 
         alliesAttackEnemies();
         enemiesAttackAllies();
