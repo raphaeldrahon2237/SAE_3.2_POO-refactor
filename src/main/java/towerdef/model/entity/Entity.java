@@ -1,7 +1,6 @@
 package towerdef.model.entity;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 
 public abstract class Entity {
 
@@ -18,6 +17,7 @@ public abstract class Entity {
 
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
+    private IntegerProperty attackCounter = new SimpleIntegerProperty();
 
     public static int nextId = 0;
 
@@ -38,6 +38,7 @@ public abstract class Entity {
 
         this.x.set(x);
         this.y.set(y);
+        this.attackCounter.set(0);
 
         this.attackTimer = 0.0;
         this.attackType = attackType;
@@ -48,6 +49,14 @@ public abstract class Entity {
         System.out.println(this + " taking damage");
         hp -= damage;
     }
+
+    public void incrementAttackCounter() {
+        attackCounter.set(attackCounter.get()+1);
+    }
+    public IntegerProperty attackCounterProperty() {
+        return attackCounter;
+    }
+
 
     public AttackType getAttackType() {
         return attackType;

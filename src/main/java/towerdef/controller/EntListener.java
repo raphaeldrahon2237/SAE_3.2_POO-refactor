@@ -12,6 +12,7 @@ public class EntListener implements ListChangeListener<Entity> {
     private final Map<Entity, EntityView> mapEntityView= new HashMap<>();
     private double animationInterval;
     private double animationTimer;
+    private int atkCounter;
 
     public EntListener(Pane gamePane) {
         this.gamePane = gamePane;
@@ -48,13 +49,18 @@ public class EntListener implements ListChangeListener<Entity> {
     public void animations(double deltaTime){
         animationTimer+=deltaTime;
         if(animationTimer>animationInterval){
-            for(EntityView eV : mapEntityView.values()){
-                eV.switchImage();
+            for(Entity e : mapEntityView.keySet()){
+                e.attackCounterProperty().addListener((obs, oldV, newV) -> {
+                    if(!oldV.equals(newV))
+                        mapEntityView.get(e).switchImageAttack();
+                    else mapEntityView.get(e).switchImageIdle();
+                });
             }
         }
         if(animationTimer>animationInterval*2){
             for(EntityView eV : mapEntityView.values()){
-                eV.switchImage2();
+                eV.switchImageToInitial();
+
             }
             animationTimer=0;
         }

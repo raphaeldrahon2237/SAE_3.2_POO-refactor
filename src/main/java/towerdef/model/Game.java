@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
+import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -161,17 +162,18 @@ public class Game {
         }
     }
 
-    public void applyShockwave (Earthquake shockWaveTower) {
 
+    public void applyShockwave (Earthquake earthquakeTower) {
+        earthquakeTower.incrementAttackCounter();
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {
-                double dx = enemy.getX() - shockWaveTower.getX();
-                double dy = enemy.getY() - shockWaveTower.getY();
+                double dx = enemy.getX() - earthquakeTower.getX();
+                double dy = enemy.getY() - earthquakeTower.getY();
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance <= shockWaveTower.getRange()) {
-                    enemy.takeDamage(shockWaveTower.getDamage());
-                    enemy.setMooveSpeed(shockWaveTower.getSlowSpeed());
+                if (distance <= earthquakeTower.getRange()) {
+                    enemy.takeDamage(earthquakeTower.getDamage());
+                    enemy.setMooveSpeed(earthquakeTower.getSlowSpeed());
                 }
                 else {
                     enemy.resetMooveSpeed();
@@ -323,13 +325,13 @@ public class Game {
 
     private void shootProjectile(Entity source, Enemy target) {
         Point2D impactTile = computePreshotTile(source, target);
-
+        source.incrementAttackCounter();
         createProjectile(source, target, impactTile);
     }
 
     private void shootProjectile(Entity source, Entity target) {
         Point2D impactTile = toTilePosition(target.getX(), target.getY());
-
+        source.incrementAttackCounter();
         createProjectile(source, target, impactTile);
     }
 

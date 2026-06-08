@@ -54,8 +54,8 @@ public class EntityView {
             iv.setImage(recruitimg);
         }
         if(entity instanceof Tower){
-            iv.setFitHeight(TILESIZE+10);
-            iv.setFitWidth(TILESIZE+10);
+            iv.setFitHeight(TILESIZE+5);
+            iv.setFitWidth(TILESIZE+5);
         }
         else{
             iv.setFitHeight(TILESIZE+5);
@@ -82,39 +82,39 @@ public class EntityView {
         this.iv.setImage(null);
     }
 
-    public void switchImage(){
-        /*
-        if(entity instanceof ArcherTower) {
-            iv.setImage(archerTower2img);
-        }*/
-        if(entity instanceof Wolf) {
-            iv.setImage(wolf2img);
-        }
-        else if(entity instanceof Barrack) {
-            iv.setImage(barrack2img);
-        }
-        /*
-        else if(entity instanceof Earthquake) {
-            iv.setImage(earthquake2img);
-        }*/
-
-    }
-
-    public void switchImage2(){
-        /*
-        if(entity instanceof ArcherTower) {
+    public void switchImageToInitial(){
+        if(entity instanceof ArcherTower){
             iv.setImage(archerTower1img);
-        }*/
+        }
+        else if(entity instanceof Earthquake){
+            iv.setImage(earthquake1img);
+        }
         if(entity instanceof Wolf) {
             iv.setImage(wolf1img);
         }
         else if(entity instanceof Barrack) {
             iv.setImage(barrack1img);
         }
-        /*
+
+    }
+
+    public void switchImageIdle(){
+
+        if(entity instanceof Wolf) {
+            iv.setImage(wolf2img);
+        }
+        else if(entity instanceof Barrack) {
+            iv.setImage(barrack2img);
+        }
+    }
+
+    public void switchImageAttack(){
+        if(entity instanceof ArcherTower) {
+            iv.setImage(archerTower2img);
+        }
         else if(entity instanceof Earthquake) {
-            iv.setImage(earthquake1img);
-        }*/
+            iv.setImage(earthquake2img);
+        }
     }
 
 }

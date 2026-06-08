@@ -85,6 +85,7 @@ public class GameController implements Initializable {
 
         projectileListener = new ProjectileListener(gamePane);
         game.getProjectiles().addListener(projectileListener);
+
     }
 
     private void initButtonControls(){
