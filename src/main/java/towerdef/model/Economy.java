@@ -15,7 +15,7 @@ public class Economy {
         this.playerName = playerName;
         scoreValue = ScoreManager.loadScore(playerName);
         score = new SimpleIntegerProperty((int) scoreValue);
-        gold = new SimpleIntegerProperty(50);
+        gold = new SimpleIntegerProperty(1000);
         scoreRate = 1;
     }
 
