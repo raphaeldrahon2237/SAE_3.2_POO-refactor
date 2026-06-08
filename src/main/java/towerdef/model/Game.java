@@ -60,6 +60,12 @@ public class Game {
         removeDeadEntities();
     }
 
+    private void updateEnemiesAttackTimers(double deltaTime) {
+        for(Enemy enemy:gameEntities.getEnemies()){
+            enemy.updateAttackTimer(deltaTime);
+        }
+    }
+
     public MapGrid getMapGrid() {
         return mapGrid;
     }
