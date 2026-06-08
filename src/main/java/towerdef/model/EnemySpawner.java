@@ -2,9 +2,7 @@ package towerdef.model;
 
 import javafx.geometry.Point2D;
 import towerdef.model.entity.Base;
-import towerdef.model.entity.troop.Boss;
-import towerdef.model.entity.troop.Enemy;
-import towerdef.model.entity.troop.Wolf;
+import towerdef.model.entity.troop.*;
 import towerdef.model.map.MapGrid;
 
 import java.util.ArrayList;
@@ -86,31 +84,56 @@ public class EnemySpawner {
     }
 
     public void spawnEnemies(int number) {
-        if (!gameEntities.getTowers().isEmpty()) {
-            List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles(mapGrid);
 
-            for (int i = 0; i < number; i++) {
-                Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
-
-                Wolf wolf = new Wolf((int) tile.getX(), (int) tile.getY());
-                wolf.setDestination(new Point2D(base.getX(), base.getY()));
-
-                spawnEnemy(wolf);
-            }
-
-            if (currentWave %2 == 0 && !bossSpawnedThisWave){
-                System.out.println("BOSS WAVE !");
-
-                    Point2D tile = walkableEdgeTiles.get(random.nextInt(walkableEdgeTiles.size()));
-                    Boss boss = new Boss((int) tile.getX(), (int) tile.getY());
-                    boss.setDestination(new Point2D(base.getX(), base.getY()));
-                    spawnEnemy(boss);
-                    bossSpawnedThisWave = true;
-
-
-            }
+        if (gameEntities.getTowers().isEmpty()) {
+            return;
         }
 
+        List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles(mapGrid);
+
+        for (int i = 0; i < number; i++) {
+
+            Point2D tile = walkableEdgeTiles.get(
+                    random.nextInt(walkableEdgeTiles.size()));
+
+            Enemy enemy;
+
+            int rand = random.nextInt(100);
+
+            if (rand < 60) {
+                enemy = new Wolf((int) tile.getX(), (int) tile.getY());
+            }
+            else if (rand < 80) {
+                enemy = new Archer((int) tile.getX(), (int) tile.getY());
+            }
+            else if (rand < 95) {
+                enemy = new ArmoredSoldier((int) tile.getX(), (int) tile.getY());
+            }
+            else {
+                enemy = new Catapult((int) tile.getX(), (int) tile.getY());
+            }
+
+            enemy.setDestination(new Point2D(base.getX(), base.getY()));
+
+            spawnEnemy(enemy);
+        }
+
+        // Boss toutes les 10 vagues
+        if (currentWave % 10 == 0 && !bossSpawnedThisWave) {
+
+            System.out.println("BOSS WAVE !");
+
+            Point2D tile = walkableEdgeTiles.get(
+                    random.nextInt(walkableEdgeTiles.size()));
+
+            Boss boss = new Boss((int) tile.getX(), (int) tile.getY());
+
+            boss.setDestination(new Point2D(base.getX(), base.getY()));
+
+            spawnEnemy(boss);
+
+            bossSpawnedThisWave = true;
+        }
     }
 
     public int getCurrentWave()  {
@@ -135,13 +158,14 @@ public class EnemySpawner {
 
     private void startNextWave() {
         currentWave++;
+
         bossSpawnedThisWave = false;
 
-        enemiesRemainingInWave = FIRST_WAVE_SIZE + (currentWave - 1) * ENEMIES_ADDED_PER_WAVE;
+        enemiesRemainingInWave = (int) Math.round(FIRST_WAVE_SIZE * Math.pow(1.10, currentWave - 1));
+
         enemySpawnTimer = getEnemySpawnDelay();
         waveInProgress = true;
     }
-
 
     private double getEnemySpawnDelay() {
         double delay = TIME_BETWEEN_ENEMIES - (currentWave - 1) * ENEMY_DELAY_DECREASE_PER_WAVE;

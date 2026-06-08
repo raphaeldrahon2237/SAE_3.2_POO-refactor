@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
-import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -58,6 +57,7 @@ public class Game {
         updateEnemiesAttackTimers(deltaTime);
 
         alliesAttackEnemies();
+        catapultsAttackTowers();
         enemiesAttackBase();
 
         if (gameOver) {
@@ -273,11 +273,83 @@ public class Game {
 
         return closestEnemy;
     }
+    private towerdef.model.entity.tower.Tower findNearestTower(Enemy enemy) {
+
+        towerdef.model.entity.tower.Tower nearest = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (towerdef.model.entity.tower.Tower tower : gameEntities.getTowers()) {
+
+            double dx = tower.getX() - enemy.getX();
+            double dy = tower.getY() - enemy.getY();
+
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearest = tower;
+            }
+        }
+
+        return nearest;
+    }
+    private void catapultsAttackTowers() {
+
+        for (Enemy enemy : gameEntities.getEnemies()) {
+
+            if (enemy instanceof Catapult) {
+
+                Tower tower = findNearestTower(enemy);
+
+                if (tower != null
+                        && enemy.canAttack()) {
+
+                    double dx = tower.getX() - enemy.getX();
+                    double dy = tower.getY() - enemy.getY();
+
+                    double distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance <= enemy.getRange()) {
+                        tower.takeDamage(enemy.getDamage());
+                        enemy.resetAttackTimer();
+                    }
+                }
+            }
+        }
+    }
 
     private void updateMovements(double deltaTime) {
+
         for (Enemy enemy : gameEntities.getEnemies()) {
-            if (!isBaseInRange(enemy)) {
-                enemy.updateMovement(deltaTime);
+
+            if (enemy instanceof Catapult) {
+
+                towerdef.model.entity.tower.Tower tower =
+                        findNearestTower(enemy);
+
+                if (tower != null) {
+
+                    double dx = tower.getX() - enemy.getX();
+                    double dy = tower.getY() - enemy.getY();
+
+                    double distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance > enemy.getRange()) {
+                        enemy.updateMovement(deltaTime);
+                    }
+
+                } else {
+
+                    if (!isBaseInRange(enemy)) {
+                        enemy.updateMovement(deltaTime);
+                    }
+                }
+
+            } else {
+
+                if (!isBaseInRange(enemy)) {
+                    enemy.updateMovement(deltaTime);
+                }
             }
         }
     }
