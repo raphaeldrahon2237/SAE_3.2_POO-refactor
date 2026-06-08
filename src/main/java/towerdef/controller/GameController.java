@@ -37,13 +37,17 @@ public class GameController implements Initializable {
     private Button buttonArtillery;
 
     @FXML
-    private Button buttonShockwave;
+    private Button buttonEarthquake;
 
     @FXML
     private Label scoreLabel;
 
     @FXML
     private Label goldLabel;
+
+    @FXML
+    private Label baseHpLabel;
+
 
     private int towerSelected=0;
     private boolean destinationTestMode = false;
@@ -64,6 +68,7 @@ public class GameController implements Initializable {
 
         scoreLabel.textProperty().bind(game.scoreProperty().asString("Score : %d"));
         goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));
+        baseHpLabel.textProperty().bind(game.baseHpProperty().asString("BaseHp : %d"));
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
         initListeners();
@@ -99,9 +104,9 @@ public class GameController implements Initializable {
             towerSelected = 2;
             System.out.println("Placement mode activated: Artillery");
         });
-        buttonShockwave.setOnAction(event -> {
+        buttonEarthquake.setOnAction(event -> {
             towerSelected = 5;
-            System.out.println("Placement mode activated: Shockwave");
+            System.out.println("Placement mode activated: Earthquake");
         });
     }
 
@@ -124,7 +129,7 @@ public class GameController implements Initializable {
                     break;
                 case S:
                     towerSelected=5;
-                    System.out.println("Placement mode activated: Shockwave");
+                    System.out.println("Placement mode activated: Earthquake");
                     break;
                 case E:
                     destinationTestMode = true;
@@ -211,6 +216,12 @@ public class GameController implements Initializable {
 
                     game.runGame();
                     game.updateStates(deltaTime);
+
+                    if (game.isGameOver()) {
+                        gameLoop.stop();
+                        return;
+                    }
+
                     alliesListener.animations(deltaTime);
                     enemiesListener.animations(deltaTime);
 

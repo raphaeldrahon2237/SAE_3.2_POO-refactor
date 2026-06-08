@@ -29,7 +29,7 @@
                         <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
                         <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
                         <Button fx:id="buttonArtillery" focusTraversable="false" mnemonicParsing="false" text="Artillery" />
-                        <Button fx:id="buttonShockwave" focusTraversable="false" mnemonicParsing="false" text="Shockwave" />
+                        <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake" />
                     </children>
                 </VBox>
             </children>
@@ -49,10 +49,11 @@
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1800.0" spacing="1000.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1800.0" spacing="500.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
                 <Label fx:id="goldLabel" contentDisplay="RIGHT" text="gold" />
+                <Label fx:id="baseHpLabel" contentDisplay="LEFT" text="BaseHp"/>
             </children>
         </HBox>
     </bottom>
