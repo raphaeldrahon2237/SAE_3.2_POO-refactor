@@ -24,6 +24,7 @@ public class Game {
     private EnemySpawner enemySpawner;
     private TowerPlacement towerPlacement;
     private String playerName = "ayoube";
+    private boolean gameOver;
 
     public Game() {
         gameEntities = new GameEntities();
@@ -34,10 +35,10 @@ public class Game {
         path = new Path(mapGrid, base);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities);
         towerPlacement = new TowerPlacement(mapGrid, gameEntities, economy);
+        gameOver = false;
     }
 
     public void setInitialState() {
-        enemySpawner.spawnEnemies(5);
     }
 
     public void runGame() {
@@ -45,13 +46,21 @@ public class Game {
     }
 
     public void updateStates(double deltaTime) {
+        if (gameOver) {
+            return;
+        }
+
         economy.increaseScoreRate(enemySpawner.update(deltaTime));
 
         updateAlliesAttackTimers(deltaTime);
         updateEnemiesAttackTimers(deltaTime);
 
         alliesAttackEnemies();
-        enemiesAttackAllies();
+        enemiesAttackBase();
+
+        if (gameOver) {
+            return;
+        }
 
         updateMovements(deltaTime);
         updateProjectiles(deltaTime);
@@ -102,6 +111,22 @@ public class Game {
         economy.resetScore();
     }
 
+    public int getBaseHp() {
+        return base.getHp();
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public int getCurrentWave() {
+        return enemySpawner.getCurrentWave();
+    }
+
+    public int getEnemiesRemainingInWave() {
+        return enemySpawner.getEnemiesRemainingInWave();
+    }
+
     public int getGold() {
         return economy.getGold();
     }
@@ -119,6 +144,13 @@ public class Game {
     }
 
     public void removeDeadEntities() {
+        for (Enemy enemy : new ArrayList<>(gameEntities.getEnemies())) {
+            if (!enemy.isAlive()) {
+                economy.addGold(5);
+                economy.addScore(10);
+            }
+        }
+
         gameEntities.removeDeadEntities();
     }
 
@@ -203,59 +235,18 @@ public class Game {
         }
     }
 
-    private void enemiesAttackAllies() {
+    private void enemiesAttackBase() {
         for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy.canAttack() && enemy.getDamage() > 0) {
-                Entity target = findAllyInRange(enemy);
+            if (enemy.canAttack() && enemy.getDamage() > 0 && isBaseInRange(enemy)) {
+                base.takeDamage(enemy.getDamage());
+                enemy.resetAttackTimer();
 
-                if (target != null) {
-                    System.out.println("Enemy: " + enemy + " attacking " + target);
-
-                    shootProjectile(enemy, target);
-                    enemy.resetAttackTimer();
+                if (base.isDestroyed()) {
+                    gameOver = true;
+                    return;
                 }
             }
         }
-    }
-
-    public void applyShockwave (Entity shockWaveTower) {
-
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy.isAlive()) {
-                double dx = enemy.getX() - shockWaveTower.getX();
-                double dy = enemy.getY() - shockWaveTower.getY();
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= shockWaveTower.getRange()) {
-                    enemy.takeDamage(shockWaveTower.getDamage());
-                    enemy.setMooveSpeed(1);
-                }
-            }
-        }
-
-    }
-
-    private Entity findAllyInRange(Enemy enemy) {
-        Entity closestAlly = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (Entity ally : gameEntities.getAllies()) {
-            boolean isRecruit = !gameEntities.getTowers().contains(ally);
-            boolean canBeAttacked = ally.isAlive();
-
-            if (isRecruit && canBeAttacked) {
-                double dx = ally.getX() - enemy.getX();
-                double dy = ally.getY() - enemy.getY();
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= enemy.getRange() && distance < closestDistance) {
-                    closestAlly = ally;
-                    closestDistance = distance;
-                }
-            }
-        }
-
-        return closestAlly;
     }
 
     private Enemy findEnemyInRange(Entity source) {
@@ -278,30 +269,18 @@ public class Game {
 
     private void updateMovements(double deltaTime) {
         for (Enemy enemy : gameEntities.getEnemies()) {
-            if (!isEnemyInCombat(enemy)) {
+            if (!isBaseInRange(enemy)) {
                 enemy.updateMovement(deltaTime);
             }
         }
     }
 
-    private boolean isEnemyInCombat(Enemy enemy) {
-        for (Entity ally : gameEntities.getAllies()) {
-            boolean isRecruitOrTroop = !gameEntities.getTowers().contains(ally);
-            boolean canFight = ally.isAlive() && ally.getDamage() > 0;
+    private boolean isBaseInRange(Enemy enemy) {
+        double dx = base.getX() - enemy.getX();
+        double dy = base.getY() - enemy.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (isRecruitOrTroop && canFight) {
-                double dx = enemy.getX() - ally.getX();
-                double dy = enemy.getY() - ally.getY();
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= ally.getRange()) {
-                    System.out.println("Loup bloqué par : " + ally);
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return distance <= enemy.getRange();
     }
 
     private void updateProjectiles(double deltaTime) {
@@ -323,12 +302,6 @@ public class Game {
 
     private void shootProjectile(Entity source, Enemy target) {
         Point2D impactTile = computePreshotTile(source, target);
-
-        createProjectile(source, target, impactTile);
-    }
-
-    private void shootProjectile(Entity source, Entity target) {
-        Point2D impactTile = toTilePosition(target.getX(), target.getY());
 
         createProjectile(source, target, impactTile);
     }

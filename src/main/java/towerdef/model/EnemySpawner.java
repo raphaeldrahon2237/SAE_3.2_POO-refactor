@@ -12,14 +12,25 @@ import java.util.Random;
 
 public class EnemySpawner {
 
+    private static final int FIRST_WAVE_SIZE = 3;
+    private static final int ENEMIES_ADDED_PER_WAVE = 1;
+    private static final double INITIAL_TIME_BETWEEN_WAVES = 8.0;
+    private static final double MIN_TIME_BETWEEN_WAVES = 3.0;
+    private static final double WAVE_DELAY_DECREASE_PER_WAVE = 0.0;
+    private static final double TIME_BETWEEN_ENEMIES = 1.0;
+    private static final double MIN_TIME_BETWEEN_ENEMIES = 0.35;
+    private static final double ENEMY_DELAY_DECREASE_PER_WAVE = 0.05;
+
     private MapGrid mapGrid;
     private Base base;
     private Random random;
     private Path path;
     private GameEntities gameEntities;
-    private double difficultyTimer;
-    private double spawnInterval;
-    private double spawnTimer;
+    private int currentWave;
+    private int enemiesRemainingInWave;
+    private double waveTimer;
+    private double enemySpawnTimer;
+    private boolean waveInProgress;
 
     public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities) {
         this.mapGrid = mapGrid;
@@ -27,35 +38,54 @@ public class EnemySpawner {
         this.random = random;
         this.path = path;
         this.gameEntities = gameEntities;
-        difficultyTimer = 0.0;
-        spawnTimer = 0.0;
-        spawnInterval = 10;
+        currentWave = 0;
+        enemiesRemainingInWave = 0;
+        waveTimer = 0.0;
+        enemySpawnTimer = 0.0;
+        waveInProgress = false;
     }
 
     public int update(double deltaTime) {
         int scoreRateIncrease = 0;
 
-        difficultyTimer += deltaTime;
-        spawnTimer += deltaTime;
+        if (gameEntities.getTowers().isEmpty()) {
+            waveTimer = 0.0;
+            enemySpawnTimer = 0.0;
+            return scoreRateIncrease;
+        }
 
-        if (difficultyTimer >= 30.0) {
-            difficultyTimer -= 30.0;
-            scoreRateIncrease++;
+        if (!waveInProgress) {
+            waveTimer += deltaTime;
 
-            if (spawnInterval - 1 > 0.0) {
-                spawnInterval -= 1;
+            if (waveTimer >= getTimeBetweenWaves()) {
+                startNextWave();
+                scoreRateIncrease++;
             }
         }
 
-        if (spawnTimer >= spawnInterval) {
-            spawnTimer -= spawnInterval;
-            spawnEnemies(1);
+        if (waveInProgress) {
+            enemySpawnTimer += deltaTime;
+
+            while (enemySpawnTimer >= getEnemySpawnDelay() && enemiesRemainingInWave > 0) {
+                enemySpawnTimer -= getEnemySpawnDelay();
+                spawnEnemies(1);
+                enemiesRemainingInWave--;
+            }
+
+            if (enemiesRemainingInWave == 0) {
+                waveInProgress = false;
+                waveTimer = 0.0;
+            }
         }
 
         return scoreRateIncrease;
     }
 
     public void spawnEnemies(int number) {
+        if (gameEntities.getTowers().isEmpty()) {
+            return;
+        }
+
         List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles(mapGrid);
 
         for (int i = 0; i < number; i++) {
@@ -66,6 +96,33 @@ public class EnemySpawner {
 
             spawnEnemy(wolf);
         }
+    }
+
+    public int getCurrentWave() {
+        return currentWave;
+    }
+
+    public int getEnemiesRemainingInWave() {
+        return enemiesRemainingInWave;
+    }
+
+    private void startNextWave() {
+        currentWave++;
+        enemiesRemainingInWave = FIRST_WAVE_SIZE + (currentWave - 1) * ENEMIES_ADDED_PER_WAVE;
+        enemySpawnTimer = getEnemySpawnDelay();
+        waveInProgress = true;
+    }
+
+    private double getEnemySpawnDelay() {
+        double delay = TIME_BETWEEN_ENEMIES - (currentWave - 1) * ENEMY_DELAY_DECREASE_PER_WAVE;
+
+        return Math.max(delay, MIN_TIME_BETWEEN_ENEMIES);
+    }
+
+    private double getTimeBetweenWaves() {
+        double delay = INITIAL_TIME_BETWEEN_WAVES - currentWave * WAVE_DELAY_DECREASE_PER_WAVE;
+
+        return Math.max(delay, MIN_TIME_BETWEEN_WAVES);
     }
 
     private void spawnEnemy(Enemy enemy) {
