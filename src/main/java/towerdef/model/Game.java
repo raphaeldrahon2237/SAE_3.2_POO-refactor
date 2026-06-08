@@ -48,7 +48,7 @@ public class Game {
         economy.increaseScoreRate(enemySpawner.update(deltaTime));
 
         updateAlliesAttackTimers(deltaTime);
-        updateEnemiesAttackTimers(deltaTime);
+        //updateEnemiesAttackTimers(deltaTime);
 
         alliesAttackEnemies();
         enemiesAttackAllies();
@@ -117,11 +117,11 @@ public class Game {
     }
 
     public boolean canPlaceTower(int x, int y) {
-        return towerPlacementService.canPlaceTower(x, y);
+        return towerPlacement.canPlaceTower(x, y);
     }
 
     public boolean placeTower(int x, int y, int idTower) {
-        return towerPlacementService.placeTower(x, y, idTower);
+        return towerPlacement.placeTower(x, y, idTower);
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
@@ -367,15 +367,6 @@ public class Game {
         );
 
         gameEntities.addProjectile(projectile);
-    }
-
-    private boolean isColliding(Entity entity1, Entity entity2) {
-        double dx = entity1.getX() - entity2.getX();
-        double dy = entity1.getY() - entity2.getY();
-
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        return distance < 0.5;
     }
 
     private List<Point2D> computeLineTiles(int startX, int startY, int targetX, int targetY) {

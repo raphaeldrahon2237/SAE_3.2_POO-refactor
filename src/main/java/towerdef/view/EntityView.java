@@ -46,7 +46,7 @@ public class EntityView {
             iv.setImage(barrack1img);
         }
         else if(entity instanceof Earthquake){
-            iv.setImage(shockWaveImg);
+            iv.setImage(archerTower2img);
         }
         else if (entity instanceof Wolf) {
             iv.setImage(wolf1img);

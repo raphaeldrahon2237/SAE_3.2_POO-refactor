@@ -6,7 +6,7 @@ public enum EntityType {
     ARTILLERY(2),
     BARRACK(3),
     MAGE(4),
-    SHOCKWAVE(5),
+    EARTHQUAKE(5),
     RECRUIT(6),
     WOLF(10);
 
