@@ -50,6 +50,9 @@ public class EntityView {
         else if (entity instanceof Wolf) {
             iv.setImage(wolf1img);
         }
+        else if (entity instanceof Boss){
+            iv.setImage(boss1img);
+        }
         else if (entity instanceof Recruit) {
             iv.setImage(recruitimg);
         }
@@ -106,6 +109,7 @@ public class EntityView {
         else if(entity instanceof Barrack) {
             iv.setImage(barrack2img);
         }
+
     }
 
     public void switchImageAttack(){

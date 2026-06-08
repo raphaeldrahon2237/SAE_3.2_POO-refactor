@@ -64,7 +64,6 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         game = new Game();
-        game = new Game();
 
         scoreLabel.textProperty().bind(game.scoreProperty().asString("Score : %d"));
         goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));

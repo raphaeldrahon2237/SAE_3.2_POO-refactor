@@ -8,7 +8,11 @@ public class ScoreManager {
 
     public static void saveScore(String playerName, int score) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            writer.write(playerName + ";" + score);
+            int oldScore = loadScore(playerName);
+
+            if(score > oldScore){
+                saveScore(playerName, score);
+            };
         } catch (IOException e) {
             System.out.println("Erreur sauvegarde score : " + e.getMessage());
         }

@@ -8,7 +8,8 @@ public enum EntityType {
     MAGE(4),
     EARTHQUAKE(5),
     RECRUIT(6),
-    WOLF(10);
+    WOLF(10),
+    BOSS(11);
 
 
     private final int id;

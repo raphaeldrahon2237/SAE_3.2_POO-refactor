@@ -32,7 +32,7 @@ public class Game {
         economy = new Economy(playerName);
 
         mapGrid = new MapGrid();
-        base = new Base(16, 12, 100);
+        base = new Base(16, 12, 250);
         path = new Path(mapGrid, base);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities);
         towerPlacement = new TowerPlacement(mapGrid, gameEntities, economy);
@@ -150,6 +150,7 @@ public class Game {
     }
 
     public void removeDeadEntities() {
+
         for (Enemy enemy : new ArrayList<>(gameEntities.getEnemies())) {
             if (!enemy.isAlive()) {
                 economy.addGold(5);

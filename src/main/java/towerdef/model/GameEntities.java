@@ -45,6 +45,8 @@ public class GameEntities {
     public void removeDeadEntities() {
         allies.removeIf(ally -> !ally.isAlive());
         enemies.removeIf(enemy -> !enemy.isAlive());
+        towers.removeIf(tower -> !tower.isAlive());
+
     }
 
     public ObservableList<Entity> getAllies() {
