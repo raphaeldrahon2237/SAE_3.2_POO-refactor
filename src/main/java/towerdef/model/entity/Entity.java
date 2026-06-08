@@ -26,14 +26,14 @@ public abstract class Entity {
         this(hp, damage, armor, atkSpeed, range, x, y, AttackType.NORMAL, 0);
     }
 
-    public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y, AttackType attackType, int zone) {
+    public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y, AttackType attackType, int zone) {
         this.id = nextId;
         nextId++;
 
         this.hp = hp;
         this.damage = damage;
         this.armor = armor;
-        this.attackSpeed = atkSpeed;
+        this.attackSpeed = attackSpeed;
         this.range = range;
 
         this.x.set(x);
@@ -46,7 +46,7 @@ public abstract class Entity {
 
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
-        hp -= damage;
+        hp -= Math.max(1, damage - armor);
     }
 
     public AttackType getAttackType() {
@@ -144,4 +144,43 @@ public abstract class Entity {
     public String toString() {
         return "" + id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public void setArmor(int armor) {
+        this.armor = armor;
+    }
+
+    public void setAttackSpeed(int attackSpeed) {
+        this.attackSpeed = attackSpeed;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+    public void setAttackTimer(double attackTimer) {
+        this.attackTimer = attackTimer;
+    }
+
+    public void setAttackType(AttackType attackType) {
+        this.attackType = attackType;
+    }
+
+    public void setZone(int zone) {
+        this.zone = zone;
+    }
+
+    public static void setNextId(int nextId) {
+        Entity.nextId = nextId;
+    }
+
+
+
 }
