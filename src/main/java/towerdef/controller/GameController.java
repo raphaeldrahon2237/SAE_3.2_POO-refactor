@@ -45,6 +45,10 @@ public class GameController implements Initializable {
     @FXML
     private Label goldLabel;
 
+    @FXML
+    private Label baseHpLabel;
+
+
     private int towerSelected=0;
     private boolean destinationTestMode = false;
 
@@ -64,6 +68,7 @@ public class GameController implements Initializable {
 
         scoreLabel.textProperty().bind(game.scoreProperty().asString("Score : %d"));
         goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));
+        baseHpLabel.textProperty().bind(game.baseHpProperty().asString("BaseHp : %d"));
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
 
         initListeners();

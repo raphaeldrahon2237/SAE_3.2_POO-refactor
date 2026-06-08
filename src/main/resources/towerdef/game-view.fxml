@@ -49,10 +49,11 @@
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1800.0" spacing="1000.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1800.0" spacing="500.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
                 <Label fx:id="goldLabel" contentDisplay="RIGHT" text="gold" />
+                <Label fx:id="baseHpLabel" contentDisplay="LEFT" text="BaseHp"/>
             </children>
         </HBox>
     </bottom>

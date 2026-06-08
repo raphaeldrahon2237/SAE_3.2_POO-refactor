@@ -135,6 +135,10 @@ public class Game {
         return economy.goldProperty();
     }
 
+    public IntegerProperty baseHpProperty(){
+        return base.hpProperty();
+    }
+
     public void addGold(int amount) {
         economy.addGold(amount);
     }

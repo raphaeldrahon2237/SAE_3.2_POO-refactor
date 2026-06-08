@@ -1,14 +1,17 @@
 package towerdef.model.entity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Base {
     private int x;
     private int y;
-    private int hp;
+    private IntegerProperty hp;
 
     public Base(int x, int y, int hp) {
         this.x = x;
         this.y = y;
-        this.hp = hp;
+        this.hp = new SimpleIntegerProperty(hp);
     }
 
     public int getY() {
@@ -20,18 +23,18 @@ public class Base {
     }
 
     public int getHp() {
+        return  hp.get();
+    }
+
+    public IntegerProperty hpProperty(){
         return hp;
     }
 
     public void takeDamage(int damage) {
-        hp -= damage;
-
-        if (hp < 0) {
-            hp = 0;
-        }
+        hp.set(Math.max(0, hp.get() - damage));
     }
 
     public boolean isDestroyed() {
-        return hp <= 0;
+        return hp.get() <= 0;
     }
 }
