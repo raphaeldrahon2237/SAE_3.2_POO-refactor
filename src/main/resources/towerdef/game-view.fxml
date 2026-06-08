@@ -29,7 +29,7 @@
                         <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
                         <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
                         <Button fx:id="buttonArtillery" focusTraversable="false" mnemonicParsing="false" text="Artillery" />
-                        <Button fx:id="buttonShockwave" focusTraversable="false" mnemonicParsing="false" text="Shockwave" />
+                        <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake" />
                     </children>
                 </VBox>
             </children>

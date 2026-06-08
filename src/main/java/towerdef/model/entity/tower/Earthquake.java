@@ -7,7 +7,7 @@ public class Earthquake extends Tower {
     private int slowSpeed;
 
     public Earthquake(int x, int y, int slowSpeed) {
-        super(40, 0, 4, 5, 2, x, y, 25, AttackType.SHOCKWAVE, 0);
+        super(40, 0, 4, 5, 2, x, y, 25, AttackType.EARTHQUAKE, 0);
         this.slowSpeed = slowSpeed;
     }
 

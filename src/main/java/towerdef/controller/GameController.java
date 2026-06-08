@@ -37,7 +37,7 @@ public class GameController implements Initializable {
     private Button buttonArtillery;
 
     @FXML
-    private Button buttonShockwave;
+    private Button buttonEarthquake;
 
     @FXML
     private Label scoreLabel;
@@ -103,9 +103,9 @@ public class GameController implements Initializable {
             towerSelected = 2;
             System.out.println("Placement mode activated: Artillery");
         });
-        buttonShockwave.setOnAction(event -> {
+        buttonEarthquake.setOnAction(event -> {
             towerSelected = 5;
-            System.out.println("Placement mode activated: Shockwave");
+            System.out.println("Placement mode activated: Earthquake");
         });
     }
 
@@ -128,7 +128,7 @@ public class GameController implements Initializable {
                     break;
                 case S:
                     towerSelected=5;
-                    System.out.println("Placement mode activated: Shockwave");
+                    System.out.println("Placement mode activated: Earthquake");
                     break;
                 case E:
                     destinationTestMode = true;

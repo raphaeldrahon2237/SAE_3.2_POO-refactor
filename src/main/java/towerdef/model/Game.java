@@ -197,17 +197,17 @@ public class Game {
         }
     }
 
-    public void applyShockwave (Earthquake shockWaveTower) {
+    public void applyEarthquake (Earthquake earthquakeTower) {
 
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {
-                double dx = enemy.getX() - shockWaveTower.getX();
-                double dy = enemy.getY() - shockWaveTower.getY();
+                double dx = enemy.getX() - earthquakeTower.getX();
+                double dy = enemy.getY() - earthquakeTower.getY();
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance <= shockWaveTower.getRange()) {
-                    enemy.takeDamage(shockWaveTower.getDamage());
-                    enemy.setMooveSpeed(shockWaveTower.getSlowSpeed());
+                if (distance <= earthquakeTower.getRange()) {
+                    enemy.takeDamage(earthquakeTower.getDamage());
+                    enemy.setMooveSpeed(earthquakeTower.getSlowSpeed());
                 }
                 else {
                     enemy.resetMooveSpeed();
@@ -221,8 +221,8 @@ public class Game {
         for (Entity ally : gameEntities.getAllies()) {
             if (ally.canAttack() && ally.getDamage() >= 0) {
                 switch (ally.getAttackType()) {
-                    case SHOCKWAVE:
-                        applyShockwave((Earthquake) ally);
+                    case EARTHQUAKE:
+                        applyEarthquake((Earthquake) ally);
                         ally.resetAttackTimer();
                         break;
 
