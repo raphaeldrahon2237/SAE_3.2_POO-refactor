@@ -41,40 +41,36 @@ public class Enemy extends Troop {
             currentTarget = getNextTarget();
         }
 
-        if (currentTarget == null) {
-            return;
+        if (currentTarget != null) {
+            double currentX = getX();
+            double currentY = getY();
+
+            double targetX = currentTarget.getX();
+            double targetY = currentTarget.getY();
+
+            double directionX = targetX - currentX;
+            double directionY = targetY - currentY;
+
+            double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+
+            if (distance == 0) {
+                currentTarget = null;
+            } else {
+                double movementDistance = getMooveSpeed() * deltaTime;
+
+                if (movementDistance >= distance) {
+                    setX(targetX);
+                    setY(targetY);
+                    currentTarget = null;
+                } else {
+                    double normalizedX = directionX / distance;
+                    double normalizedY = directionY / distance;
+
+                    setX(currentX + normalizedX * movementDistance);
+                    setY(currentY + normalizedY * movementDistance);
+                }
+            }
         }
-
-        double currentX = getX();
-        double currentY = getY();
-
-        double targetX = currentTarget.getX();
-        double targetY = currentTarget.getY();
-
-        double directionX = targetX - currentX;
-        double directionY = targetY - currentY;
-
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
-
-        if (distance == 0) {
-            currentTarget = null;
-            return;
-        }
-
-        double movementDistance = getMooveSpeed() * deltaTime;
-
-        if (movementDistance >= distance) {
-            setX(targetX);
-            setY(targetY);
-            currentTarget = null;
-            return;
-        }
-
-        double normalizedX = directionX / distance;
-        double normalizedY = directionY / distance;
-
-        setX(currentX + normalizedX * movementDistance);
-        setY(currentY + normalizedY * movementDistance);
     }
 
     public Point2D predictPositionAfter(double duration) {

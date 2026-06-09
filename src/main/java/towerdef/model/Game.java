@@ -5,8 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
-import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.Catapult;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -51,31 +49,26 @@ public class Game {
     }
 
     public void updateStates(double deltaTime) {
-        if (gameOver) {
-            return;
+        if (!gameOver) {
+            gameStats.addSurvivalTime(deltaTime);
+            economy.increaseScoreRate(enemySpawner.update(deltaTime));
+            gameStats.updateMaxWaveReached(enemySpawner.getCurrentWave());
+
+            updateAlliesAttackTimers(deltaTime);
+            updateEnemiesAttackTimers(deltaTime);
+
+            alliesAttackEnemies();
+            enemiesAttackAllies();
+            enemiesAttackBase();
+
+            if (!gameOver) {
+                updateMovements(deltaTime);
+                updateProjectiles(deltaTime);
+                updateScore(deltaTime);
+
+                removeDeadEntities();
+            }
         }
-
-        gameStats.addSurvivalTime(deltaTime);
-        economy.increaseScoreRate(enemySpawner.update(deltaTime));
-        gameStats.updateMaxWaveReached(enemySpawner.getCurrentWave());
-
-        updateAlliesAttackTimers(deltaTime);
-        updateEnemiesAttackTimers(deltaTime);
-
-        alliesAttackEnemies();
-        enemiesAttackAllies();
-        catapultsAttackTowers();
-        enemiesAttackBase();
-
-        if (gameOver) {
-            return;
-        }
-
-        updateMovements(deltaTime);
-        updateProjectiles(deltaTime);
-        updateScore(deltaTime);
-
-        removeDeadEntities();
     }
 
     private void updateEnemiesAttackTimers(double deltaTime) {
@@ -264,7 +257,7 @@ public class Game {
 
     private void enemiesAttackBase() {
         for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy.canAttack() && enemy.getDamage() > 0 && isBaseInRange(enemy)) {
+            if (!gameOver && enemy.canAttack() && enemy.getDamage() > 0 && isBaseInRange(enemy)) {
                 int baseHpBeforeAttack = base.getHp();
                 base.takeDamage(enemy.getDamage());
                 gameStats.addDamageTakenByBase(baseHpBeforeAttack - base.getHp());
@@ -272,7 +265,6 @@ public class Game {
 
                 if (base.isDestroyed()) {
                     gameOver = true;
-                    return;
                 }
             }
         }
@@ -295,117 +287,25 @@ public class Game {
 
         return closestEnemy;
     }
-    private towerdef.model.entity.tower.Tower findNearestTower(Enemy enemy) {
-
-        towerdef.model.entity.tower.Tower nearest = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (towerdef.model.entity.tower.Tower tower : gameEntities.getTowers()) {
-
-            double dx = tower.getX() - enemy.getX();
-            double dy = tower.getY() - enemy.getY();
-
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                nearest = tower;
-            }
-        }
-
-        return nearest;
-    }
-    private void catapultsAttackTowers() {
-
-        for (Enemy enemy : gameEntities.getEnemies()) {
-
-            if (enemy instanceof Catapult) {
-
-                Tower tower = findNearestTower(enemy);
-
-                if (tower != null
-                        && enemy.canAttack()) {
-
-                    double dx = tower.getX() - enemy.getX();
-                    double dy = tower.getY() - enemy.getY();
-
-                    double distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance <= enemy.getRange()) {
-                        tower.takeDamage(enemy.getDamage());
-                        enemy.resetAttackTimer();
-                    }
-                }
-            }
-        }
-    }
-
     private void updateMovements(double deltaTime) {
-
         for (Enemy enemy : gameEntities.getEnemies()) {
-
-            if (!isEnemyInCombat(enemy)) {
-
-                if (enemy instanceof Catapult) {
-
-                    Tower tower = findNearestTower(enemy);
-
-                    if (tower != null) {
-
-                        double dx = tower.getX() - enemy.getX();
-                        double dy = tower.getY() - enemy.getY();
-
-                        double distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance > enemy.getRange()) {
-                            enemy.updateMovement(deltaTime);
-                        }
-
-                    } else {
-
-                        if (!isBaseInRange(enemy)) {
-                            enemy.updateMovement(deltaTime);
-                        }
-                    }
-
-                } else {
-
-                    if (!isBaseInRange(enemy)) {
-                        enemy.updateMovement(deltaTime);
-                    }
-                }
+            if (!isEnemyInCombat(enemy) && !isBaseInRange(enemy)) {
+                enemy.updateMovement(deltaTime);
             }
         }
     }
+
     private boolean isEnemyInCombat(Enemy enemy) {
-        for (Entity ally : gameEntities.getAllies()) {
-
-            boolean isRecruit = !gameEntities.getTowers().contains(ally);
-            boolean canFight = ally.isAlive() && ally.getDamage() > 0;
-
-            if (isRecruit && canFight) {
-                double dx = enemy.getX() - ally.getX();
-                double dy = enemy.getY() - ally.getY();
-
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance <= ally.getRange()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return findAllyInRange(enemy) != null;
     }
 
     private void enemiesAttackAllies() {
         for (Enemy enemy : gameEntities.getEnemies()) {
-
             if (enemy.canAttack() && enemy.getDamage() > 0) {
                 Entity target = findAllyInRange(enemy);
 
                 if (target != null) {
-                    target.takeDamage(enemy.getDamage());
+                    shootProjectile(enemy, target);
                     enemy.resetAttackTimer();
                 }
             }
@@ -417,12 +317,9 @@ public class Game {
         double closestDistance = Double.MAX_VALUE;
 
         for (Entity ally : gameEntities.getAllies()) {
-
-            boolean isRecruit = !gameEntities.getTowers().contains(ally);
             boolean canBeAttacked = ally.isAlive();
 
-            if (isRecruit && canBeAttacked) {
-
+            if (canBeAttacked) {
                 double dx = ally.getX() - enemy.getX();
                 double dy = ally.getY() - enemy.getY();
 
@@ -463,19 +360,23 @@ public class Game {
         }
     }
 
-    private void shootProjectile(Entity source, Enemy target) {
+    private void shootProjectile(Entity source, Entity target) {
         Point2D impactTile = computePreshotTile(source, target);
         source.incrementAttackCounter();
         gameStats.projectileFired();
         createProjectile(source, target, impactTile);
     }
 
-    private Point2D computePreshotTile(Entity source, Enemy target) {
+    private Point2D computePreshotTile(Entity source, Entity target) {
         Point2D impactTile = toTilePosition(target.getX(), target.getY());
-        double projectileTravelTime = computeProjectileTravelTime(source, impactTile);
-        Point2D predictedPosition = target.predictPositionAfter(projectileTravelTime);
 
-        return toTilePosition(predictedPosition.getX(), predictedPosition.getY());
+        if (target instanceof Enemy enemy) {
+            double projectileTravelTime = computeProjectileTravelTime(source, impactTile);
+            Point2D predictedPosition = enemy.predictPositionAfter(projectileTravelTime);
+            impactTile = toTilePosition(predictedPosition.getX(), predictedPosition.getY());
+        }
+
+        return impactTile;
     }
 
     private double computeProjectileTravelTime(Entity source, Point2D impactTile) {

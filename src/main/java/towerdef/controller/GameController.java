@@ -252,25 +252,25 @@ public class GameController implements Initializable {
 
                     if (lastFrameTime == 0) {
                        lastFrameTime = now;
-                        return;
+                    } else {
+
+                        deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
+
+                        lastFrameTime = now;
+
+                        game.runGame();
+                        game.updateStates(deltaTime);
+
+                        if (game.isGameOver()) {
+                            showGameOverScreen();
+                        } else {
+
+                            alliesListener.animations(deltaTime);
+                            enemiesListener.animations(deltaTime);
+
+                            time++;
+                        }
                     }
-
-                    deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
-
-                    lastFrameTime = now;
-
-                    game.runGame();
-                    game.updateStates(deltaTime);
-
-                    if (game.isGameOver()) {
-                        showGameOverScreen();
-                        return;
-                    }
-
-                    alliesListener.animations(deltaTime);
-                    enemiesListener.animations(deltaTime);
-
-                    time++;
                 }
         );
 

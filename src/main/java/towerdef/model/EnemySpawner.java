@@ -86,38 +86,36 @@ public class EnemySpawner {
 
     public void spawnEnemies(int number) {
 
-        if (gameEntities.getTowers().isEmpty()) {
-            return;
-        }
+        if (!gameEntities.getTowers().isEmpty()) {
+            List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles(mapGrid);
 
-        List<Point2D> walkableEdgeTiles = getWalkableEdgeTiles(mapGrid);
+            for (int i = 0; i < number; i++) {
 
-        for (int i = 0; i < number; i++) {
+                Point2D tile = walkableEdgeTiles.get(
+                        random.nextInt(walkableEdgeTiles.size()));
 
-            Point2D tile = walkableEdgeTiles.get(
-                    random.nextInt(walkableEdgeTiles.size()));
+                Enemy enemy = createEnemyForCurrentWave((int) tile.getX(), (int) tile.getY());
 
-            Enemy enemy = createEnemyForCurrentWave((int) tile.getX(), (int) tile.getY());
+                enemy.setDestination(new Point2D(base.getX(), base.getY()));
 
-            enemy.setDestination(new Point2D(base.getX(), base.getY()));
+                spawnEnemy(enemy);
+            }
 
-            spawnEnemy(enemy);
-        }
+            if (currentWave > 0 && currentWave % BOSS_WAVE_INTERVAL == 0 && !bossSpawnedThisWave) {
 
-        if (currentWave > 0 && currentWave % BOSS_WAVE_INTERVAL == 0 && !bossSpawnedThisWave) {
+                System.out.println("BOSS WAVE !");
 
-            System.out.println("BOSS WAVE !");
+                Point2D tile = walkableEdgeTiles.get(
+                        random.nextInt(walkableEdgeTiles.size()));
 
-            Point2D tile = walkableEdgeTiles.get(
-                    random.nextInt(walkableEdgeTiles.size()));
+                Boss boss = new Boss((int) tile.getX(), (int) tile.getY());
 
-            Boss boss = new Boss((int) tile.getX(), (int) tile.getY());
+                boss.setDestination(new Point2D(base.getX(), base.getY()));
 
-            boss.setDestination(new Point2D(base.getX(), base.getY()));
+                spawnEnemy(boss);
 
-            spawnEnemy(boss);
-
-            bossSpawnedThisWave = true;
+                bossSpawnedThisWave = true;
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
-    private static final int TOWER_HEURISTIC = 12;
+    private static final int TOWER_HEURISTIC = 15;
 
     private MapGrid mapGrid;
     private Point2D source;
@@ -73,26 +73,27 @@ public class AStar {
 
     private void runAStar() {
         PriorityQueue<TileCost> queue = new PriorityQueue<>();
+        boolean targetFound = false;
 
         costs.put(source, 0.0);
         queue.add(new TileCost(source, heuristic(source, target)));
 
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty() && !targetFound) {
             Point2D currentTile = queue.poll().getTile();
 
             if (currentTile.equals(target)) {
-                return;
-            }
+                targetFound = true;
+            } else {
+                for (Point2D neighbor : mapGrid.getNeighbors((int) currentTile.getX(), (int) currentTile.getY())) {
+                    double newCost = costs.get(currentTile) + 1;
 
-            for (Point2D neighbor : mapGrid.getNeighbors((int) currentTile.getX(), (int) currentTile.getY())) {
-                double newCost = costs.get(currentTile) + 1;
+                    if (!costs.containsKey(neighbor) || newCost < costs.get(neighbor)) {
+                        costs.put(neighbor, newCost);
+                        predecessors.put(neighbor, currentTile);
 
-                if (!costs.containsKey(neighbor) || newCost < costs.get(neighbor)) {
-                    costs.put(neighbor, newCost);
-                    predecessors.put(neighbor, currentTile);
-
-                    double priority = newCost + heuristic(neighbor, target);
-                    queue.add(new TileCost(neighbor, priority));
+                        double priority = newCost + heuristic(neighbor, target);
+                        queue.add(new TileCost(neighbor, priority));
+                    }
                 }
             }
         }
