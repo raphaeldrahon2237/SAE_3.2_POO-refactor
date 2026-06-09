@@ -5,7 +5,9 @@ import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.*;
 import towerdef.model.entity.troop.*;
-
+import javafx.beans.binding.Bindings;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import static towerdef.model.map.TileType.TILESIZE;
 
 public class EntityView {
@@ -13,6 +15,9 @@ public class EntityView {
     private Pane gamePane;
     private Entity entity;
     private ImageView iv;
+    private Rectangle healthBarBack;
+    private Rectangle healthBarFront;
+
 
 
     private final Image wolf1img = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
@@ -28,9 +33,12 @@ public class EntityView {
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
+
         iv = new ImageView();
         iv.setPreserveRatio(true);
 
+        healthBarBack = new Rectangle();
+        healthBarFront = new Rectangle();
     }
 
     public void createEntityView() {
@@ -81,9 +89,52 @@ public class EntityView {
         iv.yProperty().bind(
                 entity.yProperty().multiply(TILESIZE)
         );
+        createHealthBar();
 
-        gamePane.getChildren().add(iv);
+        gamePane.getChildren().addAll(iv, healthBarBack, healthBarFront);
 
+    }
+    public void removeFromPane() {
+        gamePane.getChildren().removeAll(iv, healthBarBack, healthBarFront);
+    }
+
+    private void createHealthBar() {
+        double barWidth = TILESIZE;
+        double barHeight = 5;
+
+        healthBarBack.setWidth(barWidth);
+        healthBarBack.setHeight(barHeight);
+        healthBarBack.setFill(Color.DARKRED);
+
+        healthBarFront.setHeight(barHeight);
+        healthBarFront.setFill(Color.LIMEGREEN);
+
+        healthBarBack.xProperty().bind(
+                entity.xProperty().multiply(TILESIZE).add(2)
+        );
+
+        healthBarBack.yProperty().bind(
+                entity.yProperty().multiply(TILESIZE).subtract(7)
+        );
+
+        healthBarFront.xProperty().bind(
+                healthBarBack.xProperty()
+        );
+
+        healthBarFront.yProperty().bind(
+                healthBarBack.yProperty()
+        );
+
+        healthBarFront.widthProperty().bind(
+                Bindings.createDoubleBinding(
+                        () -> {
+                            double ratio = (double) entity.getHp() / entity.getMaxHp();
+                            ratio = Math.max(0, Math.min(1, ratio));
+                            return barWidth * ratio;
+                        },
+                        entity.hpProperty()
+                )
+        );
     }
 
     public ImageView getIv() {

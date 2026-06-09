@@ -26,7 +26,7 @@ public class EntListener implements ListChangeListener<Entity> {
 
             if (change.wasAdded()) {
                 for (Entity entity : change.getAddedSubList()) {
-                    EntityView eV = new EntityView(gamePane, entity);
+                    EntityView eV = new     EntityView(gamePane, entity);
                     eV.createEntityView();
                     mapEntityView.put(entity, eV);
                 }
@@ -35,8 +35,7 @@ public class EntListener implements ListChangeListener<Entity> {
             if (change.wasRemoved()) {
                 for (Entity entity : change.getRemoved()) {
                     if(mapEntityView.containsKey(entity)){
-                        mapEntityView.get(entity).setImageToNull();
-                        gamePane.getChildren().remove(mapEntityView.get(entity).getIv());
+                        mapEntityView.get(entity).removeFromPane();
                         mapEntityView.remove(entity);
                         System.out.println("Removed: " + entity);
                     }
