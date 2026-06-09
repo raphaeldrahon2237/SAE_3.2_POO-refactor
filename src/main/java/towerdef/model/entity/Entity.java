@@ -22,8 +22,8 @@ public abstract class Entity {
     public static int nextId = 0;
 
 
-    public Entity(int hp, int damage, int armor, int atkSpeed, int range, double x, double y) {
-        this(hp, damage, armor, atkSpeed, range, x, y, AttackType.NORMAL, 0);
+    public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y) {
+        this(hp, damage, armor, attackSpeed, range, x, y, AttackType.NORMAL, 0);
     }
 
     public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y, AttackType attackType, int zone) {

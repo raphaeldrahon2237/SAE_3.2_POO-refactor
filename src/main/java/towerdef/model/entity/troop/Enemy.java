@@ -11,8 +11,8 @@ public class Enemy extends Troop {
     private int currentTileIndex;
     private Point2D currentTarget;
 
-    public Enemy(int hp, int damage, int armor, int atkSpeed, int range, int mvSpeed, int x, int y) {
-        super(hp, damage, armor, atkSpeed, range, mvSpeed, x, y);
+    public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y) {
+        super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
         this.path = new ArrayList<>();
         this.currentTileIndex = 0;
         this.currentTarget = null;
