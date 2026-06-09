@@ -1,6 +1,8 @@
 package towerdef.model.core;
 
 import javafx.geometry.Point2D;
+import towerdef.model.GameEntities;
+import towerdef.model.entity.tower.Tower;
 import towerdef.model.map.MapGrid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,17 +11,21 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
+    private static final int TOWER_HEURISTIC = 8;
+
     private MapGrid mapGrid;
     private Point2D source;
     private Point2D target;
+    private GameEntities gameEntities;
 
     private Map<Point2D, Double> costs;
     private Map<Point2D, Point2D> predecessors;
 
-    public AStar(MapGrid mapGrid, Point2D source, Point2D target) {
+    public AStar(MapGrid mapGrid, Point2D source, Point2D target, GameEntities gameEntities) {
         this.mapGrid = mapGrid;
         this.source = source;
         this.target = target;
+        this.gameEntities = gameEntities;
         costs = new HashMap<>();
         predecessors = new HashMap<>();
         runAStar();
@@ -93,7 +99,23 @@ public class AStar {
     }
 
     private double heuristic(Point2D tile, Point2D target) {
-        return Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
+        double heuristic = 0;
+        heuristic += Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
+        if (hasTowerAt(tile)) {
+            heuristic += TOWER_HEURISTIC;
+        }
+
+        return heuristic;
+    }
+
+    private boolean hasTowerAt(Point2D tile) {
+        for (Tower tower : gameEntities.getTowers()) {
+            if ((int) tower.getX() == (int) tile.getX() && (int) tower.getY() == (int) tile.getY()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void clear() {

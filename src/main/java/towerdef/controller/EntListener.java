@@ -12,7 +12,6 @@ public class EntListener implements ListChangeListener<Entity> {
     private final Map<Entity, EntityView> mapEntityView= new HashMap<>();
     private double animationInterval;
     private double animationTimer;
-    private int atkCounter;
 
     public EntListener(Pane gamePane) {
         this.gamePane = gamePane;
