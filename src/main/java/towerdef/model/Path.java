@@ -50,6 +50,10 @@ public class Path {
     }
 
     private List<Point2D> getCachedPath(Enemy enemy) {
+        if (!gameEntities.getTowers().isEmpty()) {
+            return null;
+        }
+
         if (!new Point2D(base.getX(), base.getY()).equals(enemy.getDestination())) {
             return null;
         }
