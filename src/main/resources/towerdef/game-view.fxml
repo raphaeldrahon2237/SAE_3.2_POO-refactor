@@ -24,7 +24,7 @@
     </top>
 
     <left>
-        <Pane prefWidth="160.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
+        <Pane prefWidth="160.0" style="-fx-background-color: #c14949;" BorderPane.alignment="CENTER">
             <children>
                 <VBox prefHeight="200.0" prefWidth="160.0">
                     <children>
@@ -33,6 +33,7 @@
                         <Button fx:id="buttonArtillery" focusTraversable="false" mnemonicParsing="false" text="Artillery Tower" />
                         <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake Tower" />
                         <Button fx:id="buttonMage" focusTraversable="false" mnemonicParsing="false" text="Mage Tower" />
+                        <Button fx:id="buttonUpgrade" disable="true" focusTraversable="false" mnemonicParsing="false" text="Upgrade"/>
                     </children>
                 </VBox>
             </children>

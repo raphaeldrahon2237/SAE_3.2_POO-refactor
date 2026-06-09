@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
+import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -117,6 +118,18 @@ public class Game {
         return base.getHp();
     }
 
+    public int getBaseMaxHp() {
+        return base.getMaxHp();
+    }
+
+    public int getBaseX() {
+        return base.getX();
+    }
+
+    public int getBaseY() {
+        return base.getY();
+    }
+
     public boolean isGameOver() {
         return gameOver;
     }
@@ -180,6 +193,30 @@ public class Game {
         }
 
         return placed;
+    }
+
+    public Tower getTowerAt(int x, int y) {
+        Tower selectedTower = null;
+
+        for (Tower tower : gameEntities.getTowers()) {
+            if (tower.isAlive() && (int) tower.getX() == x && (int) tower.getY() == y) {
+                selectedTower = tower;
+            }
+        }
+
+        return selectedTower;
+    }
+
+    public boolean upgradeTower(Tower tower) {
+        boolean upgraded = false;
+
+        if (tower != null && tower.isAlive() && tower.getLevel() < 5 && economy.getGold() >= tower.getUpgradeCost()) {
+            economy.spendGold(tower.getUpgradeCost());
+            tower.upgrade();
+            upgraded = true;
+        }
+
+        return upgraded;
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {

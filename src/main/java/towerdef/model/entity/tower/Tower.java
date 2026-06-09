@@ -26,12 +26,13 @@ public abstract class Tower extends Entity {
     }
 
     public void upgrade() {
-        if (level <= 5) {
+        if (level < 5) {
             level++;
+            upgradeCost += 0.25 * upgradeCost;
             setHp(getHp() + hpUpgrade);
             setDamage(getDamage() + damageUpgrade);
             setArmor(getArmor() + armorUpgrade);
-            setAttackSpeed(attackSpeedUpgrade);
+            setAttackSpeed(getAttackSpeed() + attackSpeedUpgrade);
         }
     }
 

@@ -3,6 +3,7 @@ package towerdef.controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,15 +12,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.GameStats;
+import towerdef.model.entity.tower.Tower;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +54,9 @@ public class GameController implements Initializable {
 
     @FXML
     private Button buttonMage;
+
+    @FXML
+    private Button buttonUpgrade;
 
     @FXML
     private Label scoreLabel;
@@ -87,6 +95,7 @@ public class GameController implements Initializable {
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
+    private Tower selectedTower;
     private ProjectileListener projectileListener;
     private EntListener alliesListener;
     private EntListener enemiesListener;
@@ -99,6 +108,7 @@ public class GameController implements Initializable {
         goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));
         baseHpLabel.textProperty().bind(game.baseHpProperty().asString("BaseHp : %d"));
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
+        createBaseHealthBar();
 
         initListeners();
 
@@ -148,6 +158,7 @@ public class GameController implements Initializable {
             System.out.println("Placement mode activated: Earthquake");
         });
 
+        buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
     }
 
     private void initKeyboardControls() {
@@ -195,11 +206,13 @@ public class GameController implements Initializable {
 
     private void initTowerPlacementControls() {
         gamePane.setOnMouseClicked(event -> {
+            int x = (int) (event.getX() / TILESIZE);
+            int y = (int) (event.getY() / TILESIZE);
 
-            if(towerSelected!=0) {
-                int x = (int) (event.getX() / TILESIZE);
-                int y = (int) (event.getY() / TILESIZE);
-
+            if (event.getButton() == MouseButton.SECONDARY) {
+                selectTower(x, y);
+                event.consume();
+            } else if(towerSelected!=0) {
                 boolean placed = false;
                 placed = game.placeTower(x, y, towerSelected);
 
@@ -214,6 +227,54 @@ public class GameController implements Initializable {
                 gamePane.requestFocus();
             }
         });
+    }
+
+    private void selectTower(int x, int y) {
+        selectedTower = game.getTowerAt(x, y);
+
+        if (selectedTower!= null) {
+            buttonUpgrade.setText("Upgrade (" + selectedTower.getUpgradeCost() + ")");
+            buttonUpgrade.setDisable(false);
+        } else {
+            buttonUpgrade.setText("Upgrade");
+            buttonUpgrade.setDisable(true);
+        }
+
+        gamePane.requestFocus();
+    }
+
+    private void upgradeSelectedTower() {
+        if (game.upgradeTower(selectedTower)) {
+            buttonUpgrade.setText("Upgrade (" + selectedTower.getUpgradeCost() + ")");
+        }
+    }
+
+    private void createBaseHealthBar() {
+        double barWidth = TILESIZE;
+        double barHeight = 5;
+
+        Rectangle healthBarBack = new Rectangle(barWidth, barHeight);
+        Rectangle healthBarFront = new Rectangle(barWidth, barHeight);
+
+        healthBarBack.setFill(Color.DARKRED);
+        healthBarFront.setFill(Color.LIMEGREEN);
+
+        healthBarBack.setX(game.getBaseX() * TILESIZE + 2);
+        healthBarBack.setY(game.getBaseY() * TILESIZE - 7);
+        healthBarFront.xProperty().bind(healthBarBack.xProperty());
+        healthBarFront.yProperty().bind(healthBarBack.yProperty());
+        healthBarFront.widthProperty().bind(
+                Bindings.createDoubleBinding(
+                        () -> {
+                            double ratio = (double) game.getBaseHp() / game.getBaseMaxHp();
+                            ratio = Math.max(0, Math.min(1, ratio));
+                            return barWidth * ratio;
+                        },
+                        game.baseHpProperty()
+                )
+        );
+
+        gamePane.getChildren().addAll(healthBarBack, healthBarFront);
     }
 
     private void initDestinationTest() {

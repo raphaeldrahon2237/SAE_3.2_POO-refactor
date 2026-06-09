@@ -7,11 +7,13 @@ public class Base {
     private int x;
     private int y;
     private IntegerProperty hp;
+    private int maxHp;
 
     public Base(int x, int y, int hp) {
         this.x = x;
         this.y = y;
         this.hp = new SimpleIntegerProperty(hp);
+        this.maxHp = hp;
     }
 
     public int getY() {
@@ -24,6 +26,10 @@ public class Base {
 
     public int getHp() {
         return  hp.get();
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public IntegerProperty hpProperty(){
