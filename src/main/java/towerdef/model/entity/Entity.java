@@ -5,7 +5,8 @@ import javafx.beans.property.*;
 public abstract class Entity {
 
     private int id;
-    private int hp;
+    private IntegerProperty hp = new SimpleIntegerProperty();
+    private int maxHp;
     private int damage;
     private int armor;
     private int attackSpeed;
@@ -30,7 +31,8 @@ public abstract class Entity {
         this.id = nextId;
         nextId++;
 
-        this.hp = hp;
+        this.hp.set(hp);
+        this.maxHp = hp;
         this.damage = damage;
         this.armor = armor;
         this.attackSpeed = attackSpeed;
@@ -47,8 +49,10 @@ public abstract class Entity {
 
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
-        hp -= Math.max(1, damage - armor);
+        int realDamage = Math.max(1, damage - armor);
+        hp.set(Math.max(0, hp.get() - realDamage));
     }
+
 
     public void incrementAttackCounter() {
         attackCounter.set(attackCounter.get()+1);
@@ -63,7 +67,7 @@ public abstract class Entity {
     }
 
     public boolean isAlive() {
-        return hp > 0;
+        return hp.get() > 0;
     }
 
     public double getX() {
@@ -91,11 +95,15 @@ public abstract class Entity {
     }
 
     public int getHp() {
-        return hp;
+        return hp.get();
     }
 
     public void setHp(int hp) {
-        this.hp = hp;
+        this.hp.set(hp);
+
+        if (hp > maxHp) {
+            maxHp = hp;
+        }
     }
 
     public int getDamage() {
@@ -190,6 +198,11 @@ public abstract class Entity {
         Entity.nextId = nextId;
     }
 
+    public IntegerProperty hpProperty() {
+        return hp;
+    }
 
-
+    public double getMaxHp() {
+        return  maxHp;
+    }
 }
