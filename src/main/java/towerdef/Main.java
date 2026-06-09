@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("game-view.fxml"));
 
-        Scene scene = new Scene(loader.load(), 1800, 1000);
+        Scene scene = new Scene(loader.load(), 1400, 900);
 
         GameController controller = loader.getController();
 
