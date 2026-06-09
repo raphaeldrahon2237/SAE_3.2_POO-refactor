@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
+import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.troop.Catapult;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 

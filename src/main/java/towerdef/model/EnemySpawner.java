@@ -119,7 +119,7 @@ public class EnemySpawner {
         }
 
         // Boss toutes les 10 vagues
-        if (currentWave % 10 == 0 && !bossSpawnedThisWave) {
+        if (currentWave % 2 == 0 && !bossSpawnedThisWave) {
 
             System.out.println("BOSS WAVE !");
 
