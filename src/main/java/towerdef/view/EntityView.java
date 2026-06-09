@@ -25,7 +25,7 @@ public class EntityView {
     private final Image barrack2img= new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
     private final Image earthquake1img= new Image(EntityView.class.getResourceAsStream("/images/earthquake1.png"));
     private final Image earthquake2img= new Image(EntityView.class.getResourceAsStream("/images/earthquake2.png"));
-    private final Image boss1img = new Image(EntityView.class.getResourceAsStream("/images/boss1.png"));
+    //private final Image boss1img = new Image(EntityView.class.getResourceAsStream("/images/boss1.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -53,7 +53,7 @@ public class EntityView {
             iv.setImage(wolf1img);
         }
         else if (entity instanceof Boss){
-            iv.setImage(boss1img);
+            iv.setImage(recruitimg);
         }
         else if (entity instanceof Recruit) {
             iv.setImage(recruitimg);
