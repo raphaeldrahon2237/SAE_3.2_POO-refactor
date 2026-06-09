@@ -26,6 +26,7 @@ public class EnemySpawner {
     private Random random;
     private Path path;
     private GameEntities gameEntities;
+    private GameStats gameStats;
     private int currentWave;
     private int enemiesRemainingInWave;
     private double waveTimer;
@@ -33,12 +34,13 @@ public class EnemySpawner {
     private boolean waveInProgress;
     private boolean bossSpawnedThisWave = false;
 
-    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities) {
+    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities, GameStats gameStats) {
         this.mapGrid = mapGrid;
         this.base = base;
         this.random = random;
         this.path = path;
         this.gameEntities = gameEntities;
+        this.gameStats = gameStats;
         currentWave = 0;
         enemiesRemainingInWave = 0;
         waveTimer = 0.0;
@@ -208,6 +210,7 @@ public class EnemySpawner {
     private void spawnEnemy(Enemy enemy) {
         path.assignMovement(enemy);
         gameEntities.addEnemy(enemy);
+        gameStats.enemySpawned();
     }
 
     public static List<Point2D> getWalkableEdgeTiles(MapGrid mapGrid) {

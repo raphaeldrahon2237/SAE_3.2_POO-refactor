@@ -3,8 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -47,12 +49,57 @@
                           prefTileWidth="32.0" />
             </children>
         </Pane>
+        <StackPane>
+            <Pane fx:id="gamePane" prefHeight="836.0" prefWidth="1280.0">
+                <children>
+
+                    <TilePane fx:id="tilePane"
+                              prefHeight="836.0"
+                              prefWidth="1280.0"
+                              prefTileHeight="32.0"
+                              prefTileWidth="32.0" />
+                </children>
+            </Pane>
+            <GridPane fx:id="gameOverPane"
+                      alignment="CENTER"
+                      hgap="16.0"
+                      prefHeight="836.0"
+                      prefWidth="1280.0"
+                      style="-fx-background-color: rgba(0, 0, 0, 0.78); -fx-padding: 32;"
+                      vgap="10.0"
+                      visible="false">
+                <children>
+                    <Label style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: white;" text="GAME OVER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+
+                    <Label style="-fx-text-fill: white;" text="Score final" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label fx:id="finalScoreLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label style="-fx-text-fill: white;" text="Temps survécu" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label fx:id="survivalTimeLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label style="-fx-text-fill: white;" text="Vague atteinte" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <Label fx:id="maxWaveLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label style="-fx-text-fill: white;" text="Ennemis tués" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <Label fx:id="enemiesKilledLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    <Label style="-fx-text-fill: white;" text="Tours construites" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                    <Label fx:id="towersPlacedLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                    <Label style="-fx-text-fill: white;" text="Or restant" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                    <Label fx:id="goldRemainingLabel" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                    <Button onAction="#restartGame" text="Rejouer" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                    <Button onAction="#quitGame" text="Quitter" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                </children>
+            </GridPane>
+        </StackPane>
     </center>
 
     <bottom>
         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1440.0" spacing="350.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: left;" text="score" />
+                <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: CENTER_LEFT;" text="score" />
                 <Label fx:id="goldLabel" contentDisplay="RIGHT" text="gold" />
                 <Label fx:id="baseHpLabel" contentDisplay="LEFT" text="BaseHp"/>
             </children>

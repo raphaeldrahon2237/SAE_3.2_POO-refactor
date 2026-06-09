@@ -25,17 +25,19 @@ public class Game {
     private Path path;
     private EnemySpawner enemySpawner;
     private TowerPlacement towerPlacement;
+    private GameStats gameStats;
     private String playerName = "ayoube";
     private boolean gameOver;
 
     public Game() {
         gameEntities = new GameEntities();
         economy = new Economy(playerName);
+        gameStats = new GameStats();
 
         mapGrid = new MapGrid();
         base = new Base(16, 12, 250);
         path = new Path(mapGrid, base, gameEntities);
-        enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities);
+        enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, gameStats);
         towerPlacement = new TowerPlacement(mapGrid, gameEntities, economy);
         gameOver = false;
     }
@@ -53,7 +55,9 @@ public class Game {
             return;
         }
 
+        gameStats.addSurvivalTime(deltaTime);
         economy.increaseScoreRate(enemySpawner.update(deltaTime));
+        gameStats.updateMaxWaveReached(enemySpawner.getCurrentWave());
 
         updateAlliesAttackTimers(deltaTime);
         updateEnemiesAttackTimers(deltaTime);
@@ -124,6 +128,11 @@ public class Game {
         return gameOver;
     }
 
+    public GameStats getGameStats() {
+        gameStats.updateMaxWaveReached(enemySpawner.getCurrentWave());
+        return gameStats;
+    }
+
     public int getCurrentWave() {
         return enemySpawner.getCurrentWave();
     }
@@ -158,6 +167,7 @@ public class Game {
             if (!enemy.isAlive()) {
                 economy.addGold(enemy.getReward());
                 economy.addScore(10);
+                gameStats.enemyKilled();
             }
         }
 
@@ -170,7 +180,13 @@ public class Game {
 
 
     public boolean placeTower(int x, int y, int idTower) {
-        return towerPlacement.placeTower(x, y, idTower);
+        boolean placed = towerPlacement.placeTower(x, y, idTower);
+
+        if (placed) {
+            gameStats.towerPlaced();
+        }
+
+        return placed;
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
@@ -249,7 +265,9 @@ public class Game {
     private void enemiesAttackBase() {
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.canAttack() && enemy.getDamage() > 0 && isBaseInRange(enemy)) {
+                int baseHpBeforeAttack = base.getHp();
                 base.takeDamage(enemy.getDamage());
+                gameStats.addDamageTakenByBase(baseHpBeforeAttack - base.getHp());
                 enemy.resetAttackTimer();
 
                 if (base.isDestroyed()) {
@@ -448,6 +466,7 @@ public class Game {
     private void shootProjectile(Entity source, Enemy target) {
         Point2D impactTile = computePreshotTile(source, target);
         source.incrementAttackCounter();
+        gameStats.projectileFired();
         createProjectile(source, target, impactTile);
     }
 
