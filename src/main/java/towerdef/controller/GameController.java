@@ -2,18 +2,26 @@ package towerdef.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
+import towerdef.model.GameStats;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -51,10 +59,29 @@ public class GameController implements Initializable {
     @FXML
     private Label baseHpLabel;
 
+    @FXML
+    private GridPane gameOverPane;
+
+    @FXML
+    private Label finalScoreLabel;
+
+    @FXML
+    private Label survivalTimeLabel;
+
+    @FXML
+    private Label maxWaveLabel;
+
+    @FXML
+    private Label enemiesKilledLabel;
+
+    @FXML
+    private Label towersPlacedLabel;
+
+    @FXML
+    private Label goldRemainingLabel;
 
     private int towerSelected=0;
     private boolean destinationTestMode = false;
-
     private Timeline gameLoop;
     private int time;
     private long lastFrameTime = 0;
@@ -236,7 +263,7 @@ public class GameController implements Initializable {
                     game.updateStates(deltaTime);
 
                     if (game.isGameOver()) {
-                        gameLoop.stop();
+                        showGameOverScreen();
                         return;
                     }
 
@@ -249,6 +276,51 @@ public class GameController implements Initializable {
 
         gameLoop.getKeyFrames().add(keyFrame);
         gameLoop.play();
+    }
+
+    public void showGameOverScreen() {
+        GameStats stats = game.getGameStats();
+
+        finalScoreLabel.setText(String.valueOf(game.getScore()));
+        survivalTimeLabel.setText(formatTime(stats.getSurvivalTime()));
+        maxWaveLabel.setText(String.valueOf(stats.getMaxWaveReached()));
+        enemiesKilledLabel.setText(String.valueOf(stats.getEnemiesKilled()));
+        towersPlacedLabel.setText(String.valueOf(stats.getTowersPlaced()));
+        goldRemainingLabel.setText(String.valueOf(game.getGold()));
+
+        gameOverPane.setVisible(true);
+        gameLoop.stop();
+    }
+
+    @FXML
+    private void restartGame() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/towerdef/game-view.fxml"));
+        try {
+            Parent root = loader.load();
+            Scene currentScene = gameOverPane.getScene();
+            Stage stage = (Stage) currentScene.getWindow();
+            GameController controller = loader.getController();
+
+            stage.setScene(new Scene(root, currentScene.getWidth(), currentScene.getHeight()));
+            stage.setOnCloseRequest(event -> controller.onClose());
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Impossible de relancer la partie", e);
+        }
+    }
+
+    @FXML
+    private void quitGame() {
+        onClose();
+        Platform.exit();
+    }
+
+    private String formatTime(double timeInSeconds) {
+        int totalSeconds = (int) Math.floor(timeInSeconds);
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     public void onClose() {
