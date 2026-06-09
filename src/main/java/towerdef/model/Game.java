@@ -59,6 +59,7 @@ public class Game {
         updateEnemiesAttackTimers(deltaTime);
 
         alliesAttackEnemies();
+        enemiesAttackAllies();
         catapultsAttackTowers();
         enemiesAttackBase();
 
@@ -325,20 +326,28 @@ public class Game {
 
         for (Enemy enemy : gameEntities.getEnemies()) {
 
-            if (enemy instanceof Catapult) {
+            if (!isEnemyInCombat(enemy)) {
 
-                towerdef.model.entity.tower.Tower tower =
-                        findNearestTower(enemy);
+                if (enemy instanceof Catapult) {
 
-                if (tower != null) {
+                    Tower tower = findNearestTower(enemy);
 
-                    double dx = tower.getX() - enemy.getX();
-                    double dy = tower.getY() - enemy.getY();
+                    if (tower != null) {
 
-                    double distance = Math.sqrt(dx * dx + dy * dy);
+                        double dx = tower.getX() - enemy.getX();
+                        double dy = tower.getY() - enemy.getY();
 
-                    if (distance > enemy.getRange()) {
-                        enemy.updateMovement(deltaTime);
+                        double distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance > enemy.getRange()) {
+                            enemy.updateMovement(deltaTime);
+                        }
+
+                    } else {
+
+                        if (!isBaseInRange(enemy)) {
+                            enemy.updateMovement(deltaTime);
+                        }
                     }
 
                 } else {
@@ -347,14 +356,68 @@ public class Game {
                         enemy.updateMovement(deltaTime);
                     }
                 }
+            }
+        }
+    }
+    private boolean isEnemyInCombat(Enemy enemy) {
+        for (Entity ally : gameEntities.getAllies()) {
 
-            } else {
+            boolean isRecruit = !gameEntities.getTowers().contains(ally);
+            boolean canFight = ally.isAlive() && ally.getDamage() > 0;
 
-                if (!isBaseInRange(enemy)) {
-                    enemy.updateMovement(deltaTime);
+            if (isRecruit && canFight) {
+                double dx = enemy.getX() - ally.getX();
+                double dy = enemy.getY() - ally.getY();
+
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= ally.getRange()) {
+                    return true;
                 }
             }
         }
+
+        return false;
+    }
+
+    private void enemiesAttackAllies() {
+        for (Enemy enemy : gameEntities.getEnemies()) {
+
+            if (enemy.canAttack() && enemy.getDamage() > 0) {
+                Entity target = findAllyInRange(enemy);
+
+                if (target != null) {
+                    target.takeDamage(enemy.getDamage());
+                    enemy.resetAttackTimer();
+                }
+            }
+        }
+    }
+
+    private Entity findAllyInRange(Enemy enemy) {
+        Entity closestAlly = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity ally : gameEntities.getAllies()) {
+
+            boolean isRecruit = !gameEntities.getTowers().contains(ally);
+            boolean canBeAttacked = ally.isAlive();
+
+            if (isRecruit && canBeAttacked) {
+
+                double dx = ally.getX() - enemy.getX();
+                double dy = ally.getY() - enemy.getY();
+
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= enemy.getRange() && distance < closestDistance) {
+                    closestAlly = ally;
+                    closestDistance = distance;
+                }
+            }
+        }
+
+        return closestAlly;
     }
 
     private boolean isBaseInRange(Enemy enemy) {
