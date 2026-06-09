@@ -28,8 +28,9 @@
                     <children>
                         <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
                         <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
-                        <Button fx:id="buttonArtillery" focusTraversable="false" mnemonicParsing="false" text="Artillery" />
-                        <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake" />
+                        <Button fx:id="buttonArtillery" focusTraversable="false" mnemonicParsing="false" text="Artillery Tower" />
+                        <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake Tower" />
+                        <Button fx:id="buttonMage" focusTraversable="false" mnemonicParsing="false" text="Mage Tower" />
                     </children>
                 </VBox>
             </children>

@@ -51,8 +51,8 @@ public class EntListener implements ListChangeListener<Entity> {
                 e.attackCounterProperty().addListener((obs, oldV, newV) -> {
                     if(!oldV.equals(newV))
                         mapEntityView.get(e).switchImageAttack();
-                    else mapEntityView.get(e).switchImageIdle();
                 });
+                mapEntityView.get(e).switchImageIdle();
             }
         }
         if(animationTimer>animationInterval*2){
