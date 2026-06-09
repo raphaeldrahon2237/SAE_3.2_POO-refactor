@@ -10,12 +10,14 @@ public class Enemy extends Troop {
     private List<Point2D> path;
     private int currentTileIndex;
     private Point2D currentTarget;
+    private int reward;
 
-    public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y) {
+    public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y, int reward) {
         super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
         this.path = new ArrayList<>();
         this.currentTileIndex = 0;
         this.currentTarget = null;
+        this.reward = reward;
     }
 
     public void setPath(List<Point2D> path) {
@@ -120,6 +122,14 @@ public class Enemy extends Troop {
         }
 
         return new Point2D(predictionX, predictionY);
+    }
+
+    public int getReward() {
+        return reward;
+    }
+
+    public void setReward(int reward) {
+        this.reward = reward;
     }
 
     private Point2D getNextTarget() {
