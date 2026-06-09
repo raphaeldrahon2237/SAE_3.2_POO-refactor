@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class Economy {
 
+    private static final int GOLD_PER_KILL = 12;
+    private static final int SCORE_PER_KILL = 15;
+
     private String playerName;
     private IntegerProperty score;
     private double scoreValue;

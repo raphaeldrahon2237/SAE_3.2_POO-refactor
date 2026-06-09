@@ -9,18 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.System.out;
-
 public class EnemySpawner {
 
-    private static final int FIRST_WAVE_SIZE = 3;
-    private static final int ENEMIES_ADDED_PER_WAVE = 1;
-    private static final double INITIAL_TIME_BETWEEN_WAVES = 8.0;
-    private static final double MIN_TIME_BETWEEN_WAVES = 3.0;
-    private static final double WAVE_DELAY_DECREASE_PER_WAVE = 0.0;
-    private static final double TIME_BETWEEN_ENEMIES = 1.0;
-    private static final double MIN_TIME_BETWEEN_ENEMIES = 0.35;
-    private static final double ENEMY_DELAY_DECREASE_PER_WAVE = 0.05;
+    private static final int FIRST_WAVE_SIZE = 6;
+    private static final int ENEMIES_ADDED_PER_WAVE = 2;
+    private static final int BOSS_WAVE_INTERVAL = 10;
+    private static final double INITIAL_TIME_BETWEEN_WAVES = 9.0;
+    private static final double MIN_TIME_BETWEEN_WAVES = 5.0;
+    private static final double WAVE_DELAY_DECREASE_PER_WAVE = 0.2;
+    private static final double TIME_BETWEEN_ENEMIES = 0.9;
+    private static final double MIN_TIME_BETWEEN_ENEMIES = 0.4;
+    private static final double ENEMY_DELAY_DECREASE_PER_WAVE = 0.03;
 
     private MapGrid mapGrid;
     private Base base;
@@ -96,30 +95,14 @@ public class EnemySpawner {
             Point2D tile = walkableEdgeTiles.get(
                     random.nextInt(walkableEdgeTiles.size()));
 
-            Enemy enemy;
-
-            int rand = random.nextInt(100);
-
-            if (rand < 60) {
-                enemy = new Wolf((int) tile.getX(), (int) tile.getY());
-            }
-            else if (rand < 80) {
-                enemy = new Archer((int) tile.getX(), (int) tile.getY());
-            }
-            else if (rand < 95) {
-                enemy = new ArmoredSoldier((int) tile.getX(), (int) tile.getY());
-            }
-            else {
-                enemy = new Catapult((int) tile.getX(), (int) tile.getY());
-            }
+            Enemy enemy = createEnemyForCurrentWave((int) tile.getX(), (int) tile.getY());
 
             enemy.setDestination(new Point2D(base.getX(), base.getY()));
 
             spawnEnemy(enemy);
         }
 
-        // Boss toutes les 10 vagues
-        if (currentWave % 2 == 0 && !bossSpawnedThisWave) {
+        if (currentWave > 0 && currentWave % BOSS_WAVE_INTERVAL == 0 && !bossSpawnedThisWave) {
 
             System.out.println("BOSS WAVE !");
 
@@ -161,7 +144,7 @@ public class EnemySpawner {
 
         bossSpawnedThisWave = false;
 
-        enemiesRemainingInWave = (int) Math.round(FIRST_WAVE_SIZE * Math.pow(1.10, currentWave - 1));
+        enemiesRemainingInWave = FIRST_WAVE_SIZE + (currentWave - 1) * ENEMIES_ADDED_PER_WAVE;
 
         enemySpawnTimer = getEnemySpawnDelay();
         waveInProgress = true;
@@ -177,6 +160,49 @@ public class EnemySpawner {
         double delay = INITIAL_TIME_BETWEEN_WAVES - currentWave * WAVE_DELAY_DECREASE_PER_WAVE;
 
         return Math.max(delay, MIN_TIME_BETWEEN_WAVES);
+    }
+
+    private Enemy createEnemyForCurrentWave(int x, int y) {
+        int wave = Math.max(1, currentWave);
+        int rand = random.nextInt(100);
+
+        if (wave < 3) {
+            return rand < 80 ? new Wolf(x, y) : new Archer(x, y);
+        }
+
+        if (wave < 5) {
+            if (rand < 55) {
+                return new Wolf(x, y);
+            }
+            if (rand < 90) {
+                return new Archer(x, y);
+            }
+            return new ArmoredSoldier(x, y);
+        }
+
+        if (wave < 8) {
+            if (rand < 45) {
+                return new Wolf(x, y);
+            }
+            if (rand < 75) {
+                return new Archer(x, y);
+            }
+            if (rand < 95) {
+                return new ArmoredSoldier(x, y);
+            }
+            return new Catapult(x, y);
+        }
+
+        if (rand < 35) {
+            return new Wolf(x, y);
+        }
+        if (rand < 65) {
+            return new Archer(x, y);
+        }
+        if (rand < 90) {
+            return new ArmoredSoldier(x, y);
+        }
+        return new Catapult(x, y);
     }
 
     private void spawnEnemy(Enemy enemy) {

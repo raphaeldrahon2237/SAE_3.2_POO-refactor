@@ -155,7 +155,7 @@ public class Game {
 
         for (Enemy enemy : new ArrayList<>(gameEntities.getEnemies())) {
             if (!enemy.isAlive()) {
-                economy.addGold(5);
+                economy.addGold(enemy.getReward());
                 economy.addScore(10);
             }
         }
