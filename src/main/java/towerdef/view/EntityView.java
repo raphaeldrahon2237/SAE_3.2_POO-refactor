@@ -25,6 +25,7 @@ public class EntityView {
 
     private final Image recruit1img= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
     private final Image recruit2img= new Image(EntityView.class.getResourceAsStream("/images/recruit2.png"));
+    private final Image recruit3img= new Image(EntityView.class.getResourceAsStream("/images/recruit3.png"));
 
     private final Image archerTower1img= new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
     private final Image archerTower2img= new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
@@ -212,6 +213,10 @@ public class EntityView {
         }
         else if (entity instanceof Mage) {
             iv.setImage(mageTower2img);
+        }
+
+        else if (entity instanceof Recruit) {
+            iv.setImage(recruit3img);
         }
     }
 
