@@ -4,9 +4,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.*;
-import towerdef.model.entity.troop.Boss;
-import towerdef.model.entity.troop.Recruit;
-import towerdef.model.entity.troop.Wolf;
+import towerdef.model.entity.troop.*;
+
 import static towerdef.model.map.TileType.TILESIZE;
 
 public class EntityView {
@@ -25,7 +24,6 @@ public class EntityView {
     private final Image barrack2img= new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
     private final Image earthquake1img= new Image(EntityView.class.getResourceAsStream("/images/earthquake1.png"));
     private final Image earthquake2img= new Image(EntityView.class.getResourceAsStream("/images/earthquake2.png"));
-    //private final Image boss1img = new Image(EntityView.class.getResourceAsStream("/images/boss1.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -55,7 +53,16 @@ public class EntityView {
         else if (entity instanceof Boss){
             iv.setImage(recruitimg);
         }
-        else if (entity instanceof Recruit) {
+        else if(entity instanceof Catapult){
+            iv.setImage(earthquake2img);
+        }
+        else if(entity instanceof Archer) {
+            iv.setImage(archerTower1img);
+        }
+        else if (entity instanceof ArmoredSoldier) {
+            iv.setImage(wolf1img);
+
+        } else if (entity instanceof Recruit) {
             iv.setImage(recruitimg);
         }
         if(entity instanceof Tower){
