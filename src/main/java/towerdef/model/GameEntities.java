@@ -42,6 +42,11 @@ public class GameEntities {
         projectiles.remove(projectile);
     }
 
+    public void removeTower(Tower tower) {
+        towers.remove(tower);
+        allies.remove(tower);
+    }
+
     public void removeDeadEntities() {
         allies.removeIf(ally -> !ally.isAlive());
         enemies.removeIf(enemy -> !enemy.isAlive());
@@ -63,5 +68,14 @@ public class GameEntities {
 
     public ObservableList<Projectile> getProjectiles() {
         return projectiles;
+    }
+
+    public Tower getTowerById(int id) {
+        for (Tower tower : towers) {
+            if (tower.getId() == id) {
+                return tower;
+            }
+        }
+        return null;
     }
 }

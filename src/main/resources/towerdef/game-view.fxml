@@ -34,6 +34,8 @@
                         <Button fx:id="buttonEarthquake" focusTraversable="false" mnemonicParsing="false" text="Earthquake Tower" />
                         <Button fx:id="buttonMage" focusTraversable="false" mnemonicParsing="false" text="Mage Tower" />
                         <Button fx:id="buttonUpgrade" disable="true" focusTraversable="false" mnemonicParsing="false" text="Upgrade"/>
+                        <Button fx:id="buttonSell" disable="true" focusTraversable="false" mnemonicParsing="false" text="Sell"/>
+                        <Label fx:id="towerInfoLabel" wrapText="true" visible="false"/>
                     </children>
                 </VBox>
             </children>
@@ -93,6 +95,7 @@
             <children>
                 <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" style="-fx-alignment: CENTER_LEFT;" text="score" />
                 <Label fx:id="goldLabel" contentDisplay="RIGHT" text="gold" />
+                <Label fx:id="waveLabel" contentDisplay="CENTER" text="Vague"/>
                 <Label fx:id="baseHpLabel" contentDisplay="LEFT" text="BaseHp"/>
             </children>
         </HBox>

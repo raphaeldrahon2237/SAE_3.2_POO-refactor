@@ -28,6 +28,7 @@ import towerdef.model.entity.tower.Tower;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import static towerdef.model.map.TileType.TILESIZE;
@@ -59,6 +60,9 @@ public class GameController implements Initializable {
     private Button buttonUpgrade;
 
     @FXML
+    private Button buttonSell;
+
+    @FXML
     private Label scoreLabel;
 
     @FXML
@@ -66,6 +70,9 @@ public class GameController implements Initializable {
 
     @FXML
     private Label baseHpLabel;
+
+    @FXML
+    private Label waveLabel;
 
     @FXML
     private GridPane gameOverPane;
@@ -88,6 +95,9 @@ public class GameController implements Initializable {
     @FXML
     private Label goldRemainingLabel;
 
+    @FXML
+    private Label towerInfoLabel;
+
     private int towerSelected=0;
     private boolean destinationTestMode = false;
     private Timeline gameLoop;
@@ -99,6 +109,7 @@ public class GameController implements Initializable {
     private ProjectileListener projectileListener;
     private EntListener alliesListener;
     private EntListener enemiesListener;
+    private HashMap<Integer, String> description;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -107,6 +118,7 @@ public class GameController implements Initializable {
         scoreLabel.textProperty().bind(game.scoreProperty().asString("Score : %d"));
         goldLabel.textProperty().bind(game.goldProperty().asString("Gold : %d"));
         baseHpLabel.textProperty().bind(game.baseHpProperty().asString("BaseHp : %d"));
+        waveLabel.setText("Vague : " + game.getCurrentWave());
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
         createBaseHealthBar();
 
@@ -134,30 +146,49 @@ public class GameController implements Initializable {
     private void initButtonControls() {
         buttonArcherTower.setOnAction(event -> {
             towerSelected = 1;
+            displayTowerInfos(towerSelected);
             System.out.println("Placement mode activated: Archer Tower");
         });
 
         buttonArtillery.setOnAction(event -> {
             towerSelected = 2;
+            displayTowerInfos(towerSelected);
             System.out.println("Placement mode activated: Artillery");
         });
 
         buttonBarracks.setOnAction(event -> {
             towerSelected = 3;
+            displayTowerInfos(towerSelected);
             System.out.println("Placement mode activated: Barracks");
         });
 
         buttonMage.setOnAction(event -> {
             towerSelected = 4;
+            displayTowerInfos(towerSelected);
             System.out.println("Placement mode activated: Earthquake");
         });
 
         buttonEarthquake.setOnAction(event -> {
             towerSelected = 5;
+            displayTowerInfos(towerSelected);
             System.out.println("Placement mode activated: Earthquake");
         });
 
         buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
+        buttonSell.setOnAction(event -> sellSelectedTower());
+    }
+
+    private void displayTowerInfos(int towerId) {
+        Tower tower = game.getTowerByTypeId(towerId);
+        if (tower != null) {
+            towerInfoLabel.setText(
+                    "Prix : " + tower.getCost() + "\n" +
+                    "Degats : " + tower.getDamage() + "\n" +
+                    "Portee : " + tower.getRange() + "\n" +
+                    "Role : " + tower.getDescription()
+            );
+            towerInfoLabel.setVisible(true);
+        }
     }
 
     private void initKeyboardControls() {
@@ -234,9 +265,13 @@ public class GameController implements Initializable {
         if (selectedTower!= null) {
             buttonUpgrade.setText("Upgrade (" + selectedTower.getUpgradeCost() + ")");
             buttonUpgrade.setDisable(false);
+            buttonSell.setText("Sell (" + selectedTower.getSellValue() + ")");
+            buttonSell.setDisable(false);
         } else {
             buttonUpgrade.setText("Upgrade");
             buttonUpgrade.setDisable(true);
+            buttonSell.setText("Sell");
+            buttonSell.setDisable(true);
         }
 
         gamePane.requestFocus();
@@ -245,7 +280,20 @@ public class GameController implements Initializable {
     private void upgradeSelectedTower() {
         if (game.upgradeTower(selectedTower)) {
             buttonUpgrade.setText("Upgrade (" + selectedTower.getUpgradeCost() + ")");
+            buttonSell.setText("Sell (" + selectedTower.getSellValue() + ")");
         }
+    }
+
+    private void sellSelectedTower() {
+        if (game.sellTower(selectedTower)) {
+            selectedTower = null;
+            buttonUpgrade.setText("Upgrade");
+            buttonUpgrade.setDisable(true);
+            buttonSell.setText("Sell");
+            buttonSell.setDisable(true);
+        }
+
+        gamePane.requestFocus();
     }
 
     private void createBaseHealthBar() {
@@ -320,6 +368,7 @@ public class GameController implements Initializable {
 
                         game.runGame();
                         game.updateStates(deltaTime);
+                        waveLabel.setText("Vague : " + game.getCurrentWave());
 
                         if (game.isGameOver()) {
                             showGameOverScreen();

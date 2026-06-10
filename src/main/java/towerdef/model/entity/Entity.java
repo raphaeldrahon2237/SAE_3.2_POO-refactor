@@ -106,6 +106,10 @@ public abstract class Entity {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getDamage() {
         return damage;
     }

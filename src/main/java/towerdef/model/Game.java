@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
 import towerdef.model.entity.tower.Earthquake;
 import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
 
@@ -191,6 +192,14 @@ public class Game {
         return placed;
     }
 
+    public Tower getTowerByTypeId(int towerTypeId) {
+        EntityType type = EntityType.fromId(towerTypeId);
+        if (type != null) {
+            return TowerFactory.createTower(type, 0, 0);
+        }
+        return null;
+    }
+
     public Tower getTowerAt(int x, int y) {
         Tower selectedTower = null;
 
@@ -213,6 +222,18 @@ public class Game {
         }
 
         return upgraded;
+    }
+
+    public boolean sellTower(Tower tower) {
+        boolean sold = false;
+
+        if (tower != null && tower.isAlive()) {
+            economy.addGold(tower.getSellValue());
+            gameEntities.removeTower(tower);
+            sold = true;
+        }
+
+        return sold;
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {
