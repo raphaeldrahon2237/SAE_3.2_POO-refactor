@@ -3,7 +3,11 @@ package towerdef.view;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
+import towerdef.model.entity.tower.ArcherTower;
+import towerdef.model.entity.tower.Artillery;
+import towerdef.model.entity.tower.Mage;
 
 import static towerdef.model.map.TileType.TILESIZE;
 
@@ -13,16 +17,21 @@ public class ProjectileView {
     private Projectile projectile;
     private ImageView iv;
 
-    private final Image arrowImg = new Image(
-            EntityView.class.getResourceAsStream("/images/arrow.png")
-    );
+    private final Image arrowImg = new Image(EntityView.class.getResourceAsStream("/images/arrow.png"));
+    private final Image magicBoltImg = new Image(EntityView.class.getResourceAsStream("/images/magicBolt.png"));
+    private final Image artilleryShotImg= new Image(EntityView.class.getResourceAsStream("/images/artilleryShot.png"));
 
     public ProjectileView(Pane gamePane, Projectile projectile) {
         this.gamePane = gamePane;
         this.projectile = projectile;
 
         iv = new ImageView();
-        iv.setImage(arrowImg);
+        Entity source = projectile.getSource();
+        if(source instanceof ArcherTower) iv.setImage(arrowImg);
+        else if(source instanceof Artillery) iv.setImage(artilleryShotImg);
+        else if(source instanceof Mage)  iv.setImage(magicBoltImg);
+        else  iv.setImage(arrowImg);
+
         iv.setFitWidth(TILESIZE/1.5);
         iv.setFitHeight(TILESIZE/1.5);
         iv.setPreserveRatio(true);

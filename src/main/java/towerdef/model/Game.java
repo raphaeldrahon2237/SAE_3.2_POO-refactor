@@ -442,6 +442,7 @@ public class Game {
         Projectile projectile = new Projectile(
                 trajectory,
                 target,
+                source,
                 source.getDamage(),
                 PROJECTILE_SPEED,
                 source.getZone()
