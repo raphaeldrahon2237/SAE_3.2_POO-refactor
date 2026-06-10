@@ -46,6 +46,10 @@ public class EntityView {
     private final Image catapult2img= new Image(EntityView.class.getResourceAsStream("/images/catapult2.png"));
     private final Image catapult3img= new Image(EntityView.class.getResourceAsStream("/images/catapult3.png"));
 
+    private final Image shadowSoldier1img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier1.png"));
+    private final Image shadowSoldier2img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier2.png"));
+    private final Image shadowSoldier3img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier3.png"));
+
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
@@ -75,6 +79,10 @@ public class EntityView {
             iv.setImage(mageTower1img);
         }
 
+        else if (entity instanceof Recruit) {
+            iv.setImage(recruit1img);
+        }
+
         else if (entity instanceof Wolf) {
             iv.setImage(wolf1img);
         }
@@ -87,12 +95,16 @@ public class EntityView {
         else if(entity instanceof Archer) {
             iv.setImage(archerTower1img);
         }
-        else if (entity instanceof ArmoredSoldier) {
-            iv.setImage(wolf1img);
+        else if (entity instanceof ShadowSoldier) {
+            iv.setImage(shadowSoldier1img);
 
-        } else if (entity instanceof Recruit) {
-            iv.setImage(recruit1img);
         }
+
+
+
+
+
+
         if(entity instanceof Tower){
             iv.setFitHeight(TILESIZE+8);
             iv.setFitWidth(TILESIZE+8);
@@ -191,6 +203,9 @@ public class EntityView {
         else if(entity instanceof Catapult){
             iv.setImage(catapult1img);
         }
+        else if (entity instanceof ShadowSoldier) {
+            iv.setImage(shadowSoldier1img);
+        }
 
     }
 
@@ -207,6 +222,9 @@ public class EntityView {
         }
         else if(entity instanceof Catapult){
             iv.setImage(catapult2img);
+        }
+        else if(entity instanceof ShadowSoldier) {
+            iv.setImage(shadowSoldier2img);
         }
 
     }
@@ -231,6 +249,9 @@ public class EntityView {
 
         else if (entity instanceof Catapult) {
             iv.setImage(catapult3img);
+        }
+        else if (entity instanceof ShadowSoldier) {
+            iv.setImage(shadowSoldier3img);
         }
     }
 
