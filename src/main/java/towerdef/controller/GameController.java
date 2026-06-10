@@ -116,7 +116,6 @@ public class GameController implements Initializable {
         initButtonControls();
         initTowerPlacementControls();
 
-        game.setInitialState();
         initDestinationTest();
         initAnimation();
     }

@@ -41,10 +41,6 @@ public class Game {
         gameOver = false;
     }
 
-    public void setInitialState() {
-        enemySpawner.spawnEnemies(5);
-    }
-
     public void runGame() {
         removeDeadEntities();
     }
