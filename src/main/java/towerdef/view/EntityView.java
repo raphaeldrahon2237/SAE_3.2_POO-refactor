@@ -42,6 +42,10 @@ public class EntityView {
     private final Image mageTower1img= new Image(EntityView.class.getResourceAsStream("/images/mageTower1.png"));
     private final Image mageTower2img= new Image(EntityView.class.getResourceAsStream("/images/mageTower2.png"));
 
+    private final Image catapult1img= new Image(EntityView.class.getResourceAsStream("/images/catapult1.png"));
+    private final Image catapult2img= new Image(EntityView.class.getResourceAsStream("/images/catapult2.png"));
+    private final Image catapult3img= new Image(EntityView.class.getResourceAsStream("/images/catapult3.png"));
+
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
@@ -78,7 +82,7 @@ public class EntityView {
             iv.setImage(recruit1img);
         }
         else if(entity instanceof Catapult){
-            iv.setImage(earthquake2img);
+            iv.setImage(catapult1img);
         }
         else if(entity instanceof Archer) {
             iv.setImage(archerTower1img);
@@ -184,6 +188,9 @@ public class EntityView {
         else if(entity instanceof Wolf) {
             iv.setImage(wolf1img);
         }
+        else if(entity instanceof Catapult){
+            iv.setImage(catapult1img);
+        }
 
     }
 
@@ -197,6 +204,9 @@ public class EntityView {
         }
         else if(entity instanceof Barrack) {
             iv.setImage(barrack2img);
+        }
+        else if(entity instanceof Catapult){
+            iv.setImage(catapult2img);
         }
 
     }
@@ -217,6 +227,10 @@ public class EntityView {
 
         else if (entity instanceof Recruit) {
             iv.setImage(recruit3img);
+        }
+
+        else if (entity instanceof Catapult) {
+            iv.setImage(catapult3img);
         }
     }
 

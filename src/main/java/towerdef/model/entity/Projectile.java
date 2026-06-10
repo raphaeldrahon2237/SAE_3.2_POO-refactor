@@ -18,14 +18,14 @@ public class Projectile {
     private DoubleProperty y = new SimpleDoubleProperty();
     private int aoe;
     private double speed;
-    private int damage;
     private Entity target;
+    private Entity source;
     private boolean finished;
 
-    public Projectile(List<Point2D> trajectory, Entity target, int damage, double speed,  int aoe) {
+    public Projectile(List<Point2D> trajectory, Entity target, Entity source,int damage, double speed,  int aoe) {
         this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
-        this.damage = damage;
+        this.source = source;
         this.speed = speed;
         this.currentTileIndex.set(0);
         this.progressToNextTile.set(0.0);
@@ -87,7 +87,7 @@ public class Projectile {
     }
 
     public int getDamage() {
-        return damage;
+        return source.getDamage();
     }
 
     public List<Point2D> getTrajectory() {
@@ -96,6 +96,10 @@ public class Projectile {
 
     public int getAoe() {
         return aoe;
+    }
+
+    public Entity getSource() {
+        return source;
     }
 
     private void updateCoordinates() {
