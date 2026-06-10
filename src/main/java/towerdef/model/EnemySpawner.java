@@ -177,7 +177,7 @@ public class EnemySpawner {
             if (rand < 90) {
                 return new Archer(x, y);
             }
-            return new ArmoredSoldier(x, y);
+            return new ShadowSoldier(x, y);
         }
 
         if (wave < 8) {
@@ -188,7 +188,7 @@ public class EnemySpawner {
                 return new Archer(x, y);
             }
             if (rand < 95) {
-                return new ArmoredSoldier(x, y);
+                return new ShadowSoldier(x, y);
             }
             return new Catapult(x, y);
         }
@@ -200,7 +200,7 @@ public class EnemySpawner {
             return new Archer(x, y);
         }
         if (rand < 90) {
-            return new ArmoredSoldier(x, y);
+            return new ShadowSoldier(x, y);
         }
         return new Catapult(x, y);
     }
