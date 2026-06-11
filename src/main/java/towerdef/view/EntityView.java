@@ -106,12 +106,12 @@ public class EntityView {
 
 
         if(entity instanceof Tower){
-            iv.setFitHeight(TILESIZE+8);
-            iv.setFitWidth(TILESIZE+8);
-        }
-        else{
             iv.setFitHeight(TILESIZE+10);
             iv.setFitWidth(TILESIZE+10);
+        }
+        else{
+            iv.setFitHeight(TILESIZE+8);
+            iv.setFitWidth(TILESIZE+8);
         }
         if(entity.getX()>9) iv.setScaleX(-1);
         iv.xProperty().bind(
