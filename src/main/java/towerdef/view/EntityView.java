@@ -54,6 +54,10 @@ public class EntityView {
     private final Image archer2img= new Image(EntityView.class.getResourceAsStream("/images/archer2.png"));
     private final Image archer3img= new Image(EntityView.class.getResourceAsStream("/images/archer3.png"));
 
+    private final Image shadowArcher1img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher1.png"));
+    private final Image shadowArcher2img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher2.png"));
+    private final Image shadowArcher3img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher3.png"));
+
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
@@ -102,6 +106,9 @@ public class EntityView {
         else if (entity instanceof ShadowSoldier) {
             iv.setImage(shadowSoldier1img);
 
+        }
+        else if(entity instanceof ShadowArcher) {
+            iv.setImage(shadowArcher1img);
         }
 
 
@@ -209,6 +216,9 @@ public class EntityView {
         else if(entity instanceof Archer) {
             iv.setImage(archer1img);
         }
+        else if(entity instanceof ShadowArcher) {
+            iv.setImage(shadowArcher1img);
+        }
 
     }
 
@@ -231,6 +241,9 @@ public class EntityView {
         }
         else if(entity instanceof Archer) {
             iv.setImage(archer2img);
+        }
+        else if(entity instanceof ShadowArcher) {
+            iv.setImage(shadowArcher2img);
         }
 
 
@@ -262,6 +275,9 @@ public class EntityView {
         }
         else if(entity instanceof Archer) {
             iv.setImage(archer3img);
+        }
+        else if(entity instanceof ShadowArcher) {
+            iv.setImage(shadowArcher3img);
         }
     }
 
