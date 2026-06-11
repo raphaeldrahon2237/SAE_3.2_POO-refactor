@@ -181,26 +181,32 @@ public class EnemySpawner {
         }
 
         if (wave < 8) {
-            if (rand < 45) {
+            if (rand < 35) {
                 return new Wolf(x, y);
             }
-            if (rand < 75) {
+            if (rand < 65) {
                 return new Archer(x, y);
             }
-            if (rand < 95) {
+            if (rand < 85) {
                 return new ShadowSoldier(x, y);
+            }
+            if (rand < 95) {
+                return new ShadowArcher(x, y);
             }
             return new Catapult(x, y);
         }
 
-        if (rand < 35) {
+        if (rand < 25) {
             return new Wolf(x, y);
         }
-        if (rand < 65) {
+        if (rand < 45) {
             return new Archer(x, y);
         }
-        if (rand < 90) {
+        if (rand < 65) {
             return new ShadowSoldier(x, y);
+        }
+        if (rand < 85) {
+            return new ShadowArcher(x, y);
         }
         return new Catapult(x, y);
     }
