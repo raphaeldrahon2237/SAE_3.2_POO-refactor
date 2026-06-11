@@ -1,5 +1,7 @@
 package towerdef.model.entity.tower;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 
@@ -10,7 +12,7 @@ public abstract class Tower extends Entity {
 
     private int cost;
     private int sellValue;
-    private int level;
+    private IntegerProperty level;
     private int upgradeCost;
 
     private int damageUpgrade;
@@ -26,18 +28,17 @@ public abstract class Tower extends Entity {
         this.description = description;
         this.cost = cost;
         this.sellValue = cost / 2;
-        this.level = level;
+        this.level = new SimpleIntegerProperty(level);
         this.upgradeCost = upgradeCost;
         this.damageUpgrade = damageUpgrade;
         this.hpUpgrade = hpUpgrade;
         this.attackSpeedUpgrade = attackSpeedUpgrade;
         this.armorUpgrade = armorUpgrade;
-
     }
 
     public void upgrade() {
-        if (level < 5) {
-            level++;
+        if (level.get() < 5) {
+            level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;
             setHp(getHp() + hpUpgrade);
@@ -68,7 +69,7 @@ public abstract class Tower extends Entity {
         return "" + super.toString();
     }
 
-    public int getLevel() {
+    public IntegerProperty getLevel() {
         return level;
     }
 
@@ -82,7 +83,7 @@ public abstract class Tower extends Entity {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        this.level.set(level);
     }
 
 

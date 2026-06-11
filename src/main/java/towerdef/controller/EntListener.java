@@ -28,6 +28,16 @@ public class EntListener implements ListChangeListener<Entity> {
                     EntityView eV = new     EntityView(gamePane, entity);
                     eV.createEntityView();
                     mapEntityView.put(entity, eV);
+
+                    entity.attackCounterProperty().addListener((obs, oldValue, newValue) -> {
+                        if (!oldValue.equals(newValue)) {
+                            EntityView view = mapEntityView.get(entity);
+
+                            if (view != null) {
+                                view.switchImageAttack();
+                            }
+                        }
+                    });
                 }
             }
 
@@ -44,24 +54,21 @@ public class EntListener implements ListChangeListener<Entity> {
         }
     }
 
-    public void animations(double deltaTime){
-        animationTimer+=deltaTime;
-        if(animationTimer>animationInterval){
-            for(Entity e : mapEntityView.keySet()){
-                e.attackCounterProperty().addListener((obs, oldV, newV) -> {
-                    if(!oldV.equals(newV))
-                        mapEntityView.get(e).switchImageAttack();
-                });
-                mapEntityView.get(e).switchImageIdle();
+    public void animations(double deltaTime) {
+        animationTimer += deltaTime;
+
+        if (animationTimer > animationInterval) {
+            for (EntityView entityView : mapEntityView.values()) {
+                entityView.switchImageIdle();
             }
         }
-        if(animationTimer>animationInterval*2){
-            for(EntityView eV : mapEntityView.values()){
-                eV.switchImageToInitial();
 
+        if (animationTimer > animationInterval * 2) {
+            for (EntityView entityView : mapEntityView.values()) {
+                entityView.switchImageToInitial();
             }
-            animationTimer=0;
-        }
 
+            animationTimer = 0;
+        }
     }
 }
