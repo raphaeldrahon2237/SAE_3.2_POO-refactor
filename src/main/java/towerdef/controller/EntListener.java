@@ -16,7 +16,7 @@ public class EntListener implements ListChangeListener<Entity> {
 
     public EntListener(Pane gamePane) {
         this.gamePane = gamePane;
-        animationInterval=0.2;
+        animationInterval=0.3;
         animationTimer=0;
     }
 

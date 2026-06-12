@@ -167,7 +167,7 @@ public class EntityView {
         else if (entity instanceof Artillery) {
             if (level.getValue()==1) iv.setImage(ArtilleryTower1InitialImg);
 
-            if (level.getValue()==2) iv.setImage(ArtilleryTower1AttackImg);
+            if (level.getValue()==2) iv.setImage(ArtilleryTower1InitialImg);
 
         }
         else if (entity instanceof Barrack) {
