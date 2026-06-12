@@ -69,7 +69,7 @@ public abstract class Tower extends Entity {
         return "" + super.toString();
     }
 
-    public IntegerProperty getLevel() {
+    public IntegerProperty levelProperty() {
         return level;
     }
 

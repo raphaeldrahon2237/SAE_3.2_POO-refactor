@@ -215,7 +215,7 @@ public class Game {
     public boolean upgradeTower(Tower tower) {
         boolean upgraded = false;
 
-        if (tower != null && tower.isAlive() && tower.getLevel() < 5 && economy.getGold() >= tower.getUpgradeCost()) {
+        if (tower != null && tower.isAlive() && tower.levelProperty().get() < 5 && economy.getGold() >= tower.getUpgradeCost()) {
             economy.spendGold(tower.getUpgradeCost());
             tower.upgrade();
             upgraded = true;

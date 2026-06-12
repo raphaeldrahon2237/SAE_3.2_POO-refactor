@@ -3,6 +3,7 @@ package towerdef.controller;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
+import towerdef.model.entity.tower.Tower;
 import towerdef.view.EntityView;
 import java.util.HashMap;
 import java.util.Map;

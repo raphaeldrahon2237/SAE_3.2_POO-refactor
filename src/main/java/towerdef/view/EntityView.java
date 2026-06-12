@@ -1,4 +1,6 @@
 package towerdef.view;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -14,49 +16,53 @@ public class EntityView {
 
     private Pane gamePane;
     private Entity entity;
+    private IntegerProperty level;
     private ImageView iv;
     private Rectangle healthBarBack;
     private Rectangle healthBarFront;
 
+    private static final Image BuildingImg = new Image(EntityView.class.getResourceAsStream("/images/building.png"));
+
+    private static final Image RecruitInitialImg = new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
+    private static final Image RecruitIdleImg = new Image(EntityView.class.getResourceAsStream("/images/recruit2.png"));
+    private static final Image RecruitAttackImg = new Image(EntityView.class.getResourceAsStream("/images/recruit3.png"));
+
+    private static final Image ArcherTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Initial.png"));
+    private static final Image ArcherTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Attack.png"));
+    private static final Image ArcherTower2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
+    private static final Image ArcherTower2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
+
+    private static final Image Barrack1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
+    private static final Image Barrack1IdleImg = new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
+
+    private static final Image Earthquake1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1.png"));
+    private static final Image Earthquake1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2.png"));
+
+    private static final Image ArtilleryTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1.png"));
+    private static final Image ArtilleryTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower2.png"));
+
+    private static final Image MageTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1.png"));
+    private static final Image MageTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2.png"));
 
 
-    private final Image wolf1img = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
-    private final Image wolf2img = new Image(EntityView.class.getResourceAsStream("/images/wolf2.png"));
+    private static final Image WolfInitialImg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
+    private static final Image WolfIdleImg = new Image(EntityView.class.getResourceAsStream("/images/wolf2.png"));
 
-    private final Image recruit1img= new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
-    private final Image recruit2img= new Image(EntityView.class.getResourceAsStream("/images/recruit2.png"));
-    private final Image recruit3img= new Image(EntityView.class.getResourceAsStream("/images/recruit3.png"));
+    private static final Image CatapultInitialImg = new Image(EntityView.class.getResourceAsStream("/images/catapult1.png"));
+    private static final Image CatapultIdleImg = new Image(EntityView.class.getResourceAsStream("/images/catapult2.png"));
+    private static final Image CatapultAttackImg = new Image(EntityView.class.getResourceAsStream("/images/catapult3.png"));
 
-    private final Image archerTower1img= new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
-    private final Image archerTower2img= new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
+    private static final Image ShadowSoldierInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier1.png"));
+    private static final Image ShadowSoldierIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier2.png"));
+    private static final Image ShadowSoldierAttackingImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier3.png"));
 
-    private final Image barrack1img= new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
-    private final Image barrack2img= new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
+    private static final Image ArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/archer1.png"));
+    private static final Image ArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/archer2.png"));
+    private static final Image ArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/archer3.png"));
 
-    private final Image earthquake1img= new Image(EntityView.class.getResourceAsStream("/images/earthquake1.png"));
-    private final Image earthquake2img= new Image(EntityView.class.getResourceAsStream("/images/earthquake2.png"));
-
-    private final Image artilleryTower1img= new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1.png"));
-    private final Image artilleryTower2img= new Image(EntityView.class.getResourceAsStream("/images/artilleryTower2.png"));
-
-    private final Image mageTower1img= new Image(EntityView.class.getResourceAsStream("/images/mageTower1.png"));
-    private final Image mageTower2img= new Image(EntityView.class.getResourceAsStream("/images/mageTower2.png"));
-
-    private final Image catapult1img= new Image(EntityView.class.getResourceAsStream("/images/catapult1.png"));
-    private final Image catapult2img= new Image(EntityView.class.getResourceAsStream("/images/catapult2.png"));
-    private final Image catapult3img= new Image(EntityView.class.getResourceAsStream("/images/catapult3.png"));
-
-    private final Image shadowSoldier1img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier1.png"));
-    private final Image shadowSoldier2img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier2.png"));
-    private final Image shadowSoldier3img= new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier3.png"));
-
-    private final Image archer1img= new Image(EntityView.class.getResourceAsStream("/images/archer1.png"));
-    private final Image archer2img= new Image(EntityView.class.getResourceAsStream("/images/archer2.png"));
-    private final Image archer3img= new Image(EntityView.class.getResourceAsStream("/images/archer3.png"));
-
-    private final Image shadowArcher1img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher1.png"));
-    private final Image shadowArcher2img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher2.png"));
-    private final Image shadowArcher3img= new Image(EntityView.class.getResourceAsStream("/images/shadowArcher3.png"));
+    private static final Image ShadowArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher1.png"));
+    private static final Image ShadowArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher2.png"));
+    private static final Image ShadowArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher3.png"));
 
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
@@ -67,48 +73,78 @@ public class EntityView {
 
         healthBarBack = new Rectangle();
         healthBarFront = new Rectangle();
+        level= new SimpleIntegerProperty();
     }
 
     public void createEntityView() {
 
+        if(level.get()==0){
+            iv.setImage(BuildingImg);
+        }
         if (entity instanceof ArcherTower) {
-            iv.setImage(archerTower1img);
+
+            if(level.getValue()==1){
+                iv.setImage(ArcherTower1InitialImg);
+            }
+            if(level.getValue()==2){
+                iv.setImage(ArcherTower2InitialImg);
+            }
         }
         else if (entity instanceof Artillery) {
-            iv.setImage(artilleryTower1img);
+            if (level.getValue()==1) {
+                iv.setImage(ArtilleryTower1InitialImg);
+            }
+            if (level.getValue()==2) {
+                iv.setImage(ArtilleryTower1AttackImg);
+            }
         }
         else if (entity instanceof Barrack) {
-            iv.setImage(barrack1img);
+            if (level.getValue()==1) {
+                iv.setImage(ArtilleryTower1InitialImg);
+            }
+            if (level.getValue()==2) {
+                iv.setImage(ArtilleryTower1AttackImg);
+            }
         }
         else if(entity instanceof Earthquake){
-            iv.setImage(earthquake1img);
+            if (level.getValue()==1) {
+                iv.setImage(Earthquake1InitialImg);
+            }
+            if (level.getValue()==2) {
+                iv.setImage(Earthquake1AttackImg);
+            }
         }
         else if(entity instanceof Mage) {
-            iv.setImage(mageTower1img);
+            if (level.getValue()==1) {
+                iv.setImage(MageTower1InitialImg);
+            }
+            if (level.getValue()==2) {
+                iv.setImage(MageTower1AttackImg);
+            }
         }
 
         else if (entity instanceof Recruit) {
-            iv.setImage(recruit1img);
+            iv.setImage(RecruitInitialImg);
         }
 
         else if (entity instanceof Wolf) {
-            iv.setImage(wolf1img);
+            iv.setImage(WolfInitialImg);
         }
         else if (entity instanceof Boss){
-            iv.setImage(recruit1img);
+            iv.setImage(RecruitInitialImg);
         }
         else if(entity instanceof Catapult){
-            iv.setImage(catapult1img);
+            iv.setImage(CatapultInitialImg);
         }
         else if(entity instanceof Archer) {
-            iv.setImage(archer1img);
+            iv.setImage(ArcherInitialImg);
         }
         else if (entity instanceof ShadowSoldier) {
-            iv.setImage(shadowSoldier1img);
+            iv.setImage(ShadowSoldierInitialImg);
 
         }
         else if(entity instanceof ShadowArcher) {
-            iv.setImage(shadowArcher1img);
+            iv.setImage(ShadowArcherInitialImg);
         }
 
 
@@ -128,6 +164,7 @@ public class EntityView {
         iv.yProperty().bind(
                 entity.yProperty().multiply(TILESIZE)
         );
+        if(entity instanceof Tower) level.bind(((Tower) entity).levelProperty());
         createHealthBar();
 
         gamePane.getChildren().addAll(iv, healthBarBack, healthBarFront);
@@ -186,38 +223,43 @@ public class EntityView {
 
     public void switchImageToInitial(){
         if(entity instanceof ArcherTower){
-            iv.setImage(archerTower1img);
+            if(level.getValue()==1){
+                iv.setImage(ArcherTower1InitialImg);
+            }
+            if(level.getValue()==2){
+                iv.setImage(ArcherTower2InitialImg);
+            }
         }
         else if(entity instanceof Earthquake){
-            iv.setImage(earthquake1img);
+            iv.setImage(Earthquake1InitialImg);
         }
         else if(entity instanceof Artillery){
-            iv.setImage(artilleryTower1img);
+            iv.setImage(ArtilleryTower1InitialImg);
         }
         else if(entity instanceof Barrack) {
-            iv.setImage(barrack1img);
+            iv.setImage(Barrack1InitialImg);
         }
         else if(entity instanceof Mage) {
-            iv.setImage(mageTower1img);
+            iv.setImage(MageTower1InitialImg);
         }
 
         else if(entity instanceof Recruit){
-            iv.setImage(recruit1img);
+            iv.setImage(RecruitInitialImg);
         }
         else if(entity instanceof Wolf) {
-            iv.setImage(wolf1img);
+            iv.setImage(WolfInitialImg);
         }
         else if(entity instanceof Catapult){
-            iv.setImage(catapult1img);
+            iv.setImage(CatapultInitialImg);
         }
         else if (entity instanceof ShadowSoldier) {
-            iv.setImage(shadowSoldier1img);
+            iv.setImage(ShadowSoldierInitialImg);
         }
         else if(entity instanceof Archer) {
-            iv.setImage(archer1img);
+            iv.setImage(ArcherInitialImg);
         }
         else if(entity instanceof ShadowArcher) {
-            iv.setImage(shadowArcher1img);
+            iv.setImage(ShadowArcherInitialImg);
         }
 
     }
@@ -225,25 +267,25 @@ public class EntityView {
     public void switchImageIdle(){
 
         if(entity instanceof Wolf) {
-            iv.setImage(wolf2img);
+            iv.setImage(WolfIdleImg);
         }
         else if(entity instanceof Recruit) {
-            iv.setImage(recruit2img);
+            iv.setImage(RecruitIdleImg);
         }
         else if(entity instanceof Barrack) {
-            iv.setImage(barrack2img);
+            iv.setImage(Barrack1IdleImg);
         }
         else if(entity instanceof Catapult){
-            iv.setImage(catapult2img);
+            iv.setImage(CatapultIdleImg);
         }
         else if(entity instanceof ShadowSoldier) {
-            iv.setImage(shadowSoldier2img);
+            iv.setImage(ShadowSoldierIdleImg);
         }
         else if(entity instanceof Archer) {
-            iv.setImage(archer2img);
+            iv.setImage(ArcherIdleImg);
         }
         else if(entity instanceof ShadowArcher) {
-            iv.setImage(shadowArcher2img);
+            iv.setImage(ShadowArcherIdleImg);
         }
 
 
@@ -251,33 +293,33 @@ public class EntityView {
 
     public void switchImageAttack(){
         if(entity instanceof ArcherTower) {
-            iv.setImage(archerTower2img);
+            iv.setImage(ArcherTower2AttackImg);
         }
         else if(entity instanceof Earthquake) {
-            iv.setImage(earthquake2img);
+            iv.setImage(Earthquake1AttackImg);
         }
         else if (entity instanceof Artillery) {
-            iv.setImage(artilleryTower2img);
+            iv.setImage(ArtilleryTower1AttackImg);
         }
         else if (entity instanceof Mage) {
-            iv.setImage(mageTower2img);
+            iv.setImage(MageTower1AttackImg);
         }
 
         else if (entity instanceof Recruit) {
-            iv.setImage(recruit3img);
+            iv.setImage(RecruitAttackImg);
         }
 
         else if (entity instanceof Catapult) {
-            iv.setImage(catapult3img);
+            iv.setImage(CatapultAttackImg);
         }
         else if (entity instanceof ShadowSoldier) {
-            iv.setImage(shadowSoldier3img);
+            iv.setImage(ShadowSoldierAttackingImg);
         }
         else if(entity instanceof Archer) {
-            iv.setImage(archer3img);
+            iv.setImage(ArcherAttackImg);
         }
         else if(entity instanceof ShadowArcher) {
-            iv.setImage(shadowArcher3img);
+            iv.setImage(ShadowArcherAttackImg);
         }
     }
 
