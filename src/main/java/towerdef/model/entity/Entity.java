@@ -58,6 +58,11 @@ public abstract class Entity {
         hp.set(Math.max(0, hp.get() - realDamage));
     }
 
+    public void takeMagicDamage(int damage) {
+        System.out.println(this + " taking magic damage");
+        hp.set(Math.max(0, hp.get() - damage));
+    }
+
 
     public void incrementAttackCounter() {
         attackCounter.set(attackCounter.get()+1);

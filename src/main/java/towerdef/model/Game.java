@@ -448,7 +448,7 @@ public class Game {
         return new Point2D(Math.round(x), Math.round(y));
     }
 
-    public void createProjectile(Entity source, Entity target, Point2D impactTile, int projectileType) {
+    public void createProjectile(Entity source, Entity target, Point2D impactTile, AttackType projectileType) {
         List<Point2D> trajectory = computeLineTiles(
                 (int) source.getX(),
                 (int) source.getY(),

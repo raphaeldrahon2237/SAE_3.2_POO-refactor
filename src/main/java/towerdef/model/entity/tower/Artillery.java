@@ -15,7 +15,7 @@ public class Artillery extends Tower {
     public void act(Game game){
         if(canAttack()){
             Enemy targetEnemy = game.findEnemyInRange(this.getX(), this.getY(), this.getRange());
-            if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, 3);
+            if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, this.getAttackType());
             this.resetAttackTimer();
         }
     }

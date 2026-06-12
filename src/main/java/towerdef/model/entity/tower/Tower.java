@@ -94,7 +94,7 @@ public abstract class Tower extends Entity {
         this.upgradeCost = upgradeCost;
     }
 
-    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, int projectileType){
+    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
         Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
         this.incrementAttackCounter();
         game.createProjectile(this,targetEnemy, targetTile, projectileType);

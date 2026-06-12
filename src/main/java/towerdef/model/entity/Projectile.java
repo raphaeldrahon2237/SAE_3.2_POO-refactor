@@ -11,6 +11,9 @@ import towerdef.model.entity.troop.Enemy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static towerdef.model.entity.AttackType.AOE;
+import static towerdef.model.entity.AttackType.MAGIC;
+
 public class Projectile {
 
     private List<Point2D> trajectory;
@@ -18,14 +21,13 @@ public class Projectile {
     private DoubleProperty progressToNextTile = new SimpleDoubleProperty();
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
-    //private int aoe;
     private double speed;
     private Entity target;
     private Entity source;
     private boolean finished;
-    private int projectyleType;
+    private AttackType projectyleType;
 
-    public Projectile(List<Point2D> trajectory, Entity target, Entity source, double speed, int projectyleType) {
+    public Projectile(List<Point2D> trajectory, Entity target, Entity source, double speed, AttackType  projectyleType) {
         this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.source = source;
@@ -34,7 +36,6 @@ public class Projectile {
         this.progressToNextTile.set(0.0);
         updateCoordinates();
         this.finished = trajectory.size() <= 1;
-        //this.aoe = aoe;
         this.projectyleType = projectyleType;
     }
 
@@ -52,7 +53,7 @@ public class Projectile {
         }
         updateCoordinates();
         if(this.finished){
-            if(projectyleType==3) dealDamageInAoe(game);
+            if(projectyleType==AOE) dealDamageInAoe(game);
             else dealDamage();
         }
     }
@@ -115,7 +116,8 @@ public class Projectile {
     }
 
     public void dealDamage(){
-        target.takeDamage(source.getDamage());
+        if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
+        else target.takeDamage(source.getDamage());
     }
 
     public void dealDamageInAoe(Game game){
