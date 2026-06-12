@@ -243,6 +243,7 @@ public class Game {
         }
     }
 
+    /*
     public void applyAreaDamage(Projectile projectile) {
         Point2D impactTile = projectile.getImpactTile();
         double impactX = impactTile.getX();
@@ -259,7 +260,7 @@ public class Game {
                 }
             }
         }
-    }
+    }*/
 
     private void updateAlliesAttackTimers(double deltaTime) {
         for (Entity ally : gameEntities.getAllies()) {
@@ -267,8 +268,10 @@ public class Game {
         }
     }
 
-    public void applyEarthquake (Earthquake earthquakeTower) {
+
+   /* public void applyEarthquake (Earthquake earthquakeTower) {
         earthquakeTower.incrementAttackCounter();
+        ArrayList<Enemy> enemiesInRange= new ArrayList<>();
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (enemy.isAlive()) {
                 double dx = enemy.getX() - earthquakeTower.getX();
@@ -287,27 +290,16 @@ public class Game {
 
     }
 
+    */
+
     public void alliesAttackEnemies() {
         for (Entity ally : gameEntities.getAllies()) {
-            if (ally.canAttack() && ally.getDamage() >= 0) {
-                switch (ally.getAttackType()) {
-                    case EARTHQUAKE:
-                        applyEarthquake((Earthquake) ally);
-                        ally.resetAttackTimer();
-                        break;
-
-                    case NORMAL:
-                    case AOE:
-                        Enemy target = findEnemyInRange(ally);
-                        if (target != null) {
-                            shootProjectile(ally, target);
-                            ally.resetAttackTimer();
-                        }
-                        break;
-                }
+            ally.act(this);
             }
         }
-    }
+
+
+
 
     private void enemiesAttackBase() {
         for (Enemy enemy : gameEntities.getEnemies()) {
@@ -324,16 +316,16 @@ public class Game {
         }
     }
 
-    private Enemy findEnemyInRange(Entity source) {
+    public Enemy findEnemyInRange(double x, double y, int range) {
         Enemy closestEnemy = null;
-        double closestDistance = Double.MAX_VALUE;
+        double closestDistance = Double.MAX_VALUE, dx,dy,distance;
 
         for (Enemy enemy : gameEntities.getEnemies()) {
-            double dx = enemy.getX() - source.getX();
-            double dy = enemy.getY() - source.getY();
-            double distance = Math.sqrt(dx * dx + dy * dy);
+            dx = enemy.getX() - x;
+            dy = enemy.getY() - y;
+            distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance <= source.getRange() && distance < closestDistance) {
+            if (distance <= range && distance < closestDistance) {
                 closestEnemy = enemy;
                 closestDistance = distance;
             }
@@ -341,6 +333,23 @@ public class Game {
 
         return closestEnemy;
     }
+
+    public ArrayList<Enemy> findEnemiesInRange(double x, double y, int range) {
+        ArrayList<Enemy> enemiesInRange = new ArrayList<>();
+        double dx, dy, distance;
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            dx = enemy.getX() - x;
+            dy = enemy.getY() - y;
+            distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= range) {
+                enemiesInRange.add(enemy);
+            }
+        }
+        return enemiesInRange;
+
+    }
+
     private void updateMovements(double deltaTime) {
         for (Enemy enemy : gameEntities.getEnemies()) {
             if (!isEnemyInCombat(enemy) && !isBaseInRange(enemy)) {
@@ -359,7 +368,7 @@ public class Game {
                 Entity target = findAllyInRange(enemy);
 
                 if (target != null) {
-                    shootProjectile(enemy, target);
+                    //shootProjectile(enemy, target);
                     enemy.resetAttackTimer();
                 }
             }
@@ -399,44 +408,35 @@ public class Game {
 
     private void updateProjectiles(double deltaTime) {
         for (Projectile projectile : new ArrayList<>(gameEntities.getProjectiles())) {
-            projectile.updatePosition(deltaTime);
 
-            if (projectile.isFinished()) {
-                if (projectile.getTarget() != null) {
-                    if (projectile.getAoe() != 0) {
-                        applyAreaDamage(projectile);
-                    } else if (projectile.getTarget().isAlive()) {
-                        projectile.getTarget().takeDamage(projectile.getDamage());
-                    }
-                }
-                gameEntities.removeProjectile(projectile);
-            }
+            projectile.act(deltaTime, this);
+
+            if(projectile.isFinished()) gameEntities.removeProjectile(projectile);
         }
     }
 
-    private void shootProjectile(Entity source, Entity target) {
-        Point2D impactTile = computePreshotTile(source, target);
-        source.incrementAttackCounter();
-        gameStats.projectileFired();
-        createProjectile(source, target, impactTile);
-    }
+//    private void shootProjectile(Entity source, Entity target) {
+//        Point2D impactTile = computePreshotTile(source, target);
+//
+//        gameStats.projectileFired();
+//        createProjectile(source, target, impactTile);
+//    }
 
-    private Point2D computePreshotTile(Entity source, Entity target) {
+    public Point2D computePreshotTile(double sourceX, double sourceY, Enemy target) {
         Point2D impactTile = toTilePosition(target.getX(), target.getY());
 
-        if (target instanceof Enemy enemy) {
-            double projectileTravelTime = computeProjectileTravelTime(source, impactTile);
-            Point2D predictedPosition = enemy.predictPositionAfter(projectileTravelTime);
+            double projectileTravelTime = computeProjectileTravelTime(sourceX, sourceY, impactTile);
+            Point2D predictedPosition = target.predictPositionAfter(projectileTravelTime);
             impactTile = toTilePosition(predictedPosition.getX(), predictedPosition.getY());
-        }
+
 
         return impactTile;
     }
 
-    private double computeProjectileTravelTime(Entity source, Point2D impactTile) {
+    private double computeProjectileTravelTime(double sourceX, double sourceY, Point2D impactTile) {
         List<Point2D> trajectory = computeLineTiles(
-                (int) source.getX(),
-                (int) source.getY(),
+                (int) sourceX,
+                (int) sourceY,
                 (int) impactTile.getX(),
                 (int) impactTile.getY()
         );
@@ -448,7 +448,7 @@ public class Game {
         return new Point2D(Math.round(x), Math.round(y));
     }
 
-    private void createProjectile(Entity source, Entity target, Point2D impactTile) {
+    public void createProjectile(Entity source, Entity target, Point2D impactTile, int projectileType) {
         List<Point2D> trajectory = computeLineTiles(
                 (int) source.getX(),
                 (int) source.getY(),
@@ -456,14 +456,7 @@ public class Game {
                 (int) impactTile.getY()
         );
 
-        Projectile projectile = new Projectile(
-                trajectory,
-                target,
-                source,
-                source.getDamage(),
-                PROJECTILE_SPEED,
-                source.getZone()
-        );
+        Projectile projectile = new Projectile( trajectory, target, source, PROJECTILE_SPEED, projectileType);
 
         gameEntities.addProjectile(projectile);
     }

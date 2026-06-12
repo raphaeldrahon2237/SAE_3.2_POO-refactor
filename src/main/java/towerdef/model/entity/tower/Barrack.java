@@ -1,5 +1,6 @@
 package towerdef.model.entity.tower;
 
+import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 
 public class Barrack extends Tower {
@@ -10,5 +11,9 @@ public class Barrack extends Tower {
 
     public String toString() {
         return "Barracks: "+super.toString();
+    }
+
+    public void act(Game game){
+        System.out.println("I am doing something");
     }
 }

@@ -1,6 +1,7 @@
 package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
+import towerdef.model.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,5 +137,9 @@ public class Enemy extends Troop {
         }
 
         return null;
+    }
+
+    public void act(Game game){
+        System.out.println("I am doing something");
     }
 }

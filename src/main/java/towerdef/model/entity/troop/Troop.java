@@ -1,6 +1,7 @@
 package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
+import towerdef.model.Game;
 import towerdef.model.entity.Entity;
 
 public abstract class Troop extends Entity {
@@ -42,5 +43,9 @@ public abstract class Troop extends Entity {
     @Override
     public String toString() {
         return "" + super.toString();
+    }
+
+    public void act(Game game){
+        System.out.println("I am doing something");
     }
 }
