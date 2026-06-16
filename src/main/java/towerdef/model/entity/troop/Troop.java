@@ -45,7 +45,7 @@ public abstract class Troop extends Entity {
         return "" + super.toString();
     }
 
-    public void act(Game game){
+    public void attack(Game game){
         System.out.println("I am doing something");
     }
 }

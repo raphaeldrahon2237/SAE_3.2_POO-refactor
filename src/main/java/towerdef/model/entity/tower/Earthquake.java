@@ -16,7 +16,7 @@ public class Earthquake extends Tower {
     }
 
 
-    public void act(Game game){
+    public void attack(Game game){
         ArrayList<Enemy> enemiesInRange;
         this.incrementAttackCounter();
         if (canAttack()){

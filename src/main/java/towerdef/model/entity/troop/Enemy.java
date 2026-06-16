@@ -149,7 +149,7 @@ public class Enemy extends Troop {
         return lastDamagingTower;
     }
 
-    public void act(Game game){
+    public void attack(Game game){
         System.out.println("I am doing something");
     }
 }

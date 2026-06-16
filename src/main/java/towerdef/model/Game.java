@@ -4,7 +4,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.entity.*;
-import towerdef.model.entity.tower.Earthquake;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Enemy;
@@ -299,7 +298,7 @@ public class Game {
 
     public void alliesAttackEnemies() {
         for (Entity ally : gameEntities.getAllies()) {
-            ally.act(this);
+            ally.attack(this);
             }
         }
 

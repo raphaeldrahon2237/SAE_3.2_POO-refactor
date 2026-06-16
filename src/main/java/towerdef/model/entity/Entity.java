@@ -221,6 +221,6 @@ public abstract class Entity {
     }
 
 
-    public abstract void act(Game game);
+    public abstract void attack(Game game);
 
 }

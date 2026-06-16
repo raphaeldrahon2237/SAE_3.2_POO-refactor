@@ -14,7 +14,7 @@ public class ArcherTower extends Tower {
                 80, 3, 5, 5, 1);
     }
 
-    public void act(Game game){
+    public void attack(Game game){
         if (canAttack()){
             Enemy targetEnemy = game.findEnemyInRange(this.getX(), this.getY(), this.getRange());
             if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, this.getAttackType());
