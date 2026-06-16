@@ -1,5 +1,6 @@
 package towerdef.model.entity.tower;
 
+import towerdef.model.Game;
 import towerdef.model.entity.EntityType;
 
 public class TowerFactory {

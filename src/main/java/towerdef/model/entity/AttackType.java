@@ -4,4 +4,5 @@ public enum AttackType {
     NORMAL,
     AOE,
     EARTHQUAKE,
+    MAGIC,
 }

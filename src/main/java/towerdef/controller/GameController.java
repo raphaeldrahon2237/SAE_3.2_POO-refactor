@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.scene.layout.VBox;
+import towerdef.model.quest.MiniQuest;
 
 import static towerdef.model.map.TileType.TILESIZE;
 
@@ -98,6 +100,9 @@ public class GameController implements Initializable {
     @FXML
     private Label towerInfoLabel;
 
+    @FXML
+    private VBox miniQuestBox;
+
     private int towerSelected=0;
     private boolean destinationTestMode = false;
     private Timeline gameLoop;
@@ -120,6 +125,7 @@ public class GameController implements Initializable {
         baseHpLabel.textProperty().bind(game.baseHpProperty().asString("BaseHp : %d"));
         waveLabel.setText("Vague : " + game.getCurrentWave());
         TerrainView.renderMap(tilePane, game.getMapGrid().getMap());
+        refreshMiniQuestDisplay();
         createBaseHealthBar();
 
         initListeners();
@@ -366,9 +372,9 @@ public class GameController implements Initializable {
 
                         lastFrameTime = now;
 
-                        game.runGame();
                         game.updateStates(deltaTime);
                         waveLabel.setText("Vague : " + game.getCurrentWave());
+                        refreshMiniQuestDisplay();
 
                         if (game.isGameOver()) {
                             showGameOverScreen();
@@ -430,6 +436,32 @@ public class GameController implements Initializable {
         int seconds = totalSeconds % 60;
 
         return String.format("%02d:%02d", minutes, seconds);
+    }
+    private void refreshMiniQuestDisplay() {
+        if (miniQuestBox.getChildren().isEmpty()) {
+            Label titleLabel = new Label("Mini-quêtes bonus");
+            titleLabel.setWrapText(true);
+            titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+            miniQuestBox.getChildren().add(titleLabel);
+
+            for (MiniQuest ignored : game.getMiniQuestManager().getQuests()) {
+                Label questLabel = new Label();
+                questLabel.setWrapText(true);
+                miniQuestBox.getChildren().add(questLabel);
+            }
+        }
+
+        for (int i = 0; i < game.getMiniQuestManager().getQuests().size(); i++) {
+            MiniQuest quest = game.getMiniQuestManager().getQuests().get(i);
+            Label questLabel = (Label) miniQuestBox.getChildren().get(i + 1);
+            questLabel.setText(quest.getDisplayText());
+
+            if (quest.isCompleted()) {
+                questLabel.setStyle("-fx-text-fill: #5cff78; -fx-font-weight: bold;");
+            } else {
+                questLabel.setStyle("-fx-text-fill: white;");
+            }
+        }
     }
 
     public void onClose() {

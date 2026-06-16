@@ -1,6 +1,7 @@
 package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
+import towerdef.model.Game;
 import towerdef.model.entity.Entity;
 
 public abstract class Troop extends Entity {
@@ -42,5 +43,17 @@ public abstract class Troop extends Entity {
     @Override
     public String toString() {
         return "" + super.toString();
+    }
+
+    public void attack(Game game){
+        if (canAttack() && getDamage() > 0) {
+            Enemy targetEnemy = game.findEnemyInRange(getX(), getY(), getRange());
+
+            if (targetEnemy != null) {
+                incrementAttackCounter();
+                targetEnemy.takeDamage(getDamage());
+                resetAttackTimer();
+            }
+        }
     }
 }

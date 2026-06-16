@@ -26,7 +26,7 @@ public class EnemySpawner {
     private Random random;
     private Path path;
     private GameEntities gameEntities;
-    private GameStats gameStats;
+    private Progression progression;
     private int currentWave;
     private int enemiesRemainingInWave;
     private double waveTimer;
@@ -34,13 +34,13 @@ public class EnemySpawner {
     private boolean waveInProgress;
     private boolean bossSpawnedThisWave = false;
 
-    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities, GameStats gameStats) {
+    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities, Progression progression) {
         this.mapGrid = mapGrid;
         this.base = base;
         this.random = random;
         this.path = path;
         this.gameEntities = gameEntities;
-        this.gameStats = gameStats;
+        this.progression = progression;
         currentWave = 0;
         enemiesRemainingInWave = 0;
         waveTimer = 0.0;
@@ -196,25 +196,22 @@ public class EnemySpawner {
             return new Catapult(x, y);
         }
 
-        if (rand < 25) {
-            return new Wolf(x, y);
-        }
-        if (rand < 45) {
-            return new Archer(x, y);
-        }
-        if (rand < 65) {
-            return new ShadowSoldier(x, y);
-        }
-        if (rand < 85) {
-            return new ShadowArcher(x, y);
-        }
-        return new Catapult(x, y);
+        if (rand < 30) return new Wolf(x, y);
+
+        else if (rand < 55) return new Archer(x, y);
+
+        else if (rand < 75) return new ShadowSoldier(x, y);
+
+        else if (rand < 90) return new ShadowArcher(x, y);
+
+        else return new Catapult(x, y);
+
     }
 
     private void spawnEnemy(Enemy enemy) {
         path.assignMovement(enemy);
         gameEntities.addEnemy(enemy);
-        gameStats.enemySpawned();
+        progression.enemySpawned();
     }
 
     public static List<Point2D> getWalkableEdgeTiles(MapGrid mapGrid) {

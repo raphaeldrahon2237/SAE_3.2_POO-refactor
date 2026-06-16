@@ -1,9 +1,14 @@
 package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
+import towerdef.model.Game;
+import towerdef.model.Utils;
+import towerdef.model.entity.AttackType;
+import towerdef.model.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import towerdef.model.entity.tower.Tower;
 
 public class Enemy extends Troop {
 
@@ -11,6 +16,7 @@ public class Enemy extends Troop {
     private int currentTileIndex;
     private Point2D currentTarget;
     private int reward;
+    private Tower lastDamagingTower;
 
     public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y, int reward) {
         super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
@@ -18,6 +24,7 @@ public class Enemy extends Troop {
         this.currentTileIndex = 0;
         this.currentTarget = null;
         this.reward = reward;
+        this.lastDamagingTower = null;
     }
 
     public void setPath(List<Point2D> path) {
@@ -136,5 +143,87 @@ public class Enemy extends Troop {
         }
 
         return null;
+    }
+    public void setLastDamagingTower(Tower lastDamagingTower) {
+        if (isAlive()) {
+            this.lastDamagingTower = lastDamagingTower;
+        }
+    }
+    public Tower getLastDamagingTower() {
+        return lastDamagingTower;
+    }
+
+    public void attack(Game game){
+        if (!game.isGameOver() && getDamage() > 0 && !attackAlliedTroopInRange(game)) {
+            attackBaseInRange(game);
+        }
+    }
+
+    public boolean isInCombat(Game game) {
+        return game.isAlliedTroopInRange(getX(), getY(), getRange()) || game.isBaseInRange(this);
+    }
+
+    protected boolean attackTowerInRange(Game game) {
+        boolean hasTarget = false;
+        Tower targetTower = game.findTowerInRange(getX(), getY(), getRange());
+
+        if (targetTower != null) {
+            hasTarget = true;
+
+            if (canAttack()) {
+                shootProjectileAtTarget(targetTower, game, getAttackType());
+                resetAttackTimer();
+            }
+        }
+
+        return hasTarget;
+    }
+
+    protected boolean attackAlliedTroopInRange(Game game) {
+        boolean hasTarget = false;
+        Troop targetTroop = game.findAlliedTroopInRange(getX(), getY(), getRange());
+
+        if (targetTroop != null) {
+            hasTarget = true;
+
+            if (canAttack()) {
+                targetTroop.takeDamage(getDamage());
+                incrementAttackCounter();
+                resetAttackTimer();
+            }
+        }
+
+        return hasTarget;
+    }
+
+    protected boolean shootProjectileAtAlliedTroopInRange(Game game) {
+        boolean hasTarget = false;
+        Troop targetTroop = game.findAlliedTroopInRange(getX(), getY(), getRange());
+
+        if (targetTroop != null) {
+            hasTarget = true;
+
+            if (canAttack()) {
+                shootProjectileAtTarget(targetTroop, game, getAttackType());
+                resetAttackTimer();
+            }
+        }
+
+        return hasTarget;
+    }
+
+    protected void attackBaseInRange(Game game) {
+        if (game.isBaseInRange(this)) {
+            if (canAttack()) {
+                game.damageBase(getDamage());
+                resetAttackTimer();
+            }
+        }
+    }
+
+    protected void shootProjectileAtTarget(Entity target, Game game, AttackType projectileType) {
+        Point2D targetTile = Utils.toTilePosition(target.getX(), target.getY());
+        incrementAttackCounter();
+        game.createProjectile(this, target, targetTile, projectileType);
     }
 }
