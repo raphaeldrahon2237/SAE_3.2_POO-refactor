@@ -10,7 +10,7 @@ public class Archer extends Enemy {
 
     @Override
     public void attack(Game game) {
-        if (getDamage() > 0 && !attackTowerInRange(game)) {
+        if (getDamage() > 0 && !shootProjectileAtAlliedTroopInRange(game) && !attackTowerInRange(game)) {
             super.attack(game);
         }
     }

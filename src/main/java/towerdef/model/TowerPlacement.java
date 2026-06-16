@@ -11,12 +11,12 @@ public class TowerPlacement {
 
     private MapGrid mapGrid;
     private GameEntities gameEntities;
-    private Economy economy;
+    private Progression progression;
 
-    public TowerPlacement(MapGrid mapGrid, GameEntities gameEntities, Economy economy) {
+    public TowerPlacement(MapGrid mapGrid, GameEntities gameEntities, Progression progression) {
         this.mapGrid = mapGrid;
         this.gameEntities = gameEntities;
-        this.economy = economy;
+        this.progression = progression;
     }
 
     public boolean canPlaceTower(int x, int y) {
@@ -50,11 +50,11 @@ public class TowerPlacement {
 
         Tower tower = TowerFactory.createTower(entityType, x, y);
 
-        if (tower == null || economy.getGold() < tower.getCost()) {
+        if (tower == null || progression.getGold() < tower.getCost()) {
             return false;
         }
 
-        economy.spendGold(tower.getCost());
+        progression.spendGold(tower.getCost());
         gameEntities.addTower(tower);
 
         if (entityType == EntityType.BARRACK) {

@@ -46,6 +46,14 @@ public abstract class Troop extends Entity {
     }
 
     public void attack(Game game){
-        System.out.println("I am doing something");
+        if (canAttack() && getDamage() > 0) {
+            Enemy targetEnemy = game.findEnemyInRange(getX(), getY(), getRange());
+
+            if (targetEnemy != null) {
+                targetEnemy.takeDamage(getDamage());
+                incrementAttackCounter();
+                resetAttackTimer();
+            }
+        }
     }
 }
