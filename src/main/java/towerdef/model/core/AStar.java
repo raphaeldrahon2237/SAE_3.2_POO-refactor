@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
-    private static final int TOWER_HEURISTIC = 15;
+    private static final int TOWER_HEURISTIC = 20;
 
     private MapGrid mapGrid;
     private Point2D source;
