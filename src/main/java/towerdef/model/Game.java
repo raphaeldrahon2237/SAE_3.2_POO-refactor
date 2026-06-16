@@ -9,6 +9,8 @@ import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
+import towerdef.model.quest.MiniQuest;
+import towerdef.model.quest.MiniQuestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class Game {
     private GameStats gameStats;
     private String playerName = "ayoube";
     private boolean gameOver;
-
+    private MiniQuestManager miniQuestManager;
     public Game() {
         gameEntities = new GameEntities();
         economy = new Economy(playerName);
@@ -40,6 +42,9 @@ public class Game {
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, gameStats);
         towerPlacement = new TowerPlacement(mapGrid, gameEntities, economy);
         gameOver = false;
+        miniQuestManager = new MiniQuestManager();
+
+
     }
 
     public void runGame() {
@@ -520,5 +525,29 @@ public class Game {
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         return distance < 0.5;
+    }
+    public String getMiniQuestDisplayText() {
+        return miniQuestManager.getDisplayText();
+    }
+
+    public MiniQuestManager getMiniQuestManager() {
+        return miniQuestManager;
+    }
+
+    private void giveMiniQuestRewardIfCompleted(Enemy enemy) {
+        MiniQuest completedQuest = miniQuestManager.updateOnEnemyKilled(enemy, enemy.getLastDamagingTower());
+
+        if (completedQuest != null) {
+            economy.addGold(completedQuest.getRewardGold());
+            economy.addScore(completedQuest.getRewardScore());
+            System.out.println("Mini-quete terminee : " + completedQuest.getTitle());
+        }
+    }
+    private void applyDamageFromSource(Enemy enemy, Entity source, int damage) {
+        if (source instanceof Tower tower) {
+            enemy.setLastDamagingTower(tower);
+        }
+
+        enemy.takeDamage(damage);
     }
 }

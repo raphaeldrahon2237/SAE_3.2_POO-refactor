@@ -5,6 +5,7 @@ import towerdef.model.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+import towerdef.model.entity.tower.Tower;
 
 public class Enemy extends Troop {
 
@@ -12,6 +13,7 @@ public class Enemy extends Troop {
     private int currentTileIndex;
     private Point2D currentTarget;
     private int reward;
+    private Tower lastDamagingTower;
 
     public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y, int reward) {
         super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
@@ -19,6 +21,7 @@ public class Enemy extends Troop {
         this.currentTileIndex = 0;
         this.currentTarget = null;
         this.reward = reward;
+        this.lastDamagingTower = null;
     }
 
     public void setPath(List<Point2D> path) {
@@ -137,6 +140,13 @@ public class Enemy extends Troop {
         }
 
         return null;
+    }
+    public void setLastDamagingTower(Tower lastDamagingTower) {
+        this.lastDamagingTower = lastDamagingTower;
+    }
+
+    public Tower getLastDamagingTower() {
+        return lastDamagingTower;
     }
 
     public void act(Game game){
