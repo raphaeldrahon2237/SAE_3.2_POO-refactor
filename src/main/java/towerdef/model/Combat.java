@@ -13,9 +13,9 @@ public class Combat {
     private GameEntities gameEntities;
     private Base base;
     private Progression progression;
-    private ScoreManager.MiniQuestManager miniQuestManager;
+    private MiniQuestManager miniQuestManager;
 
-    public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, ScoreManager.MiniQuestManager miniQuestManager) {
+    public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, MiniQuestManager miniQuestManager) {
         this.game = game;
         this.gameEntities = gameEntities;
         this.base = base;

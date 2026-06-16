@@ -20,8 +20,8 @@ public class MiniQuest {
     private final BooleanProperty completed;
     private boolean rewardClaimed;
 
-    public MiniQuest(String title, Class<? extends Enemy> enemyType, int towerTypeId, String towerName, int targetAmount, int rewardGold,
-                     int rewardScore) {
+    public MiniQuest(String title, Class<? extends Enemy> enemyType, int towerTypeId, String towerName,
+                     int targetAmount, int rewardGold, int rewardScore) {
         this.title = title;
         this.enemyType = enemyType;
         this.towerTypeId = towerTypeId;
@@ -34,6 +34,7 @@ public class MiniQuest {
         this.rewardClaimed = false;
     }
 
+    // Checks if the killed enemy and the tower used match the quest requirements.
     public boolean matches(Enemy enemy, Tower tower) {
         return !completed.get()
                 && enemyType.isInstance(enemy)
@@ -41,21 +42,22 @@ public class MiniQuest {
                 && tower.getTowerTypeId() == towerTypeId;
     }
 
+    // Increases the quest progress by one and marks it as completed when the target is reached.
     public void progress() {
-        if (completed.get()) {
-            return;
-        }
+        if (!completed.get()) {
+            int nextAmount = Math.min(targetAmount, currentAmount.get() + 1);
+            currentAmount.set(nextAmount);
 
-        int nextAmount = Math.min(targetAmount, currentAmount.get() + 1);
-        currentAmount.set(nextAmount);
-
-        if (nextAmount >= targetAmount) {
-            completed.set(true);
+            if (nextAmount >= targetAmount) {
+                completed.set(true);
+            }
         }
     }
 
+    // Returns the text displayed for this mini quest.
     public String getDisplayText() {
-        String status = completed.get() ? "TERMINEE" : currentAmount.get() + "/" + targetAmount;
+        String status = completed.get() ? "COMPLETED" : currentAmount.get() + "/" + targetAmount;
+
         return "• " + title + " : " + status
                 + " (Bonus +" + rewardGold + " gold, +" + rewardScore + " score)";
     }
@@ -100,6 +102,7 @@ public class MiniQuest {
         return rewardClaimed;
     }
 
+    // Marks the reward as claimed to prevent giving it multiple times.
     public void claimReward() {
         rewardClaimed = true;
     }

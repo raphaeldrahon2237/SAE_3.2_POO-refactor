@@ -161,7 +161,7 @@ public class EnemySpawner {
 
         return Math.max(delay, MIN_TIME_BETWEEN_WAVES);
     }
-
+    // Creates a random enemy based on the current wave difficulty.
     private Enemy createEnemyForCurrentWave(int x, int y) {
         int wave = Math.max(1, currentWave);
         int rand = random.nextInt(100);

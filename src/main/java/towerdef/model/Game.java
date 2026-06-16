@@ -29,7 +29,7 @@ public class Game {
     private Combat combat;
     private String playerName = "ayoube";
     private boolean gameOver;
-    private ScoreManager.MiniQuestManager miniQuestManager;
+    private MiniQuestManager miniQuestManager;
 
     public Game() {
         gameEntities = new GameEntities();
@@ -42,7 +42,7 @@ public class Game {
         rangeChecker = new RangeChecker(gameEntities, base);
         projectileManager = new ProjectileManager(gameEntities, rangeChecker, progression);
         towerManager = new TowerManager(mapGrid, gameEntities, progression);
-        miniQuestManager = new ScoreManager.MiniQuestManager();
+        miniQuestManager = new MiniQuestManager();
         combat = new Combat(this, gameEntities, base, progression, miniQuestManager);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression);
         gameOver = false;
@@ -244,7 +244,7 @@ public class Game {
         return miniQuestManager.getDisplayText();
     }
 
-    public ScoreManager.MiniQuestManager getMiniQuestManager() {
+    public MiniQuestManager getMiniQuestManager() {
         return miniQuestManager;
     }
 }
