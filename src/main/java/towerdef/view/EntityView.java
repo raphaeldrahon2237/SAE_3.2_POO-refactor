@@ -161,31 +161,31 @@ public class EntityView {
 
             if(level.getValue()==1) iv.setImage(ArcherTower1InitialImg);
 
-            if(level.getValue()==2) iv.setImage(ArcherTower2InitialImg);
+            else if(level.getValue()==2) iv.setImage(ArcherTower2InitialImg);
 
         }
         else if (entity instanceof Artillery) {
             if (level.getValue()==1) iv.setImage(ArtilleryTower1InitialImg);
 
-            if (level.getValue()==2) iv.setImage(ArtilleryTower1InitialImg);
+            else if (level.getValue()==2) iv.setImage(ArtilleryTower1InitialImg);
 
         }
         else if (entity instanceof Barrack) {
             if (level.getValue()==1) iv.setImage(Barrack1InitialImg);
 
-            if (level.getValue()==2) iv.setImage(Barrack1InitialImg);
+            else if (level.getValue()==2) iv.setImage(Barrack1InitialImg);
 
         }
         else if(entity instanceof Earthquake){
             if (level.getValue()==1) iv.setImage(Earthquake1InitialImg);
 
-            if (level.getValue()==2) iv.setImage(Earthquake1InitialImg);
+            else if (level.getValue()==2) iv.setImage(Earthquake1InitialImg);
 
         }
         else if(entity instanceof Mage) {
             if (level.getValue()==1) iv.setImage(MageTower1InitialImg);
 
-            if (level.getValue()==2) iv.setImage(MageTower1InitialImg);
+            else if (level.getValue()==2) iv.setImage(MageTower1InitialImg);
 
         }
 
@@ -228,8 +228,11 @@ public class EntityView {
 
     public void switchImageAttack(){
 
-        if(entity instanceof ArcherTower) iv.setImage(ArcherTower2AttackImg);
+        if(entity instanceof ArcherTower) {
+            if (level.getValue() == 1) iv.setImage(ArcherTower1AttackImg);
 
+            else if (level.getValue() == 2) iv.setImage(ArcherTower2AttackImg);
+        }
         else if(entity instanceof Earthquake) iv.setImage(Earthquake1AttackImg);
 
         else if (entity instanceof Artillery) iv.setImage(ArtilleryTower1AttackImg);
