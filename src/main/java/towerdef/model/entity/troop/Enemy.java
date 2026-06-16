@@ -2,6 +2,9 @@ package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
+import towerdef.model.Utils;
+import towerdef.model.entity.AttackType;
+import towerdef.model.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ public class Enemy extends Troop {
     private Point2D currentTarget;
     private int reward;
     private Tower lastDamagingTower;
+    private boolean attacking;
 
     public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y, int reward) {
         super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
@@ -22,6 +26,7 @@ public class Enemy extends Troop {
         this.currentTarget = null;
         this.reward = reward;
         this.lastDamagingTower = null;
+        this.attacking = false;
     }
 
     public void setPath(List<Point2D> path) {
@@ -149,7 +154,49 @@ public class Enemy extends Troop {
         return lastDamagingTower;
     }
 
-    public void act(Game game){
-        System.out.println("I am doing something");
+    public void attack(Game game){
+        if (!game.isGameOver() && getDamage() > 0 && game.isBaseInRange(this)) {
+            attacking = true;
+
+            if (canAttack()) {
+                game.damageBase(getDamage());
+                resetAttackTimer();
+            }
+        }
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public boolean isInCombat(Game game) {
+        return game.isBaseInRange(this);
+    }
+
+    public void resetAttacking() {
+        attacking = false;
+    }
+
+    protected boolean attackTowerInRange(Game game) {
+        boolean hasTarget = false;
+        Tower targetTower = game.findTowerInRange(getX(), getY(), getRange());
+
+        if (targetTower != null) {
+            attacking = true;
+            hasTarget = true;
+
+            if (canAttack()) {
+                shootProjectileAtTarget(targetTower, game, getAttackType());
+                resetAttackTimer();
+            }
+        }
+
+        return hasTarget;
+    }
+
+    protected void shootProjectileAtTarget(Entity target, Game game, AttackType projectileType) {
+        Point2D targetTile = Utils.toTilePosition(target.getX(), target.getY());
+        incrementAttackCounter();
+        game.createProjectile(this, target, targetTile, projectileType);
     }
 }

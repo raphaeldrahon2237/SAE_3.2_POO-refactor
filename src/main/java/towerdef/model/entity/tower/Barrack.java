@@ -13,7 +13,7 @@ public class Barrack extends Tower {
         return "Barracks: "+super.toString();
     }
 
-    public void act(Game game){
+    public void attack(Game game){
         System.out.println("I am doing something");
     }
 }

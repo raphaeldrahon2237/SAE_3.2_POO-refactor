@@ -12,7 +12,7 @@ public class Mage extends Tower {
         super(4,"Degats magiques de zone a moyenne portee.",35, 14, 1, 2, 5, x, y, AttackType.MAGIC, 1, 170, 1, 120, 5, 5, 3, 1);
     }
 
-    public void act(Game game){
+    public void attack(Game game){
         if(canAttack()){
             Enemy targetEnemy = game.findEnemyInRange(this.getX(), this.getY(), this.getRange());
             if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, this.getAttackType());
