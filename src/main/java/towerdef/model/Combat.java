@@ -4,7 +4,6 @@ import towerdef.model.entity.Base;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.quest.MiniQuest;
-import towerdef.model.quest.MiniQuestManager;
 
 import java.util.ArrayList;
 
@@ -14,9 +13,9 @@ public class Combat {
     private GameEntities gameEntities;
     private Base base;
     private Progression progression;
-    private MiniQuestManager miniQuestManager;
+    private ScoreManager.MiniQuestManager miniQuestManager;
 
-    public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, MiniQuestManager miniQuestManager) {
+    public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, ScoreManager.MiniQuestManager miniQuestManager) {
         this.game = game;
         this.gameEntities = gameEntities;
         this.base = base;

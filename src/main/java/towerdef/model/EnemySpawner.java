@@ -196,19 +196,16 @@ public class EnemySpawner {
             return new Catapult(x, y);
         }
 
-        if (rand < 25) {
-            return new Wolf(x, y);
-        }
-        if (rand < 45) {
-            return new Archer(x, y);
-        }
-        if (rand < 65) {
-            return new ShadowSoldier(x, y);
-        }
-        if (rand < 85) {
-            return new ShadowArcher(x, y);
-        }
-        return new Catapult(x, y);
+        if (rand < 30) return new Wolf(x, y);
+
+        else if (rand < 55) return new Archer(x, y);
+
+        else if (rand < 75) return new ShadowSoldier(x, y);
+
+        else if (rand < 90) return new ShadowArcher(x, y);
+
+        else return new Catapult(x, y);
+
     }
 
     private void spawnEnemy(Enemy enemy) {

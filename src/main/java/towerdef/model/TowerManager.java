@@ -1,6 +1,8 @@
 package towerdef.model;
 
+import towerdef.model.entity.Entity;
 import towerdef.model.entity.EntityType;
+import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Recruit;
@@ -58,10 +60,12 @@ public class TowerManager {
         gameEntities.addTower(tower);
 
         if (entityType == EntityType.BARRACK) {
-            Troop recruit = createRecruitNextToBarrack(x, y);
+            Barrack barrack = (Barrack) tower;
+            Troop recruitedTroop = createTroopNextToBarrack(barrack);
 
-            if (recruit != null) {
-                gameEntities.addAlly(recruit);
+            if (recruitedTroop != null) {
+                gameEntities.addAlly(recruitedTroop);
+                barrack.setRecruitedTroop(recruitedTroop);
             }
         }
 
@@ -132,6 +136,61 @@ public class TowerManager {
             if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
 
                 return new Recruit(newX, newY);
+            }
+        }
+
+        return null;
+    }
+    public void updateBarrackRespawns(int currentWave) {
+        for (Tower tower : gameEntities.getTowers()) {
+            if (tower instanceof Barrack barrack) {
+                updateBarrackRecruitedTroop(barrack, currentWave);
+            }
+        }
+    }
+
+    private void updateBarrackRecruitedTroop(Barrack barrack, int currentWave) {
+        if (barrack.hasRecruitedTroop() && findRecruitedTroopById(barrack.getRecruitedTroopId()) == null) {
+            barrack.markRecruitedTroopDead(currentWave);
+        }
+
+        if (barrack.canRespawnRecruitedTroop(currentWave)) {
+            Troop recruitedTroop = createTroopNextToBarrack(barrack);
+
+            if (recruitedTroop != null) {
+                gameEntities.addAlly(recruitedTroop);
+                barrack.setRecruitedTroop(recruitedTroop);
+            }
+        }
+    }
+
+    private Troop findRecruitedTroopById(int recruitedTroopId) {
+        for (Entity ally : gameEntities.getAllies()) {
+            if (ally instanceof Troop troop && troop.getId() == recruitedTroopId && troop.isAlive()) {
+                return troop;
+            }
+        }
+
+        return null;
+    }
+
+    private Troop createTroopNextToBarrack(Barrack barrack) {
+        int x = (int) barrack.getX();
+        int y = (int) barrack.getY();
+
+        int[][] directions = {
+                {0, -1},
+                {0, 1},
+                {-1, 0},
+                {1, 0}
+        };
+
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+
+            if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
+                return barrack.createTroopForCurrentLevel(newX, newY);
             }
         }
 
