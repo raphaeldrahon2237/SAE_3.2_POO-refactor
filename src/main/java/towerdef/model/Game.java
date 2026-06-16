@@ -11,7 +11,6 @@ import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
-import towerdef.model.quest.MiniQuestManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,7 +29,7 @@ public class Game {
     private Combat combat;
     private String playerName = "ayoube";
     private boolean gameOver;
-    private MiniQuestManager miniQuestManager;
+    private ScoreManager.MiniQuestManager miniQuestManager;
 
     public Game() {
         gameEntities = new GameEntities();
@@ -43,15 +42,13 @@ public class Game {
         rangeChecker = new RangeChecker(gameEntities, base);
         projectileManager = new ProjectileManager(gameEntities, rangeChecker, progression);
         towerManager = new TowerManager(mapGrid, gameEntities, progression);
-        miniQuestManager = new MiniQuestManager();
+        miniQuestManager = new ScoreManager.MiniQuestManager();
         combat = new Combat(this, gameEntities, base, progression, miniQuestManager);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression);
         gameOver = false;
     }
 
-    public void runGame() {
-        removeDeadEntities();
-    }
+
 
     public void updateStates(double deltaTime) {
         if (!gameOver) {
@@ -65,8 +62,11 @@ public class Game {
                 projectileManager.update(deltaTime);
                 progression.updateScore(deltaTime);
                 removeDeadEntities();
+                updateBarrackRespawns();
             }
         }
+
+
     }
 
     public MapGrid getMapGrid() {
@@ -236,12 +236,15 @@ public class Game {
     public void createProjectile(Entity source, Entity target, Point2D impactTile, AttackType projectileType) {
         projectileManager.createProjectile(source, target, impactTile, projectileType);
     }
+    public void updateBarrackRespawns() {
+        towerManager.updateBarrackRespawns(getCurrentWave());
+    }
 
     public String getMiniQuestDisplayText() {
         return miniQuestManager.getDisplayText();
     }
 
-    public MiniQuestManager getMiniQuestManager() {
+    public ScoreManager.MiniQuestManager getMiniQuestManager() {
         return miniQuestManager;
     }
 }

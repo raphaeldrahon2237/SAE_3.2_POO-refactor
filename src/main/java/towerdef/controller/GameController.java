@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.scene.layout.VBox;
 import towerdef.model.quest.MiniQuest;
-import towerdef.model.quest.MiniQuestManager;
 
 import static towerdef.model.map.TileType.TILESIZE;
 

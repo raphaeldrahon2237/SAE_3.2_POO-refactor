@@ -64,6 +64,7 @@ public class EntityView {
     private static final Image ShadowArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher2.png"));
     private static final Image ShadowArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher3.png"));
 
+
     public EntityView(Pane gamePane, Entity entity) {
         this.gamePane = gamePane;
         this.entity = entity;
@@ -203,6 +204,10 @@ public class EntityView {
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherInitialImg);
 
+        else if (entity instanceof Soldier) iv.setImage(WolfInitialImg);
+
+        else if (entity instanceof  Veteran) iv.setImage(CatapultInitialImg );
+
     }
 
     public void switchImageIdle(){
@@ -222,6 +227,9 @@ public class EntityView {
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherIdleImg);
 
+        else if (entity instanceof Soldier) iv.setImage(WolfIdleImg);
+
+        else if (entity instanceof  Veteran) iv.setImage(CatapultIdleImg);
 
 
     }
@@ -245,6 +253,10 @@ public class EntityView {
         else if(entity instanceof Archer) iv.setImage(ArcherAttackImg);
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherAttackImg);
+
+        else if (entity instanceof Soldier) iv.setImage(WolfInitialImg);
+
+        else if (entity instanceof  Veteran) iv.setImage(CatapultAttackImg);
 
     }
 
