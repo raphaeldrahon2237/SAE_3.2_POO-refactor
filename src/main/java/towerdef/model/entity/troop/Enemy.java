@@ -145,9 +145,10 @@ public class Enemy extends Troop {
         return null;
     }
     public void setLastDamagingTower(Tower lastDamagingTower) {
-        this.lastDamagingTower = lastDamagingTower;
+        if (isAlive()) {
+            this.lastDamagingTower = lastDamagingTower;
+        }
     }
-
     public Tower getLastDamagingTower() {
         return lastDamagingTower;
     }
