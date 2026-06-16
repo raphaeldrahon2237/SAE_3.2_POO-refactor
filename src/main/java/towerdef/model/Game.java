@@ -46,16 +46,16 @@ public class Game {
         gameOver = false;
     }
 
-    public void runGame() {
-        removeDeadEntities();
-    }
+//    public void runGame() {
+//        removeDeadEntities();
+//    }
 
     public void updateStates(double deltaTime) {
         if (!gameOver) {
             gameStats.addSurvivalTime(deltaTime);
             economy.increaseScoreRate(enemySpawner.update(deltaTime));
             gameStats.updateMaxWaveReached(enemySpawner.getCurrentWave());
-
+            removeDeadEntities();
             updateAlliesAttackTimers(deltaTime);
             updateEnemiesAttackTimers(deltaTime);
 
@@ -184,6 +184,8 @@ public class Game {
     private void applyDamageFromSource(Enemy enemy, Entity source, int damage) {
         if (source instanceof Tower tower) {
             enemy.setLastDamagingTower(tower);
+        } else {
+            enemy.setLastDamagingTower(null);
         }
 
         enemy.takeDamage(damage);

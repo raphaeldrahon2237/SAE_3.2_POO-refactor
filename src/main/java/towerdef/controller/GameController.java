@@ -372,9 +372,9 @@ public class GameController implements Initializable {
 
                         lastFrameTime = now;
 
-                        game.runGame();
                         game.updateStates(deltaTime);
                         waveLabel.setText("Vague : " + game.getCurrentWave());
+                        refreshMiniQuestDisplay();
 
                         if (game.isGameOver()) {
                             showGameOverScreen();
