@@ -29,8 +29,10 @@ public class EntityView {
 
     private static final Image ArcherTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Initial.png"));
     private static final Image ArcherTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Attack.png"));
-    private static final Image ArcherTower2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1.png"));
-    private static final Image ArcherTower2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower2.png"));
+    private static final Image ArcherTower2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower2Initial.png"));
+    private static final Image ArcherTower2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower2Attack.png"));
+    private static final Image ArcherTower3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower3Initial.png"));
+    private static final Image ArcherTower3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower3Attack.png"));
 
     private static final Image Barrack1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
     private static final Image Barrack1IdleImg = new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
@@ -163,6 +165,8 @@ public class EntityView {
 
             else if(level.getValue()==2) iv.setImage(ArcherTower2InitialImg);
 
+            else if(level.getValue()==3) iv.setImage(ArcherTower3InitialImg);
+
         }
         else if (entity instanceof Artillery) {
             if (level.getValue()==1) iv.setImage(ArtilleryTower1InitialImg);
@@ -232,6 +236,8 @@ public class EntityView {
             if (level.getValue() == 1) iv.setImage(ArcherTower1AttackImg);
 
             else if (level.getValue() == 2) iv.setImage(ArcherTower2AttackImg);
+
+            else if (level.getValue() == 3) iv.setImage(ArcherTower3AttackImg);
         }
         else if(entity instanceof Earthquake) iv.setImage(Earthquake1AttackImg);
 
