@@ -130,6 +130,7 @@ public class TowerManager {
             int newY = y + direction[1];
 
             if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
+
                 return new Recruit(newX, newY);
             }
         }

@@ -14,6 +14,6 @@ public class Barrack extends Tower {
     }
 
     public void attack(Game game){
-        System.out.println("I am doing something");
+        System.out.println("");
     }
 }
