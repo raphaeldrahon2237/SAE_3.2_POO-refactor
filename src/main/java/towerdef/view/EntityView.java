@@ -37,8 +37,12 @@ public class EntityView {
     private static final Image Barrack1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
     private static final Image Barrack1IdleImg = new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
 
-    private static final Image Earthquake1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1.png"));
-    private static final Image Earthquake1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2.png"));
+    private static final Image Earthquake1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1Initial.png"));
+    private static final Image Earthquake1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1Attack.png"));
+    private static final Image Earthquake2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2Initial.png"));
+    private static final Image Earthquake2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2Attack.png"));
+    private static final Image Earthquake3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake3Initial.png"));
+    private static final Image Earthquake3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake3Attack.png"));
 
     private static final Image ArtilleryTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1.png"));
     private static final Image ArtilleryTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower2.png"));
@@ -187,7 +191,9 @@ public class EntityView {
         else if(entity instanceof Earthquake){
             if (level.getValue()==1) iv.setImage(Earthquake1InitialImg);
 
-            else if (level.getValue()==2) iv.setImage(Earthquake1InitialImg);
+            else if (level.getValue()==2) iv.setImage(Earthquake2InitialImg);
+
+            else if(level.getValue()==3) iv.setImage(Earthquake3InitialImg);
 
         }
         else if(entity instanceof Mage) {
@@ -245,7 +251,13 @@ public class EntityView {
 
             else if (level.getValue() == 3) iv.setImage(ArcherTower3AttackImg);
         }
-        else if(entity instanceof Earthquake) iv.setImage(Earthquake1AttackImg);
+        else if(entity instanceof Earthquake) {
+            if (level.getValue()==1) iv.setImage(Earthquake1AttackImg);
+
+            else if (level.getValue()==2) iv.setImage(Earthquake2AttackImg);
+
+            else if(level.getValue()==3) iv.setImage(Earthquake3AttackImg);
+        }
 
         else if (entity instanceof Artillery) iv.setImage(ArtilleryTower1AttackImg);
 
