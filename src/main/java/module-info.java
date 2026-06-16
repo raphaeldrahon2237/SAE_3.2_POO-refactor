@@ -3,7 +3,7 @@ module towerdef {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.desktop;
-
+    //requires org.junit.jupiter.api;
     opens towerdef.controller to javafx.fxml;
 
     exports towerdef;
