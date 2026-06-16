@@ -233,7 +233,9 @@ public class Game {
 
         if (tower != null && tower.isAlive()) {
             economy.addGold(tower.getSellValue());
+            tower.kill();
             gameEntities.removeTower(tower);
+
             sold = true;
         }
 

@@ -89,6 +89,9 @@ public abstract class Tower extends Entity {
         this.level.set(level);
     }
 
+    public void kill() {
+        hpProperty().set(0);
+    }
 
     public void setUpgradeCost(int upgradeCost) {
         this.upgradeCost = upgradeCost;
