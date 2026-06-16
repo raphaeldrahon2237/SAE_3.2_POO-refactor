@@ -9,6 +9,8 @@ import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.map.MapGrid;
+import towerdef.model.quest.MiniQuest;
+import towerdef.model.quest.MiniQuestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +30,13 @@ public class Game {
     private GameStats gameStats;
     private String playerName = "ayoube";
     private boolean gameOver;
+    private MiniQuestManager miniQuestManager;
 
     public Game() {
         gameEntities = new GameEntities();
         economy = new Economy(playerName);
         gameStats = new GameStats();
+        miniQuestManager = new MiniQuestManager();
 
         mapGrid = new MapGrid();
         base = new Base(16, 12, 250);
@@ -171,12 +175,37 @@ public class Game {
                 economy.addGold(enemy.getReward());
                 economy.addScore(10);
                 gameStats.enemyKilled();
+                giveMiniQuestRewardIfCompleted(enemy);
             }
         }
 
         gameEntities.removeDeadEntities();
     }
+    private void applyDamageFromSource(Enemy enemy, Entity source, int damage) {
+        if (source instanceof Tower tower) {
+            enemy.setLastDamagingTower(tower);
+        }
 
+        enemy.takeDamage(damage);
+    }
+
+    public String getMiniQuestDisplayText() {
+        return miniQuestManager.getDisplayText();
+    }
+
+    public MiniQuestManager getMiniQuestManager() {
+        return miniQuestManager;
+    }
+
+    private void giveMiniQuestRewardIfCompleted(Enemy enemy) {
+        MiniQuest completedQuest = miniQuestManager.updateOnEnemyKilled(enemy, enemy.getLastDamagingTower());
+
+        if (completedQuest != null) {
+            economy.addGold(completedQuest.getRewardGold());
+            economy.addScore(completedQuest.getRewardScore());
+            System.out.println("Mini-quete terminee : " + completedQuest.getTitle());
+        }
+    }
     public boolean canPlaceTower(int x, int y) {
         return towerPlacement.canPlaceTower(x, y);
     }
@@ -255,7 +284,8 @@ public class Game {
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= projectile.getAoe()) {
-                    enemy.takeDamage(projectile.getDamage());
+                    //enemy.takeDamage(projectile.getDamage());
+                    applyDamageFromSource(enemy, projectile.getSource(), projectile.getDamage());
                 }
             }
         }
@@ -276,7 +306,8 @@ public class Game {
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= earthquakeTower.getRange()) {
-                    enemy.takeDamage(earthquakeTower.getDamage());
+                    //enemy.takeDamage(earthquakeTower.getDamage());
+                    applyDamageFromSource(enemy, earthquakeTower, earthquakeTower.getDamage());
                     enemy.setMooveSpeed(earthquakeTower.getSlowSpeed());
                 }
                 else {
@@ -397,22 +428,42 @@ public class Game {
         return distance <= enemy.getRange();
     }
 
-    private void updateProjectiles(double deltaTime) {
-        for (Projectile projectile : new ArrayList<>(gameEntities.getProjectiles())) {
-            projectile.updatePosition(deltaTime);
+//    private void updateProjectiles(double deltaTime) {
+//        for (Projectile projectile : new ArrayList<>(gameEntities.getProjectiles())) {
+//            projectile.updatePosition(deltaTime);
+//
+//            if (projectile.isFinished()) {
+//                if (projectile.getTarget() != null) {
+//                    if (projectile.getAoe() != 0) {
+//                        applyAreaDamage(projectile);
+//                    } else if (projectile.getTarget().isAlive()) {
+//                        projectile.getTarget().takeDamage(projectile.getDamage());
+//                    }
+//                }
+//                gameEntities.removeProjectile(projectile);
+//            }
+//        }
+//    }
+private void updateProjectiles(double deltaTime) {
+    for (Projectile projectile : new ArrayList<>(gameEntities.getProjectiles())) {
+        projectile.updatePosition(deltaTime);
 
-            if (projectile.isFinished()) {
-                if (projectile.getTarget() != null) {
-                    if (projectile.getAoe() != 0) {
-                        applyAreaDamage(projectile);
-                    } else if (projectile.getTarget().isAlive()) {
+        if (projectile.isFinished()) {
+            if (projectile.getTarget() != null) {
+                if (projectile.getAoe() != 0) {
+                    applyAreaDamage(projectile);
+                } else if (projectile.getTarget().isAlive()) {
+                    if (projectile.getTarget() instanceof Enemy enemyTarget) {
+                        applyDamageFromSource(enemyTarget, projectile.getSource(), projectile.getDamage());
+                    } else {
                         projectile.getTarget().takeDamage(projectile.getDamage());
                     }
                 }
-                gameEntities.removeProjectile(projectile);
             }
+            gameEntities.removeProjectile(projectile);
         }
     }
+}
 
     private void shootProjectile(Entity source, Entity target) {
         Point2D impactTile = computePreshotTile(source, target);

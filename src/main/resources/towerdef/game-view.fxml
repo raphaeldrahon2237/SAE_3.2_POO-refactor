@@ -26,7 +26,7 @@
     <left>
         <Pane prefWidth="160.0" style="-fx-background-color: #c14949;" BorderPane.alignment="CENTER">
             <children>
-                <VBox prefHeight="200.0" prefWidth="160.0">
+                <VBox prefHeight="500.0" prefWidth="160.0">
                     <children>
                         <Button fx:id="buttonArcherTower" focusTraversable="false" mnemonicParsing="false" text="Archer Tower" />
                         <Button fx:id="buttonBarracks" focusTraversable="false" mnemonicParsing="false" text="Barracks" />
@@ -36,6 +36,7 @@
                         <Button fx:id="buttonUpgrade" disable="true" focusTraversable="false" mnemonicParsing="false" text="Upgrade"/>
                         <Button fx:id="buttonSell" disable="true" focusTraversable="false" mnemonicParsing="false" text="Sell"/>
                         <Label fx:id="towerInfoLabel" wrapText="true" visible="false"/>
+                        <VBox fx:id="miniQuestBox" spacing="4.0" style="-fx-padding: 10 4 0 4;"/>
                     </children>
                 </VBox>
             </children>

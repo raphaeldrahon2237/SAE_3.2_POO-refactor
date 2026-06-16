@@ -13,4 +13,5 @@ module towerdef {
     exports towerdef.model.entity;
     exports towerdef.model.entity.tower;
     exports towerdef.model.entity.troop;
+    exports towerdef.model.quest;
 }
