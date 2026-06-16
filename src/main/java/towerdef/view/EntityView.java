@@ -43,8 +43,12 @@ public class EntityView {
     private static final Image ArtilleryTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1.png"));
     private static final Image ArtilleryTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower2.png"));
 
-    private static final Image MageTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1.png"));
-    private static final Image MageTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2.png"));
+    private static final Image MageTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1initial.png"));
+    private static final Image MageTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1Attack.png"));
+    private static final Image MageTower2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2initial.png"));
+    private static final Image MageTower2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2Attack.png"));
+    private static final Image MageTower3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower3initial.png"));
+    private static final Image MageTower3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower3Attack.png"));
 
 
     private static final Image WolfInitialImg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
@@ -189,7 +193,9 @@ public class EntityView {
         else if(entity instanceof Mage) {
             if (level.getValue()==1) iv.setImage(MageTower1InitialImg);
 
-            else if (level.getValue()==2) iv.setImage(MageTower1InitialImg);
+            else if (level.getValue()==2) iv.setImage(MageTower2InitialImg);
+
+            else if(level.getValue()==3) iv.setImage(MageTower3InitialImg);
 
         }
 
@@ -243,7 +249,14 @@ public class EntityView {
 
         else if (entity instanceof Artillery) iv.setImage(ArtilleryTower1AttackImg);
 
-        else if (entity instanceof Mage) iv.setImage(MageTower1AttackImg);
+        else if (entity instanceof Mage) {
+            if (level.getValue() == 1) iv.setImage(MageTower1AttackImg);
+
+            else if (level.getValue() == 2) iv.setImage(MageTower2AttackImg);
+
+            else if(level.getValue()==3) iv.setImage(MageTower3AttackImg);
+
+        }
 
         else if (entity instanceof Recruit) iv.setImage(RecruitAttackImg);
 
