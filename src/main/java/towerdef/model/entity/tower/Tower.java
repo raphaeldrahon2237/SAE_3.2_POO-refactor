@@ -2,8 +2,11 @@ package towerdef.model.entity.tower;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Point2D;
+import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
+import towerdef.model.entity.troop.Enemy;
 
 public abstract class Tower extends Entity {
 
@@ -89,5 +92,11 @@ public abstract class Tower extends Entity {
 
     public void setUpgradeCost(int upgradeCost) {
         this.upgradeCost = upgradeCost;
+    }
+
+    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
+        Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
+        this.incrementAttackCounter();
+        game.createProjectile(this,targetEnemy, targetTile, projectileType);
     }
 }

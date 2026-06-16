@@ -1,6 +1,7 @@
 package towerdef.model.entity;
 
 import javafx.beans.property.*;
+import towerdef.model.Game;
 
 public abstract class Entity {
 
@@ -15,6 +16,8 @@ public abstract class Entity {
     private double attackTimer;
     private AttackType attackType;
     private int zone;
+
+    //private Game game;
 
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
@@ -45,12 +48,19 @@ public abstract class Entity {
         this.attackTimer = 0.0;
         this.attackType = attackType;
         this.zone = zone;
+
+        //this.game= game;
     }
 
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
         int realDamage = Math.max(1, damage - armor);
         hp.set(Math.max(0, hp.get() - realDamage));
+    }
+
+    public void takeMagicDamage(int damage) {
+        System.out.println(this + " taking magic damage");
+        hp.set(Math.max(0, hp.get() - damage));
     }
 
 
@@ -209,4 +219,8 @@ public abstract class Entity {
     public double getMaxHp() {
         return  maxHp;
     }
+
+
+    public abstract void act(Game game);
+
 }

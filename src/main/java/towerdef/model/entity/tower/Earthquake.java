@@ -1,6 +1,10 @@
 package towerdef.model.entity.tower;
 
+import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
+import towerdef.model.entity.troop.Enemy;
+
+import java.util.ArrayList;
 
 public class Earthquake extends Tower {
 
@@ -11,7 +15,21 @@ public class Earthquake extends Tower {
         this.slowSpeed = slowSpeed;
     }
 
-    public int getSlowSpeed() {
-        return slowSpeed;
+
+    public void act(Game game){
+        ArrayList<Enemy> enemiesInRange;
+        this.incrementAttackCounter();
+        if (canAttack()){
+            enemiesInRange = game.findEnemiesInRange(this.getX(), this.getY(), this.getRange());
+            if (!enemiesInRange.isEmpty()){
+                for(Enemy enemy: enemiesInRange){
+                    enemy.takeDamage(this.getDamage());
+                    enemy.setMooveSpeed(slowSpeed);
+                }
+
+            }
+            this.resetAttackTimer();
+        }
+
     }
 }

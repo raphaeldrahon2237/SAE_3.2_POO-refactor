@@ -5,9 +5,14 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
+import towerdef.model.Game;
+import towerdef.model.entity.troop.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static towerdef.model.entity.AttackType.AOE;
+import static towerdef.model.entity.AttackType.MAGIC;
 
 public class Projectile {
 
@@ -16,13 +21,13 @@ public class Projectile {
     private DoubleProperty progressToNextTile = new SimpleDoubleProperty();
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
-    private int aoe;
     private double speed;
     private Entity target;
     private Entity source;
     private boolean finished;
+    private AttackType projectyleType;
 
-    public Projectile(List<Point2D> trajectory, Entity target, Entity source,int damage, double speed,  int aoe) {
+    public Projectile(List<Point2D> trajectory, Entity target, Entity source, double speed, AttackType  projectyleType) {
         this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.source = source;
@@ -31,10 +36,10 @@ public class Projectile {
         this.progressToNextTile.set(0.0);
         updateCoordinates();
         this.finished = trajectory.size() <= 1;
-        this.aoe = aoe;
+        this.projectyleType = projectyleType;
     }
 
-    public void updatePosition(double deltaTime) {
+    public void act(double deltaTime, Game game) {
 
         progressToNextTile.set(progressToNextTile.get() + speed * deltaTime);
 
@@ -46,8 +51,11 @@ public class Projectile {
                 finished = true;
             }
         }
-
         updateCoordinates();
+        if(this.finished){
+            if(projectyleType==AOE) dealDamageInAoe(game);
+            else dealDamage();
+        }
     }
 
     public Point2D getCurrentTile() {
@@ -94,10 +102,6 @@ public class Projectile {
         return trajectory;
     }
 
-    public int getAoe() {
-        return aoe;
-    }
-
     public Entity getSource() {
         return source;
     }
@@ -109,5 +113,21 @@ public class Projectile {
 
         x.set(current.getX() + (next.getX() - current.getX()) * progress);
         y.set(current.getY() + (next.getY() - current.getY()) * progress);
+    }
+
+    public void dealDamage(){
+        if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
+        else target.takeDamage(source.getDamage());
+    }
+
+    public void dealDamageInAoe(Game game){
+        ArrayList<Enemy> enemiesImpacted;
+        Point2D impactTile = this.getImpactTile();
+        double impactX = impactTile.getX();
+        double impactY = impactTile.getY();
+
+        enemiesImpacted= game.findEnemiesInRange(impactX,impactY, 2);
+
+        for(Enemy enemy: enemiesImpacted) enemy.takeDamage(source.getDamage());
     }
 }
