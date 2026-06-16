@@ -44,6 +44,7 @@ public class GameEntities {
 
     public void removeTower(Tower tower) {
         towers.remove(tower);
+        tower.killTower();
         allies.remove(tower);
     }
 

@@ -67,6 +67,10 @@ public abstract class Tower extends Entity {
         return sellValue;
     }
 
+    public void killTower(){
+        hpProperty().set(0);
+    }
+
     @Override
     public String toString() {
         return "" + super.toString();
