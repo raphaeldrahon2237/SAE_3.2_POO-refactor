@@ -18,6 +18,8 @@ public enum TileType {
     CROSSROADDOWN(12, true),
     CROSSROADUP(13, true),
     CROSSROADFULL(14, true),
+    CROSSROADLEFT(17, true),
+    CROSSROADRIGHT(18, true),
 
     MOUNTAIN1(15, false),
     MOUNTAIN2(16, false);

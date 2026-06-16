@@ -11,7 +11,8 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
-    private static final int TOWER_HEURISTIC = 15;
+    private static final int TOWER_PATH_PENALTY = 15;
+    private static final int TOWER_INFLUENCE_RADIUS = 3;
 
     private MapGrid mapGrid;
     private Point2D source;
@@ -85,7 +86,7 @@ public class AStar {
                 targetFound = true;
             } else {
                 for (Point2D neighbor : mapGrid.getNeighbors((int) currentTile.getX(), (int) currentTile.getY())) {
-                    double newCost = costs.get(currentTile) + 1;
+                    double newCost = costs.get(currentTile) + movementCost(neighbor);
 
                     if (!costs.containsKey(neighbor) || newCost < costs.get(neighbor)) {
                         costs.put(neighbor, newCost);
@@ -100,13 +101,22 @@ public class AStar {
     }
 
     private double heuristic(Point2D tile, Point2D target) {
-        double heuristic = 0;
-        heuristic += Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
-        if (hasTowerAt(tile)) {
-            heuristic += TOWER_HEURISTIC;
+        return Math.abs(tile.getX() - target.getX()) + Math.abs(tile.getY() - target.getY());
+    }
+
+    private double movementCost(Point2D tile) {
+        double cost = 1;
+
+        for (Tower tower : gameEntities.getTowers()) {
+            double distance = Math.abs(tile.getX() - tower.getX())
+                    + Math.abs(tile.getY() - tower.getY());
+
+            if (distance <= TOWER_INFLUENCE_RADIUS) {
+                cost += TOWER_PATH_PENALTY;
+            }
         }
 
-        return heuristic;
+        return cost;
     }
 
     private boolean hasTowerAt(Point2D tile) {
