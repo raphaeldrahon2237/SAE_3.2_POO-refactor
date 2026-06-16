@@ -7,16 +7,16 @@ import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
 
-public class TowerPlacement {
+public class TowerManager {
 
     private MapGrid mapGrid;
     private GameEntities gameEntities;
-    private Economy economy;
+    private Progression progression;
 
-    public TowerPlacement(MapGrid mapGrid, GameEntities gameEntities, Economy economy) {
+    public TowerManager(MapGrid mapGrid, GameEntities gameEntities, Progression progression) {
         this.mapGrid = mapGrid;
         this.gameEntities = gameEntities;
-        this.economy = economy;
+        this.progression = progression;
     }
 
     public boolean canPlaceTower(int x, int y) {
@@ -50,11 +50,11 @@ public class TowerPlacement {
 
         Tower tower = TowerFactory.createTower(entityType, x, y);
 
-        if (tower == null || economy.getGold() < tower.getCost()) {
+        if (tower == null || progression.getGold() < tower.getCost()) {
             return false;
         }
 
-        economy.spendGold(tower.getCost());
+        progression.spendGold(tower.getCost());
         gameEntities.addTower(tower);
 
         if (entityType == EntityType.BARRACK) {
@@ -65,7 +65,56 @@ public class TowerPlacement {
             }
         }
 
+        progression.towerPlaced();
+
         return true;
+    }
+
+    public Tower getTowerByTypeId(int towerTypeId) {
+        EntityType type = EntityType.fromId(towerTypeId);
+        Tower tower = null;
+
+        if (type != null) {
+            tower = TowerFactory.createTower(type, 0, 0);
+        }
+
+        return tower;
+    }
+
+    public Tower getTowerAt(int x, int y) {
+        Tower selectedTower = null;
+
+        for (Tower tower : gameEntities.getTowers()) {
+            if (tower.isAlive() && (int) tower.getX() == x && (int) tower.getY() == y) {
+                selectedTower = tower;
+            }
+        }
+
+        return selectedTower;
+    }
+
+    public boolean upgradeTower(Tower tower) {
+        boolean upgraded = false;
+
+        if (tower != null && tower.isAlive() && tower.levelProperty().get() < 5 && progression.getGold() >= tower.getUpgradeCost()) {
+            progression.spendGold(tower.getUpgradeCost());
+            tower.upgrade();
+            upgraded = true;
+        }
+
+        return upgraded;
+    }
+
+    public boolean sellTower(Tower tower) {
+        boolean sold = false;
+
+        if (tower != null && tower.isAlive()) {
+            progression.addGold(tower.getSellValue());
+            gameEntities.removeTower(tower);
+            sold = true;
+        }
+
+        return sold;
     }
 
     private Troop createRecruitNextToBarrack(int x, int y) {

@@ -5,7 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
-import towerdef.model.Game;
+import towerdef.model.RangeChecker;
+import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Enemy;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Projectile {
         this.projectyleType = projectyleType;
     }
 
-    public void act(double deltaTime, Game game) {
+    public void act(double deltaTime, RangeChecker rangeChecker) {
 
         progressToNextTile.set(progressToNextTile.get() + speed * deltaTime);
 
@@ -53,7 +54,7 @@ public class Projectile {
         }
         updateCoordinates();
         if(this.finished){
-            if(projectyleType==AOE) dealDamageInAoe(game);
+            if(projectyleType==AOE) dealDamageInAoe(rangeChecker);
             else dealDamage();
         }
     }
@@ -116,18 +117,28 @@ public class Projectile {
     }
 
     public void dealDamage(){
+        if (target instanceof Enemy enemy && source instanceof Tower tower) {
+            enemy.setLastDamagingTower(tower);
+        }
+
         if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
         else target.takeDamage(source.getDamage());
     }
 
-    public void dealDamageInAoe(Game game){
+    public void dealDamageInAoe(RangeChecker rangeChecker){
         ArrayList<Enemy> enemiesImpacted;
         Point2D impactTile = this.getImpactTile();
         double impactX = impactTile.getX();
         double impactY = impactTile.getY();
 
-        enemiesImpacted= game.findEnemiesInRange(impactX,impactY, 2);
+        enemiesImpacted= rangeChecker.findEnemiesInRange(impactX,impactY, 2);
 
-        for(Enemy enemy: enemiesImpacted) enemy.takeDamage(source.getDamage());
+        for(Enemy enemy: enemiesImpacted) {
+            if (source instanceof Tower tower) {
+                enemy.setLastDamagingTower(tower);
+            }
+
+            enemy.takeDamage(source.getDamage());
+        }
     }
 }
