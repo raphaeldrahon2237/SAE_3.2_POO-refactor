@@ -9,6 +9,7 @@ import towerdef.model.entity.tower.ArcherTower;
 import towerdef.model.entity.tower.Artillery;
 import towerdef.model.entity.tower.Mage;
 import towerdef.model.entity.troop.Archer;
+import towerdef.model.entity.troop.Catapult;
 import towerdef.model.entity.troop.ShadowArcher;
 
 import static towerdef.model.map.TileType.TILESIZE;
@@ -23,6 +24,7 @@ public class ProjectileView {
     private final Image magicBoltImg = new Image(EntityView.class.getResourceAsStream("/images/magicBolt.png"));
     private final Image artilleryShotImg= new Image(EntityView.class.getResourceAsStream("/images/artilleryShot.png"));
     private final Image shadowArrowImg= new Image(EntityView.class.getResourceAsStream("/images/shadowArrow.png"));
+    private final Image catapultShotImg= new Image(EntityView.class.getResourceAsStream("/images/cailloux.png"));
     private final Image slashImg= new Image(EntityView.class.getResourceAsStream("/images/slash.png"));
 
     public ProjectileView(Pane gamePane, Projectile projectile) {
@@ -35,6 +37,7 @@ public class ProjectileView {
         else if(source instanceof Artillery) iv.setImage(artilleryShotImg);
         else if(source instanceof Mage)  iv.setImage(magicBoltImg);
         else if(source instanceof ShadowArcher)  iv.setImage(shadowArrowImg);
+        else if(source instanceof Catapult) iv.setImage(catapultShotImg);
         else  iv.setImage(slashImg);
 
         iv.setFitWidth(TILESIZE/1.5);
