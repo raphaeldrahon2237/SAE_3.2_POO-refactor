@@ -51,6 +51,21 @@ public abstract class Tower extends Entity {
         }
     }
 
+    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
+        Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
+        this.incrementAttackCounter();
+        game.createProjectile(this,targetEnemy, targetTile, projectileType);
+    }
+
+    public void killTower(){
+        hpProperty().set(0);
+    }
+
+    //METHODE DE TEST
+    public void kill() {
+        hpProperty().set(0);
+    }
+
     public int getTowerTypeId() {
         return towerTypeId;
     }
@@ -67,15 +82,6 @@ public abstract class Tower extends Entity {
         return sellValue;
     }
 
-    public void killTower(){
-        hpProperty().set(0);
-    }
-
-    @Override
-    public String toString() {
-        return "" + super.toString();
-    }
-
     public IntegerProperty levelProperty() {
         return level;
     }
@@ -85,15 +91,8 @@ public abstract class Tower extends Entity {
         return upgradeCost;
     }
 
-    //METHODE DE TEST
-    public void kill() {
-        hpProperty().set(0);
-    }
-
-
-    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
-        Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
-        this.incrementAttackCounter();
-        game.createProjectile(this,targetEnemy, targetTile, projectileType);
+    @Override
+    public String toString() {
+        return "" + super.toString();
     }
 }

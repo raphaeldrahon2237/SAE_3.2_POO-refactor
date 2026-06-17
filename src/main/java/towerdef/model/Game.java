@@ -17,19 +17,19 @@ import java.util.Random;
 
 public class Game {
 
+    private String playerName = "ayoube";
     private GameEntities gameEntities;
     private Progression progression;
     private MapGrid mapGrid;
     private Base base;
     private Path path;
-    private EnemySpawner enemySpawner;
-    private TowerManager towerManager;
     private RangeChecker rangeChecker;
     private ProjectileManager projectileManager;
-    private Combat combat;
-    private String playerName = "ayoube";
-    private boolean gameOver;
+    private TowerManager towerManager;
     private MiniQuestManager miniQuestManager;
+    private Combat combat;
+    private EnemySpawner enemySpawner;
+    private boolean gameOver;
 
     public Game() {
         gameEntities = new GameEntities();
@@ -69,6 +69,14 @@ public class Game {
 
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
     public MapGrid getMapGrid() {
         return mapGrid;
     }
@@ -83,6 +91,36 @@ public class Game {
 
     public ObservableList<Projectile> getProjectiles() {
         return gameEntities.getProjectiles();
+    }
+
+    public int getBaseHp() {
+        return base.getHp();
+    }
+
+    public int getBaseMaxHp() {
+        return base.getMaxHp();
+    }
+
+    public int getBaseX() {
+        return base.getX();
+    }
+
+    public int getBaseY() {
+        return base.getY();
+    }
+
+    public IntegerProperty baseHpProperty(){
+        return base.hpProperty();
+    }
+
+    public void damageBase(int damage) {
+        combat.damageBase(damage);
+    }
+
+    public void removeDeadEntities() {
+        combat.progressionReward(gameEntities.getEnemies());
+        gameEntities.removeDeadEntities();
+
     }
 
     public int getScore() {
@@ -105,28 +143,12 @@ public class Game {
         progression.resetScore();
     }
 
-    public int getBaseHp() {
-        return base.getHp();
+    public int getGold() {
+        return progression.getGold();
     }
 
-    public int getBaseMaxHp() {
-        return base.getMaxHp();
-    }
-
-    public int getBaseX() {
-        return base.getX();
-    }
-
-    public int getBaseY() {
-        return base.getY();
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
+    public IntegerProperty goldProperty() {
+        return progression.goldProperty();
     }
 
     public GameStats getGameStats() {
@@ -136,29 +158,6 @@ public class Game {
 
     public int getCurrentWave() {
         return enemySpawner.getCurrentWave();
-    }
-
-
-    public int getGold() {
-        return progression.getGold();
-    }
-
-    public IntegerProperty goldProperty() {
-        return progression.goldProperty();
-    }
-
-    public IntegerProperty baseHpProperty(){
-        return base.hpProperty();
-    }
-
-    public void damageBase(int damage) {
-        combat.damageBase(damage);
-    }
-
-    public void removeDeadEntities() {
-        combat.progressionReward(gameEntities.getEnemies());
-        gameEntities.removeDeadEntities();
-
     }
 
     public boolean canPlaceTower(int x, int y) {
@@ -185,11 +184,8 @@ public class Game {
         return towerManager.sellTower(tower);
     }
 
-    public void changeEnemiesDestination(Point2D newDestination) {
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            enemy.setDestination(newDestination);
-            path.assignMovement(enemy);
-        }
+    public void updateBarrackRespawns() {
+        towerManager.updateBarrackRespawns(getCurrentWave());
     }
 
     public Enemy findEnemyInRange(double x, double y, int range) {
@@ -227,10 +223,13 @@ public class Game {
     public void createProjectile(Entity source, Entity target, Point2D impactTile, AttackType projectileType) {
         projectileManager.createProjectile(source, target, impactTile, projectileType);
     }
-    public void updateBarrackRespawns() {
-        towerManager.updateBarrackRespawns(getCurrentWave());
-    }
 
+    public void changeEnemiesDestination(Point2D newDestination) {
+        for (Enemy enemy : gameEntities.getEnemies()) {
+            enemy.setDestination(newDestination);
+            path.assignMovement(enemy);
+        }
+    }
 
     public MiniQuestManager getMiniQuestManager() {
         return miniQuestManager;

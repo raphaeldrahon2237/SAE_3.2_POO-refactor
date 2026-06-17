@@ -5,6 +5,8 @@ import towerdef.model.Game;
 
 public abstract class Entity {
 
+    public static int nextId = 0;
+
     private int id;
     private IntegerProperty hp = new SimpleIntegerProperty();
     private int maxHp;
@@ -22,9 +24,6 @@ public abstract class Entity {
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
     private IntegerProperty attackCounter = new SimpleIntegerProperty();
-
-    public static int nextId = 0;
-
 
     public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y) {
         this(hp, damage, armor, attackSpeed, range, x, y, AttackType.NORMAL, 0);
@@ -52,6 +51,8 @@ public abstract class Entity {
         //this.game= game;
     }
 
+    public abstract void attack(Game game);
+
     public void takeDamage(int damage) {
         System.out.println(this + " taking damage");
         int realDamage = Math.max(1, damage - armor);
@@ -63,6 +64,29 @@ public abstract class Entity {
         hp.set(Math.max(0, hp.get() - damage));
     }
 
+    public boolean isAlive() {
+        return hp.get() > 0;
+    }
+
+    public void updateAttackTimer(double deltaTime) {
+        if (attackTimer > 0.0) {
+            attackTimer -= deltaTime;
+        }
+
+        if (attackTimer < 0.0) {
+            attackTimer = 0.0;
+        }
+    }
+
+    public boolean canAttack() {
+        return attackSpeed > 0 && attackTimer <= 0.0;
+    }
+
+    public void resetAttackTimer() {
+        if (attackSpeed > 0) {
+            attackTimer = 1.0 / attackSpeed;
+        }
+    }
 
     public void incrementAttackCounter() {
         attackCounter.set(attackCounter.get()+1);
@@ -71,13 +95,8 @@ public abstract class Entity {
         return attackCounter;
     }
 
-
-    public AttackType getAttackType() {
-        return attackType;
-    }
-
-    public boolean isAlive() {
-        return hp.get() > 0;
+    public int getId() {
+        return id;
     }
 
     public double getX() {
@@ -116,67 +135,6 @@ public abstract class Entity {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public int getArmor() {
-        return armor;
-    }
-
-    public int getAttackSpeed() {
-        return attackSpeed;
-    }
-
-    public int getRange() {
-        return range;
-    }
-
-    public int getZone() {
-        return zone;
-    }
-
-    public void updateAttackTimer(double deltaTime) {
-        if (attackTimer > 0.0) {
-            attackTimer -= deltaTime;
-        }
-
-        if (attackTimer < 0.0) {
-            attackTimer = 0.0;
-        }
-    }
-
-    public boolean canAttack() {
-        return attackSpeed > 0 && attackTimer <= 0.0;
-    }
-
-    public void resetAttackTimer() {
-        if (attackSpeed > 0) {
-            attackTimer = 1.0 / attackSpeed;
-        }
-    }
-
-
-    public String toString() {
-        return "" + id;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public void setArmor(int armor) {
-        this.armor = armor;
-    }
-
-    public void setAttackSpeed(int attackSpeed) {
-        this.attackSpeed = attackSpeed;
-    }
-
     public IntegerProperty hpProperty() {
         return hp;
     }
@@ -185,7 +143,44 @@ public abstract class Entity {
         return  maxHp;
     }
 
+    public int getDamage() {
+        return damage;
+    }
 
-    public abstract void attack(Game game);
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public void setArmor(int armor) {
+        this.armor = armor;
+    }
+
+    public int getAttackSpeed() {
+        return attackSpeed;
+    }
+
+    public void setAttackSpeed(int attackSpeed) {
+        this.attackSpeed = attackSpeed;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public AttackType getAttackType() {
+        return attackType;
+    }
+
+    public int getZone() {
+        return zone;
+    }
+
+    public String toString() {
+        return "" + id;
+    }
 
 }
