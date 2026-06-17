@@ -92,8 +92,8 @@ public class gameJunit {
 
 
     @Test
+        // Vérifie qu'une tour peut être vendue et que l'or est bien remboursé.
     void sellTowerSuccessTest() {
-        // On place une tour sur une case valide.
         boolean placed = game.placeTower(0, 0, 1);
 
         assertTrue(placed, "La tour doit être placée sur la case valide (0, 0).");
@@ -115,6 +115,7 @@ public class gameJunit {
     }
 
     @Test
+        // Vérifie que la vente échoue lorsqu'on essaie de vendre une tour inexistante.
     void sellTowerNullTest() {
         int goldBefore = game.getGold();
         int scoreBefore = game.getScore();
@@ -129,9 +130,9 @@ public class gameJunit {
         assertEquals(towersPlacedBefore, game.getGameStats().getTowersPlaced(), "Le nombre de tours placées ne doit pas changer.");
     }
 
+    // Vérifie qu'une même tour ne peut pas être vendue deux fois.
     @Test
     void sellTowerAlreadySoldTest() {
-        // On place une tour valide.
         boolean placed = game.placeTower(0, 0, 1);
 
         assertTrue(placed, "La tour doit être placée.");
@@ -141,7 +142,6 @@ public class gameJunit {
 
         assertTrue(tower != null, "La tour doit exister avant la première vente.");
 
-        // Première vente : elle doit fonctionner.
         boolean firstSell = game.sellTower(tower);
 
         assertTrue(firstSell, "La première vente doit réussir.");
@@ -151,7 +151,6 @@ public class gameJunit {
         int goldBeforeSecondSell = game.getGold();
         int scoreBeforeSecondSell = game.getScore();
 
-        // Deuxième vente de la même tour : elle doit échouer.
         boolean secondSell = game.sellTower(tower);
 
         assertFalse(secondSell, "On ne doit pas pouvoir vendre deux fois la même tour.");
@@ -159,6 +158,7 @@ public class gameJunit {
         assertEquals(scoreBeforeSecondSell, game.getScore(), "Le score ne doit pas augmenter si la vente échoue.");
     }
 
+    // Vérifie les différentes conditions nécessaires pour placer une tour.
     @Test
     void canPlaceTowerTest() {
         assertTrue(game.canPlaceTower(0, 0), "La case (0, 0) est dans la map et n'est pas un chemin.");
@@ -177,7 +177,7 @@ public class gameJunit {
         game.placeTower(0, 0, 1);
         assertFalse(game.canPlaceTower(0, 0), "On ne peut pas placer une deuxième tour sur une case déjà occupée.");
     }
-
+    // Vérifie que les ennemis morts sont supprimés et que les ennemis vivants restent.
     @Test
     void removeDeadEnemiesTest() {
         Wolf deadWolf1 = new Wolf(0, 0);
@@ -203,22 +203,20 @@ public class gameJunit {
         assertEquals(20, game.getScore(), "Le score doit augmenter seulement pour les deux ennemis morts.");
     }
 
+    // Vérifie qu'un ennemi mort ne donne pas deux fois sa récompense.
     @Test
-    void removeDeadEntitiesTwiceDoesNotGiveRewardTwiceTest() {
+    void removeDeadEnemyTwiceTest() {
         Wolf wolf = new Wolf(0, 0);
         game.getEnemies().add(wolf);
 
-        // On tue le loup.
         wolf.takeDamage(9999);
 
-        // Premier nettoyage : la récompense doit être donnée.
         game.removeDeadEntities();
 
         assertEquals(0, game.getEnemies().size(), "Le loup mort doit être supprimé.");
         assertEquals(1015, game.getGold(), "Le joueur doit recevoir la récompense une seule fois.");
         assertEquals(10, game.getScore(), "Le score doit augmenter une seule fois.");
 
-        // Deuxième nettoyage : il ne doit rien se passer.
         game.removeDeadEntities();
 
         assertEquals(0, game.getEnemies().size(), "La liste doit rester vide.");
@@ -226,9 +224,9 @@ public class gameJunit {
         assertEquals(10, game.getScore(), "Le score ne doit pas augmenter une deuxième fois.");
     }
 
+    // Vérifie qu'une tour morte est supprimée sans donner d'or ni de score.
     @Test
-    void removeDeadTowerDoesNotGiveRewardTest() {
-        // On place une tour sur une case valide.
+    void removeDeadTowerTest() {
         boolean placed = game.placeTower(0, 0, 1);
 
         assertTrue(placed, "La tour doit être placée.");
@@ -240,13 +238,11 @@ public class gameJunit {
         assertTrue(tower != null, "La tour doit exister avant d'être tuée.");
         assertTrue(game.getAllies().contains(tower), "La tour doit aussi être présente dans la liste des alliés.");
 
-        // On tue la tour sans la vendre.
         tower.takeDamage(9999);
 
         assertFalse(tower.isAlive(), "La tour doit être morte avant le nettoyage.");
         assertTrue(game.getAllies().contains(tower), "Avant removeDeadEntities, la tour morte est encore dans les alliés.");
 
-        // On supprime les entités mortes.
         game.removeDeadEntities();
 
         assertNull(game.getTowerAt(0, 0), "La tour morte ne doit plus être récupérable sur la map.");
@@ -256,15 +252,15 @@ public class gameJunit {
         assertEquals(0, game.getScore(), "Une tour morte ne doit pas augmenter le score.");
     }
 
+    // Vérifie que le nombre d'ennemis tués augmente dans les statistiques.
     @Test
-    void removeDeadEnemiesIncreaseStatsTest() {
+    void enemyKillStatsTest() {
         Wolf wolf1 = new Wolf(0, 0);
         Wolf wolf2 = new Wolf(1, 0);
 
         game.getEnemies().add(wolf1);
         game.getEnemies().add(wolf2);
 
-        // On tue les deux loups.
         wolf1.takeDamage(9999);
         wolf2.takeDamage(9999);
 
@@ -275,9 +271,9 @@ public class gameJunit {
         assertEquals(20, game.getScore(), "Le score doit augmenter pour les deux ennemis morts.");
         assertEquals(2, game.getGameStats().getEnemiesKilled(), "Les statistiques doivent compter les deux ennemis tués.");
     }
-
+    //Vérifie que la suppression des entités mortes fonctionne avec des listes vides.
     @Test
-    void removeDeadEntitiesWithEmptyListsTest() {
+    void removeDeadEntitiesEmptyTest() {
         // On appelle removeDeadEntities alors qu'il n'y a aucun ennemi ni allié.
         game.removeDeadEntities();
 
@@ -288,11 +284,11 @@ public class gameJunit {
         assertEquals(0, game.getGameStats().getEnemiesKilled(), "Aucun ennemi tué ne doit être compté.");
     }
 
+    // Vérifie que la quête est terminée après exactement dix loups tués.
     @Test
-    void questCompletedExactlyAtTenKillsTest() {
+    void  completeQuestWithTenKillsTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
 
-        // On tue exactement 10 loups avec une Archer Tower.
         for (int i = 0; i < 10; i++) {
             Wolf wolf = createDeadWolfKilledBy(archerTower);
 
@@ -307,9 +303,9 @@ public class gameJunit {
         assertTrue(game.getMiniQuestManager().getQuests().get(0).isCompleted(), "La quête des 10 loups doit être terminée.");
         assertEquals(10, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression doit être bloquée à 10.");
     }
-
+    //Vérifie que la quête n'est pas terminée avec seulement neuf loups tués.
     @Test
-    void questNotCompletedWithOnlyNineKillsTest() {
+    void questNotCompleteWithNineKillsTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
 
         // On tue seulement 9 loups alors que la quête en demande 10.
@@ -328,11 +324,11 @@ public class gameJunit {
         assertEquals(9, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression doit être à 9.");
     }
 
+    // Vérifie que la récompense de la quête n'est donnée qu'une seule fois.
     @Test
-    void questRewardOnlyGivenOnceWithMoreThanTenKillsTest() {
+    void questRewardGivenOnceTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
 
-        // On tue 15 loups avec une Archer Tower.
         for (int i = 0; i < 15; i++) {
             Wolf wolf = createDeadWolfKilledBy(archerTower);
 
@@ -347,9 +343,9 @@ public class gameJunit {
         assertTrue(game.getMiniQuestManager().getQuests().get(0).isCompleted(), "La quête doit rester terminée.");
         assertEquals(10, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression ne doit pas dépasser 10.");
     }
-
+    //Vérifie que la quête ne progresse pas lorsque les loups sont tués par la mauvaise tour.
     @Test
-    void questDoesNotProgressWithWrongTowerTest() {
+    void wrongTowerQuestTest() {
         Mage mageTower = new Mage(0, 0);
 
         // On tue 10 loups, mais avec une Mage Tower au lieu d'une Archer Tower.
@@ -367,9 +363,9 @@ public class gameJunit {
         assertFalse(game.getMiniQuestManager().getQuests().get(0).isCompleted(), "La quête Archer Tower ne doit pas être terminée.");
         assertEquals(0, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression ne doit pas augmenter avec la mauvaise tour.");
     }
-
+    // Vérifie que la quête ne progresse pas lorsque le mauvais type d'ennemi est tué. @Test
     @Test
-    void questDoesNotProgressWithWrongEnemyTypeTest() {
+    void wrongEnemyQuestTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
 
         // On tue 10 archers avec une Archer Tower, mais la quête demande des loups.
@@ -387,9 +383,9 @@ public class gameJunit {
         assertFalse(game.getMiniQuestManager().getQuests().get(0).isCompleted(), "La quête des loups ne doit pas être terminée.");
         assertEquals(0, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression de la quête des loups ne doit pas augmenter.");
     }
-
+    // Vérifie que la quête ne progresse pas si aucune tour responsable n'est enregistrée.
     @Test
-    void questDoesNotProgressWithoutLastDamagingTowerTest() {
+    void killWithoutTowerQuestTest() {
         // On tue 10 loups sans indiquer quelle tour les a tués.
         for (int i = 0; i < 10; i++) {
             Wolf wolf = new Wolf(0, 0);
@@ -407,8 +403,9 @@ public class gameJunit {
         assertEquals(0, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression ne doit pas augmenter sans tour responsable.");
     }
 
+    // Vérifie qu'un même ennemi mort ne peut pas être compté plusieurs fois dans la quête. @Test
     @Test
-    void questDoesNotCountSameDeadEnemyTwiceTest() {
+    void sameEnemyCountedOnceTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
         Wolf wolf = createDeadWolfKilledBy(archerTower);
 
@@ -422,7 +419,6 @@ public class gameJunit {
         assertEquals(10, game.getScore(), "Le score doit augmenter une seule fois.");
         assertEquals(1, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La quête doit progresser de 1.");
 
-        // Deuxième nettoyage : le même loup ne doit pas être recompté.
         game.removeDeadEntities();
 
         assertEquals(0, game.getEnemies().size(), "La liste doit rester vide.");
@@ -432,8 +428,10 @@ public class gameJunit {
         assertEquals(0, game.getMiniQuestManager().getCompletedQuestCount(), "La quête ne doit pas être complétée avec un seul loup.");
     }
 
+
+    // Vérifie qu'un même ennemi mort ne peut pas être compté plusieurs fois dans la quête.
     @Test
-    void multipleDeadEnemiesRemovedAtOnceCompleteQuestTest() {
+    void completeQuestWithSeveralDeathsTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
 
         // On ajoute 10 loups morts avant d'appeler removeDeadEntities.
@@ -452,9 +450,9 @@ public class gameJunit {
         assertTrue(game.getMiniQuestManager().getQuests().get(0).isCompleted(), "La quête doit être terminée.");
         assertEquals(10, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression doit atteindre 10.");
     }
-
+    // Vérifie que seuls les ennemis tués avec la bonne tour font progresser la quête.
     @Test
-    void questProgressOnlyWithCorrectTowerWhenKillsAreMixedTest() {
+    void mixedTowerKillsQuestTest() {
         ArcherTower archerTower = new ArcherTower(0, 0);
         Mage mageTower = new Mage(0, 0);
 
@@ -496,8 +494,9 @@ public class gameJunit {
         assertEquals(10, game.getMiniQuestManager().getQuests().get(0).getCurrentAmount(), "La progression doit être à 10.");
     }
 
+    //Vérifie qu'une Recruit est créée au moment où une Barrack est placée.
     @Test
-    void barrackCreatesRecruitWhenPlacedTest() {
+    void barrackCreatesRecruitTest() {
         GameEntities gameEntities = new GameEntities();
         TowerManager towerManager = createTowerManagerForRespawnTest(gameEntities);
 
@@ -511,9 +510,9 @@ public class gameJunit {
         assertTrue(barrack.hasRecruitedTroop(), "La Barrack doit garder l'id de sa Recruit.");
         assertEquals(recruit.getId(), barrack.getRecruitedTroopId(), "L'id stocké doit être celui de la Recruit.");
     }
-
+    // Vérifie qu'une Recruit morte ne réapparaît pas pendant la même vague.
     @Test
-    void deadRecruitDoesNotRespawnInSameWaveTest() {
+    void recruitDoesNotRespawnSameWaveTest() {
         GameEntities gameEntities = new GameEntities();
         TowerManager towerManager = createTowerManagerForRespawnTest(gameEntities);
 
@@ -541,9 +540,9 @@ public class gameJunit {
         assertNull(findRecruit(gameEntities), "Aucune nouvelle Recruit ne doit être créée dans la même vague.");
         assertFalse(barrack.hasRecruitedTroop(), "La Barrack ne doit toujours pas avoir de Recruit.");
     }
-
+    // Vérifie qu'une Recruit morte réapparaît à la vague suivante.
     @Test
-    void deadRecruitRespawnsAfterOneWaveTest() {
+    void recruitRespawnsNextWaveTest() {
         GameEntities gameEntities = new GameEntities();
         TowerManager towerManager = createTowerManagerForRespawnTest(gameEntities);
 
@@ -575,8 +574,9 @@ public class gameJunit {
         assertEquals(newRecruit.getId(), barrack.getRecruitedTroopId(), "La Barrack doit stocker l'id de la nouvelle Recruit.");
         assertEquals(-1, barrack.getRecruitedTroopDeathWave(), "La vague de mort doit être réinitialisée après le respawn.");
     }
+    // Vérifie que la Barrack ne crée pas une nouvelle Recruit si la précédente est encore vivante.
     @Test
-    void barrackDoesNotRespawnIfRecruitIsStillAliveTest() {
+    void noRespawnWhileRecruitAliveTest() {
         GameEntities gameEntities = new GameEntities();
         TowerManager towerManager = createTowerManagerForRespawnTest(gameEntities);
 
