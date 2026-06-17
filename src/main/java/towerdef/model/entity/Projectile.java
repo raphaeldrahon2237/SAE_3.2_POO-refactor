@@ -59,6 +59,41 @@ public class Projectile {
         }
     }
 
+    public void dealDamage(){
+        if (target instanceof Enemy enemy && source instanceof Tower tower) {
+            enemy.setLastDamagingTower(tower);
+        }
+
+        if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
+        else target.takeDamage(source.getDamage());
+    }
+
+    public void dealDamageInAoe(RangeChecker rangeChecker){
+        ArrayList<Enemy> enemiesImpacted;
+        Point2D impactTile = this.getImpactTile();
+        double impactX = impactTile.getX();
+        double impactY = impactTile.getY();
+
+        enemiesImpacted= rangeChecker.findEnemiesInRange(impactX,impactY, 2);
+
+        for(Enemy enemy: enemiesImpacted) {
+            if (source instanceof Tower tower) {
+                enemy.setLastDamagingTower(tower);
+            }
+
+            enemy.takeDamage(source.getDamage());
+        }
+    }
+
+    private void updateCoordinates() {
+        Point2D current = getCurrentTile();
+        Point2D next = getNextTile();
+        double progress = progressToNextTile.get();
+
+        x.set(current.getX() + (next.getX() - current.getX()) * progress);
+        y.set(current.getY() + (next.getY() - current.getY()) * progress);
+    }
+
     public Point2D getCurrentTile() {
         return trajectory.get(currentTileIndex.get());
     }
@@ -93,40 +128,5 @@ public class Projectile {
 
     public Entity getSource() {
         return source;
-    }
-
-    private void updateCoordinates() {
-        Point2D current = getCurrentTile();
-        Point2D next = getNextTile();
-        double progress = progressToNextTile.get();
-
-        x.set(current.getX() + (next.getX() - current.getX()) * progress);
-        y.set(current.getY() + (next.getY() - current.getY()) * progress);
-    }
-
-    public void dealDamage(){
-        if (target instanceof Enemy enemy && source instanceof Tower tower) {
-            enemy.setLastDamagingTower(tower);
-        }
-
-        if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
-        else target.takeDamage(source.getDamage());
-    }
-
-    public void dealDamageInAoe(RangeChecker rangeChecker){
-        ArrayList<Enemy> enemiesImpacted;
-        Point2D impactTile = this.getImpactTile();
-        double impactX = impactTile.getX();
-        double impactY = impactTile.getY();
-
-        enemiesImpacted= rangeChecker.findEnemiesInRange(impactX,impactY, 2);
-
-        for(Enemy enemy: enemiesImpacted) {
-            if (source instanceof Tower tower) {
-                enemy.setLastDamagingTower(tower);
-            }
-
-            enemy.takeDamage(source.getDamage());
-        }
     }
 }

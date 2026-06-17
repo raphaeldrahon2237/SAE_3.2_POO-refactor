@@ -127,11 +127,6 @@ public class Enemy extends Troop {
         return new Point2D(predictionX, predictionY);
     }
 
-    public int getReward() {
-        return reward;
-    }
-
-
     private Point2D getNextTarget() {
         currentTileIndex++;
 
@@ -140,14 +135,6 @@ public class Enemy extends Troop {
         }
 
         return null;
-    }
-    public void setLastDamagingTower(Tower lastDamagingTower) {
-        if (isAlive()) {
-            this.lastDamagingTower = lastDamagingTower;
-        }
-    }
-    public Tower getLastDamagingTower() {
-        return lastDamagingTower;
     }
 
     public void attack(Game game){
@@ -222,5 +209,19 @@ public class Enemy extends Troop {
         Point2D targetTile = Utils.toTilePosition(target.getX(), target.getY());
         incrementAttackCounter();
         game.createProjectile(this, target, targetTile, projectileType);
+    }
+
+    public int getReward() {
+        return reward;
+    }
+
+
+    public void setLastDamagingTower(Tower lastDamagingTower) {
+        if (isAlive()) {
+            this.lastDamagingTower = lastDamagingTower;
+        }
+    }
+    public Tower getLastDamagingTower() {
+        return lastDamagingTower;
     }
 }
