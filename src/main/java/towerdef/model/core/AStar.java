@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
-    private static final int TOWER_PATH_PENALTY = 15;
+    private static final int TOWER_PATH_PENALTY = 30;
     private static final int TOWER_INFLUENCE_RADIUS = 3;
 
     private MapGrid mapGrid;
@@ -119,15 +119,6 @@ public class AStar {
         return cost;
     }
 
-    private boolean hasTowerAt(Point2D tile) {
-        for (Tower tower : gameEntities.getTowers()) {
-            if ((int) tower.getX() == (int) tile.getX() && (int) tower.getY() == (int) tile.getY()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     private void clear() {
         costs.clear();
