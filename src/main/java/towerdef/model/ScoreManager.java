@@ -1,16 +1,5 @@
 package towerdef.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.Archer;
-import towerdef.model.entity.troop.Enemy;
-import towerdef.model.entity.troop.ShadowSoldier;
-import towerdef.model.entity.troop.Wolf;
-import towerdef.model.quest.MiniQuest;
-
 import java.io.*;
 
 public class ScoreManager {
@@ -23,7 +12,7 @@ public class ScoreManager {
 
             if(score > oldScore){
                 saveScore(playerName, score);
-            };
+            }
         } catch (IOException e) {
             System.out.println("Erreur sauvegarde score : " + e.getMessage());
         }

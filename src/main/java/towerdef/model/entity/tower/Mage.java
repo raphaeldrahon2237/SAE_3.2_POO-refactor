@@ -6,8 +6,6 @@ import towerdef.model.entity.troop.Enemy;
 
 public class Mage extends Tower {
 
-    private int towerTypeId;
-
     public Mage( int x, int y){
         super(4,"Degats magiques de zone a moyenne portee.",35, 14, 1, 2, 5, x, y, AttackType.MAGIC, 1, 170, 1, 120, 5, 5, 3, 1);
     }

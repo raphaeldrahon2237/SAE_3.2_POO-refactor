@@ -162,14 +162,6 @@ public class EntityView {
         );
     }
 
-    public ImageView getIv() {
-        return iv;
-    }
-
-    public void setImageToNull(){
-        this.iv.setImage(null);
-    }
-
     public void switchImageToInitial(){
         if(level.get()==0) iv.setImage(BuildingImg);
 
@@ -252,8 +244,6 @@ public class EntityView {
         else if(entity instanceof Archer) iv.setImage(ArcherIdleImg);
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherIdleImg);
-
-        else if (entity instanceof Soldier) iv.setImage(WolfIdleImg);
 
         else if (entity instanceof  Veteran) iv.setImage(CatapultIdleImg);
 

@@ -45,20 +45,8 @@ public class GameStats {
         return enemiesKilled;
     }
 
-    public int getEnemiesSpawned() {
-        return enemiesSpawned;
-    }
-
     public int getTowersPlaced() {
         return towersPlaced;
-    }
-
-    public int getProjectilesFired() {
-        return projectilesFired;
-    }
-
-    public int getDamageTakenByBase() {
-        return damageTakenByBase;
     }
 
     public int getMaxWaveReached() {

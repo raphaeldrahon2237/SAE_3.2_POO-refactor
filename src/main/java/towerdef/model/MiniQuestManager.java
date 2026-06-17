@@ -88,19 +88,4 @@ public class MiniQuestManager {
     public int getCompletedQuestCount() {
         return completedQuestCount.get();
     }
-
-    public IntegerProperty completedQuestCountProperty() {
-        return completedQuestCount;
-    }
-
-    // Returns the text displayed for all mini quests.
-    public String getDisplayText() {
-        StringBuilder builder = new StringBuilder("Bonus mini quests \n");
-
-        for (MiniQuest quest : quests) {
-            builder.append(quest.getDisplayText()).append('\n');
-        }
-
-        return builder.toString().trim();
-    }
 }

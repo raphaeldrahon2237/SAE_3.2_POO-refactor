@@ -5,7 +5,6 @@ import towerdef.model.entity.EntityType;
 import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
-import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
 

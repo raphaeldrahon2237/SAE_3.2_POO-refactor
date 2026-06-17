@@ -138,9 +138,6 @@ public class Game {
         return enemySpawner.getCurrentWave();
     }
 
-    public int getEnemiesRemainingInWave() {
-        return enemySpawner.getEnemiesRemainingInWave();
-    }
 
     public int getGold() {
         return progression.getGold();
@@ -156,14 +153,6 @@ public class Game {
 
     public void damageBase(int damage) {
         combat.damageBase(damage);
-    }
-
-    public void addGold(int amount) {
-        progression.addGold(amount);
-    }
-
-    public void spendGold(int amount) {
-        progression.spendGold(amount);
     }
 
     public void removeDeadEntities() {
@@ -242,9 +231,6 @@ public class Game {
         towerManager.updateBarrackRespawns(getCurrentWave());
     }
 
-    public String getMiniQuestDisplayText() {
-        return miniQuestManager.getDisplayText();
-    }
 
     public MiniQuestManager getMiniQuestManager() {
         return miniQuestManager;

@@ -70,13 +70,4 @@ public class GameEntities {
     public ObservableList<Projectile> getProjectiles() {
         return projectiles;
     }
-
-//    public Tower getTowerById(int id) {
-//        for (Tower tower : towers) {
-//            if (tower.getId() == id) {
-//                return tower;
-//            }
-//        }
-//        return null;
-//    }
 }

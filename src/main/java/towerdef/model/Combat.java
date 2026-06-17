@@ -6,27 +6,21 @@ import towerdef.model.entity.Entity;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.quest.MiniQuest;
 
-import java.util.ArrayList;
-
 public class Combat {
 
     private Game game;
-    //private GameEntities gameEntities;
     private Base base;
     private Progression progression;
     private MiniQuestManager miniQuestManager;
 
     public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, MiniQuestManager miniQuestManager) {
         this.game = game;
-        //this.gameEntities = gameEntities;
         this.base = base;
         this.progression = progression;
         this.miniQuestManager = miniQuestManager;
     }
 
     public void update(ObservableList<Enemy> enemies, ObservableList<Entity> allies, double deltaTime) {
-        //updateAlliesAttackTimers(allies,deltaTime);
-        //updateEnemiesAttackTimers(enemies,deltaTime);
 
         alliesAttackEnemies(allies, deltaTime);
         enemiesAttack(enemies, deltaTime);
@@ -58,19 +52,6 @@ public class Combat {
 
 
     }
-
-    /*
-    private void updateAlliesAttackTimers(ObservableList<Entity> allies, double deltaTime) {
-        for (Entity ally : allies) {
-            ally.updateAttackTimer(deltaTime);
-        }
-    }
-
-    private void updateEnemiesAttackTimers(ObservableList<Enemy> enemies,double deltaTime) {
-        for (Enemy enemy : enemies) {
-            enemy.updateAttackTimer(deltaTime);
-        }
-    }*/
 
     private void alliesAttackEnemies(ObservableList<Entity> allies, double deltaTime) {
         for (Entity ally : allies) {

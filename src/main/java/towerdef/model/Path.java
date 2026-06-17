@@ -27,7 +27,7 @@ public class Path {
 
         if (path == null) {
             Point2D source = new Point2D(enemy.getX(), enemy.getY());
-            AStar aStar = new AStar(mapGrid, source, enemy.getDestination(), gameEntities);
+            AStar aStar = new AStar(mapGrid, source, enemy.getDestination(), gameEntities.getTowers());
             path = aStar.getPath();
         }
 
@@ -43,7 +43,7 @@ public class Path {
         Point2D baseTile = new Point2D(base.getX(), base.getY());
 
         for (int i = 0; i < aStarList.length; i++) {
-            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile, gameEntities);
+            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile, gameEntities.getTowers());
         }
 
         return aStarList;

@@ -66,14 +66,6 @@ public class MiniQuest {
         return title;
     }
 
-    public String getTowerName() {
-        return towerName;
-    }
-
-    public int getTargetAmount() {
-        return targetAmount;
-    }
-
     public int getRewardGold() {
         return rewardGold;
     }
@@ -94,9 +86,6 @@ public class MiniQuest {
         return completed.get();
     }
 
-    public BooleanProperty completedProperty() {
-        return completed;
-    }
 
     public boolean isRewardClaimed() {
         return rewardClaimed;

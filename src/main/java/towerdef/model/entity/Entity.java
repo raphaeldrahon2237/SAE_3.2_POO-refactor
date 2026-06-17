@@ -160,24 +160,9 @@ public abstract class Entity {
         }
     }
 
-    public double getAttackTimer() {
-        return attackTimer;
-    }
-
-    public Entity getTarget() {
-        return target;
-    }
-
-    public void setTarget(Entity target) {
-        this.target = target;
-    }
 
     public String toString() {
         return "" + id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setDamage(int damage) {
@@ -190,26 +175,6 @@ public abstract class Entity {
 
     public void setAttackSpeed(int attackSpeed) {
         this.attackSpeed = attackSpeed;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
-    }
-
-    public void setAttackTimer(double attackTimer) {
-        this.attackTimer = attackTimer;
-    }
-
-    public void setAttackType(AttackType attackType) {
-        this.attackType = attackType;
-    }
-
-    public void setZone(int zone) {
-        this.zone = zone;
-    }
-
-    public static void setNextId(int nextId) {
-        Entity.nextId = nextId;
     }
 
     public IntegerProperty hpProperty() {

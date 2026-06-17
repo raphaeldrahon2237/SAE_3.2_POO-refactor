@@ -3,7 +3,6 @@ package towerdef.model.entity.tower;
 import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.troop.Enemy;
-import javafx.geometry.Point2D;
 
 
 public class ArcherTower extends Tower {

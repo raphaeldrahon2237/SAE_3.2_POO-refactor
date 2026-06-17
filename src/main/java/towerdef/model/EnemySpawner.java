@@ -122,18 +122,6 @@ public class EnemySpawner {
     public int getCurrentWave()  {
         return currentWave;
     }
-    public boolean isBossSpawnedThisWave() {
-        return bossSpawnedThisWave;
-    }
-
-    public boolean hasBossAlive() {
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy instanceof Boss) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public int getEnemiesRemainingInWave() {
         return enemiesRemainingInWave;
