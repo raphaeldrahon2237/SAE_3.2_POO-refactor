@@ -14,7 +14,7 @@ public class Barrack extends Tower {
     private int recruitedTroopDeathWave;
 
     public Barrack(int x, int y){
-        super(3,"Tour defensive qui bloque les ennemis avec une unite alliee.",80, 0, 8, 0, 0, x, y, AttackType.NORMAL, 0, 180, 1, 130, 0, 15, 0, 2);
+        super(3,"Defensive Tower, spawns troops to block the enemies path, little damage",80, 0, 8, 0, 0, x, y, AttackType.NORMAL, 0, 180, 1, 130, 0, 15, 0, 2);
     }
 
 
