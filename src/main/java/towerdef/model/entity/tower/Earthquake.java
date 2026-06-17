@@ -11,7 +11,7 @@ public class Earthquake extends Tower {
     private int slowSpeed;
 
     public Earthquake(int x, int y, int slowSpeed) {
-        super(5,"Ralentit les ennemis proches et inflige des degats continus.",60, 4, 3, 1, 4, x, y, AttackType.EARTHQUAKE, 0, 260, 1, 180, 2, 10, 1, 1);
+        super(5,"Slows down enemies and deals small continuous damage ",60, 4, 3, 1, 4, x, y, AttackType.EARTHQUAKE, 0, 260, 1, 180, 2, 10, 1, 1);
         this.slowSpeed = slowSpeed;
     }
 

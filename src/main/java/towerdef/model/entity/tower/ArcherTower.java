@@ -8,9 +8,9 @@ import towerdef.model.entity.troop.Enemy;
 public class ArcherTower extends Tower {
 
     public ArcherTower(int x, int y) {
-        super(1,"Tir rapide monocible pour eliminer les ennemis faibles a distance.",35, 8, 2, 4, 4, x, y,
+        super(1,"Rapid fire tower, ideal for eliminating many weaker enemies",35, 8, 2, 3, 4, x, y,
                 AttackType.NORMAL, 0, 120, 1,
-                80, 3, 5, 5, 1);
+                80, 3, 5, 3, 1);
     }
 
     public void attack(Game game){

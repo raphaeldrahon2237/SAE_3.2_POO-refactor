@@ -188,9 +188,9 @@ public class GameController implements Initializable {
         Tower tower = game.getTowerByTypeId(towerId);
         if (tower != null) {
             towerInfoLabel.setText(
-                    "Prix : " + tower.getCost() + "\n" +
-                    "Degats : " + tower.getDamage() + "\n" +
-                    "Portee : " + tower.getRange() + "\n" +
+                    "Price : " + tower.getCost() + "\n" +
+                    "Damage : " + tower.getDamage() + "\n" +
+                    "Range : " + tower.getRange() + "\n" +
                     "Role : " + tower.getDescription()
             );
             towerInfoLabel.setVisible(true);
