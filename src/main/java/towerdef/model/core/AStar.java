@@ -119,6 +119,15 @@ public class AStar {
         return cost;
     }
 
+    private boolean hasTowerAt(Point2D tile) {
+        for (Tower tower : gameEntities.getTowers()) {
+            if ((int) tower.getX() == (int) tile.getX() && (int) tower.getY() == (int) tile.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private void clear() {
         costs.clear();
