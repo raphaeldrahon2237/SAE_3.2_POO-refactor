@@ -56,7 +56,7 @@ public class Game {
             progression.increaseScoreRate(enemySpawner.update(deltaTime));
             progression.updateMaxWaveReached(enemySpawner.getCurrentWave());
 
-            combat.update(deltaTime);
+            combat.update(gameEntities.getEnemies(), gameEntities.getAllies(),deltaTime);
 
             if (!gameOver) {
                 projectileManager.update(deltaTime);
@@ -167,7 +167,9 @@ public class Game {
     }
 
     public void removeDeadEntities() {
-        combat.removeDeadEntities();
+        combat.progressionReward(gameEntities.getEnemies());
+        gameEntities.removeDeadEntities();
+
     }
 
     public boolean canPlaceTower(int x, int y) {

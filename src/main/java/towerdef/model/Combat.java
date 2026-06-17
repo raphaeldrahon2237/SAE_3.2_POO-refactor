@@ -1,5 +1,6 @@
 package towerdef.model;
 
+import javafx.collections.ObservableList;
 import towerdef.model.entity.Base;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.troop.Enemy;
@@ -10,28 +11,28 @@ import java.util.ArrayList;
 public class Combat {
 
     private Game game;
-    private GameEntities gameEntities;
+    //private GameEntities gameEntities;
     private Base base;
     private Progression progression;
     private MiniQuestManager miniQuestManager;
 
     public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, MiniQuestManager miniQuestManager) {
         this.game = game;
-        this.gameEntities = gameEntities;
+        //this.gameEntities = gameEntities;
         this.base = base;
         this.progression = progression;
         this.miniQuestManager = miniQuestManager;
     }
 
-    public void update(double deltaTime) {
-        updateAlliesAttackTimers(deltaTime);
-        updateEnemiesAttackTimers(deltaTime);
+    public void update(ObservableList<Enemy> enemies, ObservableList<Entity> allies, double deltaTime) {
+        //updateAlliesAttackTimers(allies,deltaTime);
+        //updateEnemiesAttackTimers(enemies,deltaTime);
 
-        alliesAttackEnemies();
-        enemiesAttack();
+        alliesAttackEnemies(allies, deltaTime);
+        enemiesAttack(enemies, deltaTime);
 
         if (!game.isGameOver()) {
-            updateMovements(deltaTime);
+            updateMovements(enemies,deltaTime);
         }
     }
 
@@ -47,43 +48,46 @@ public class Combat {
         }
     }
 
-    public void removeDeadEntities() {
-        for (Enemy enemy : new ArrayList<>(gameEntities.getEnemies())) {
+    public void progressionReward(ObservableList<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
             if (!enemy.isAlive()) {
                 progression.rewardEnemyKill(enemy);
                 giveMiniQuestRewardIfCompleted(enemy);
             }
         }
 
-        gameEntities.removeDeadEntities();
+
     }
 
-    private void updateAlliesAttackTimers(double deltaTime) {
-        for (Entity ally : gameEntities.getAllies()) {
+    /*
+    private void updateAlliesAttackTimers(ObservableList<Entity> allies, double deltaTime) {
+        for (Entity ally : allies) {
             ally.updateAttackTimer(deltaTime);
         }
     }
 
-    private void updateEnemiesAttackTimers(double deltaTime) {
-        for (Enemy enemy : gameEntities.getEnemies()) {
+    private void updateEnemiesAttackTimers(ObservableList<Enemy> enemies,double deltaTime) {
+        for (Enemy enemy : enemies) {
             enemy.updateAttackTimer(deltaTime);
         }
-    }
+    }*/
 
-    private void alliesAttackEnemies() {
-        for (Entity ally : gameEntities.getAllies()) {
+    private void alliesAttackEnemies(ObservableList<Entity> allies, double deltaTime) {
+        for (Entity ally : allies) {
+            ally.updateAttackTimer(deltaTime);
             ally.attack(game);
         }
     }
 
-    private void enemiesAttack() {
-        for (Enemy enemy : gameEntities.getEnemies()) {
+    private void enemiesAttack(ObservableList<Enemy> enemies,double deltaTime) {
+        for (Enemy enemy : enemies) {
+            enemy.updateAttackTimer(deltaTime);
             enemy.attack(game);
         }
     }
 
-    private void updateMovements(double deltaTime) {
-        for (Enemy enemy : gameEntities.getEnemies()) {
+    private void updateMovements(ObservableList<Enemy> enemies,double deltaTime) {
+        for (Enemy enemy : enemies) {
             if (!enemy.isInCombat(game)) {
                 enemy.updateMovement(deltaTime);
             }
