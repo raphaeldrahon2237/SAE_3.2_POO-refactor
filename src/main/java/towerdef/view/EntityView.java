@@ -31,6 +31,10 @@ public class EntityView {
     private static final Image SoldierIdleImg = new Image(EntityView.class.getResourceAsStream("/images/soldierIdle.png"));
     private static final Image SoldierAttackImg = new Image(EntityView.class.getResourceAsStream("/images/soldierAttack.png"));
 
+    private static final Image VeteranInitialImg = new Image(EntityView.class.getResourceAsStream("/images/veteranInitial.png"));
+    private static final Image VeteranIdleImg = new Image(EntityView.class.getResourceAsStream("/images/veteranIdle.png"));
+    private static final Image VeteranAttackImg = new Image(EntityView.class.getResourceAsStream("/images/veteranAttack.png"));
+
 
     private static final Image ArcherTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Initial.png"));
     private static final Image ArcherTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower1Attack.png"));
@@ -207,6 +211,8 @@ public class EntityView {
 
         else if (entity instanceof Soldier) iv.setImage(SoldierInitialImg);
 
+        else if (entity instanceof  Veteran) iv.setImage(VeteranInitialImg);
+
 
         else if (entity instanceof Wolf) iv.setImage(WolfInitialImg);
 
@@ -220,7 +226,7 @@ public class EntityView {
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherInitialImg);
 
-        else if (entity instanceof  Veteran) iv.setImage(CatapultInitialImg );
+
 
     }
 
@@ -230,6 +236,8 @@ public class EntityView {
         if(entity instanceof Recruit) iv.setImage(RecruitIdleImg);
 
         else if(entity instanceof  Soldier) iv.setImage(SoldierIdleImg);
+
+        else if (entity instanceof  Veteran) iv.setImage(VeteranIdleImg );
 
 
         else if(entity instanceof Barrack) iv.setImage(Barrack1IdleImg);
@@ -244,8 +252,6 @@ public class EntityView {
         else if(entity instanceof Archer) iv.setImage(ArcherIdleImg);
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherIdleImg);
-
-        else if (entity instanceof  Veteran) iv.setImage(CatapultIdleImg);
 
 
     }
@@ -283,6 +289,8 @@ public class EntityView {
 
         else if (entity instanceof Soldier) iv.setImage(SoldierAttackImg);
 
+        else if (entity instanceof  Veteran) iv.setImage(VeteranAttackImg );
+
 
         else if (entity instanceof Catapult) iv.setImage(CatapultAttackImg);
 
@@ -291,8 +299,6 @@ public class EntityView {
         else if(entity instanceof Archer) iv.setImage(ArcherAttackImg);
 
         else if(entity instanceof ShadowArcher) iv.setImage(ShadowArcherAttackImg);
-
-        else if (entity instanceof  Veteran) iv.setImage(CatapultAttackImg);
 
     }
 
