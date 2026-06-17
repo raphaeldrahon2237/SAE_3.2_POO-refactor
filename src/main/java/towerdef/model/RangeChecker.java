@@ -18,6 +18,7 @@ public class RangeChecker {
         this.base = base;
     }
 
+    // Finds and returns the closest alive enemy within the given range.
     public Enemy findEnemyInRange(double x, double y, int range) {
         Enemy closestEnemy = null;
         double closestDistance = Double.MAX_VALUE;

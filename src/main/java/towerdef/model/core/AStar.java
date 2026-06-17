@@ -1,7 +1,9 @@
 package towerdef.model.core;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import towerdef.model.GameEntities;
+import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.map.MapGrid;
 import java.util.ArrayList;
@@ -17,16 +19,16 @@ public class AStar {
     private MapGrid mapGrid;
     private Point2D source;
     private Point2D target;
-    private GameEntities gameEntities;
+    private ObservableList<Tower> towers;
 
     private Map<Point2D, Double> costs;
     private Map<Point2D, Point2D> predecessors;
 
-    public AStar(MapGrid mapGrid, Point2D source, Point2D target, GameEntities gameEntities) {
+    public AStar(MapGrid mapGrid, Point2D source, Point2D target, ObservableList<Tower> towers) {
         this.mapGrid = mapGrid;
         this.source = source;
         this.target = target;
-        this.gameEntities = gameEntities;
+        this.towers = towers;
         costs = new HashMap<>();
         predecessors = new HashMap<>();
         runAStar();
@@ -52,24 +54,6 @@ public class AStar {
 
     public Point2D getSource() {
         return source;
-    }
-
-    public void setSource(Point2D source) {
-        this.source = source;
-        clear();
-        runAStar();
-    }
-
-    public void setMapGrid(MapGrid mapGrid) {
-        this.mapGrid = mapGrid;
-        clear();
-        runAStar();
-    }
-
-    public void setTarget(Point2D target) {
-        this.target = target;
-        clear();
-        runAStar();
     }
 
     private void runAStar() {
@@ -107,7 +91,7 @@ public class AStar {
     private double movementCost(Point2D tile) {
         double cost = 1;
 
-        for (Tower tower : gameEntities.getTowers()) {
+        for (Tower tower : towers) {
             double distance = Math.abs(tile.getX() - tower.getX())
                     + Math.abs(tile.getY() - tower.getY());
 
@@ -117,21 +101,6 @@ public class AStar {
         }
 
         return cost;
-    }
-
-    private boolean hasTowerAt(Point2D tile) {
-        for (Tower tower : gameEntities.getTowers()) {
-            if ((int) tower.getX() == (int) tile.getX() && (int) tower.getY() == (int) tile.getY()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void clear() {
-        costs.clear();
-        predecessors.clear();
     }
 
     private static class TileCost implements Comparable<TileCost> {

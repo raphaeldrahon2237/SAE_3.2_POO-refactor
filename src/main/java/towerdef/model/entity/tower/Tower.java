@@ -85,21 +85,11 @@ public abstract class Tower extends Entity {
         return upgradeCost;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public void setLevel(int level) {
-        this.level.set(level);
-    }
-
+    //METHODE DE TEST
     public void kill() {
         hpProperty().set(0);
     }
 
-    public void setUpgradeCost(int upgradeCost) {
-        this.upgradeCost = upgradeCost;
-    }
 
     public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
         Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);

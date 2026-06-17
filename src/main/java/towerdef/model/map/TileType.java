@@ -34,10 +34,6 @@ public enum TileType {
         this.walkable = walkable;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public boolean isWalkable() {
         return walkable;
     }

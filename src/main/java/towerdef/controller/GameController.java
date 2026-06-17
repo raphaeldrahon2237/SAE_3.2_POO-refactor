@@ -437,9 +437,11 @@ public class GameController implements Initializable {
 
         return String.format("%02d:%02d", minutes, seconds);
     }
+
+    // Updates the quest display.
     private void refreshMiniQuestDisplay() {
         if (miniQuestBox.getChildren().isEmpty()) {
-            Label titleLabel = new Label("Mini-quêtes bonus");
+            Label titleLabel = new Label("Mini-quest bonus");
             titleLabel.setWrapText(true);
             titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
             miniQuestBox.getChildren().add(titleLabel);

@@ -5,7 +5,6 @@ import towerdef.model.entity.EntityType;
 import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerFactory;
-import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
 
@@ -121,26 +120,9 @@ public class TowerManager {
         return sold;
     }
 
-    private Troop createRecruitNextToBarrack(int x, int y) {
-        int[][] directions = {
-                {0, -1},
-                {0, 1},
-                {-1, 0},
-                {1, 0}
-        };
 
-        for (int[] direction : directions) {
-            int newX = x + direction[0];
-            int newY = y + direction[1];
 
-            if (mapGrid.isInside(newX, newY) && mapGrid.isWalkable(newX, newY)) {
-
-                return new Recruit(newX, newY);
-            }
-        }
-
-        return null;
-    }
+    // Updates the respawn of recruited troops for all barracks.
     public void updateBarrackRespawns(int currentWave) {
         for (Tower tower : gameEntities.getTowers()) {
             if (tower instanceof Barrack barrack) {
@@ -163,7 +145,7 @@ public class TowerManager {
             }
         }
     }
-
+    // Marks the barrack troop as dead if missing, then respawns it when allowed.
     private Troop findRecruitedTroopById(int recruitedTroopId) {
         for (Entity ally : gameEntities.getAllies()) {
             if (ally instanceof Troop troop && troop.getId() == recruitedTroopId && troop.isAlive()) {
@@ -174,6 +156,7 @@ public class TowerManager {
         return null;
     }
 
+    // Creates a recruited troop on a walkable tile next to the barrack.
     private Troop createTroopNextToBarrack(Barrack barrack) {
         int x = (int) barrack.getX();
         int y = (int) barrack.getY();

@@ -24,6 +24,7 @@ public class Barrack extends Tower {
 
     public void attack(Game game){}
 
+    // Creates the correct troop type based on the barrack's current level.
     public Troop createTroopForCurrentLevel(int x, int y) {
         int currentLevel = levelProperty().get();
 
@@ -55,11 +56,11 @@ public class Barrack extends Tower {
         recruitedTroopDeathWave = -1;
     }
 
+    //stock quand est ce que la recruite est morte
     public void markRecruitedTroopDead(int currentWave) {
         recruitedTroopId = -1;
         recruitedTroopDeathWave = currentWave;
     }
-
     public boolean canRespawnRecruitedTroop(int currentWave) {
         return isAlive()
                 && !hasRecruitedTroop()

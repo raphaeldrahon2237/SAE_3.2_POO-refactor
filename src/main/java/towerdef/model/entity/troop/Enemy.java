@@ -131,9 +131,6 @@ public class Enemy extends Troop {
         return reward;
     }
 
-    public void setReward(int reward) {
-        this.reward = reward;
-    }
 
     private Point2D getNextTarget() {
         currentTileIndex++;

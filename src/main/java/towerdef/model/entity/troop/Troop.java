@@ -32,14 +32,6 @@ public abstract class Troop extends Entity {
         this.moveSpeed = mooveSpeed;
     }
 
-    public int getBaseMooveSpeed() {
-        return baseMooveSpeed;
-    }
-
-    public void resetMooveSpeed() {
-        this.moveSpeed = baseMooveSpeed;
-    }
-
     @Override
     public String toString() {
         return "" + super.toString();

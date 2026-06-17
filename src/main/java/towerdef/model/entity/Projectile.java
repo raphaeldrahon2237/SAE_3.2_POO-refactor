@@ -75,10 +75,6 @@ public class Projectile {
         return trajectory.get(trajectory.size() - 1);
     }
 
-    public DoubleProperty getProgressToNextTile() {
-        return progressToNextTile;
-    }
-
     public DoubleProperty xProperty() {
         return x;
     }
@@ -91,16 +87,8 @@ public class Projectile {
         return finished;
     }
 
-    public Entity getTarget() {
-        return target;
-    }
-
     public int getDamage() {
         return source.getDamage();
-    }
-
-    public List<Point2D> getTrajectory() {
-        return trajectory;
     }
 
     public Entity getSource() {

@@ -20,7 +20,6 @@ public class ProjectileListener implements ListChangeListener<Projectile> {
     @Override
     public void onChanged(Change<? extends Projectile> change) {
         while (change.next()) {
-
             if (change.wasAdded()) {
                 for (Projectile projectile : change.getAddedSubList()) {
                     ProjectileView projectileView = new ProjectileView(gamePane, projectile);

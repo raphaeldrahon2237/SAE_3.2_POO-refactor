@@ -122,18 +122,6 @@ public class EnemySpawner {
     public int getCurrentWave()  {
         return currentWave;
     }
-    public boolean isBossSpawnedThisWave() {
-        return bossSpawnedThisWave;
-    }
-
-    public boolean hasBossAlive() {
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            if (enemy instanceof Boss) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public int getEnemiesRemainingInWave() {
         return enemiesRemainingInWave;
@@ -161,7 +149,7 @@ public class EnemySpawner {
 
         return Math.max(delay, MIN_TIME_BETWEEN_WAVES);
     }
-
+    // Creates a random enemy based on the current wave difficulty.
     private Enemy createEnemyForCurrentWave(int x, int y) {
         int wave = Math.max(1, currentWave);
         int rand = random.nextInt(100);
