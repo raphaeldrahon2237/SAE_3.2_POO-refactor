@@ -106,7 +106,6 @@ public class GameController implements Initializable {
     private int towerSelected=0;
     private boolean destinationTestMode = false;
     private Timeline gameLoop;
-    private int time;
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
@@ -114,7 +113,6 @@ public class GameController implements Initializable {
     private ProjectileListener projectileListener;
     private EntListener alliesListener;
     private EntListener enemiesListener;
-    private HashMap<Integer, String> description;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -149,52 +147,34 @@ public class GameController implements Initializable {
 
     }
 
+    private void changeTowerSelected(int TowerId){
+        towerSelected= TowerId;
+        displayTowerInfos(TowerId);
+    }
+
     private void initButtonControls() {
         buttonArcherTower.setOnAction(event -> {
-            towerSelected = 1;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Archer Tower");
+            changeTowerSelected(1);
         });
 
         buttonArtillery.setOnAction(event -> {
-            towerSelected = 2;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Artillery");
+            changeTowerSelected(2);
         });
 
         buttonBarracks.setOnAction(event -> {
-            towerSelected = 3;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Barracks");
+            changeTowerSelected(3);
         });
 
         buttonMage.setOnAction(event -> {
-            towerSelected = 4;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Earthquake");
+            changeTowerSelected(4);
         });
 
         buttonEarthquake.setOnAction(event -> {
-            towerSelected = 5;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Earthquake");
+            changeTowerSelected(5);
         });
 
         buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
         buttonSell.setOnAction(event -> sellSelectedTower());
-    }
-
-    private void displayTowerInfos(int towerId) {
-        Tower tower = game.getTowerByTypeId(towerId);
-        if (tower != null) {
-            towerInfoLabel.setText(
-                    "Price : " + tower.getCost() + "\n" +
-                    "Damage : " + tower.getDamage() + "\n" +
-                    "Range : " + tower.getRange() + "\n" +
-                    "Role : " + tower.getDescription()
-            );
-            towerInfoLabel.setVisible(true);
-        }
     }
 
     private void initKeyboardControls() {
@@ -203,41 +183,46 @@ public class GameController implements Initializable {
         gamePane.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case A:
-                    towerSelected=1;
-                    System.out.println("Placement mode activated: Archer Tower");
+                    changeTowerSelected(1);
                     break;
 
                 case T:
-                    towerSelected=2;
-                    System.out.println("Placement mode activated: Artillery");
+                    changeTowerSelected(2);
                     break;
                 case B:
-                    towerSelected=3;
-                    System.out.println("Placement mode activated: Barracks");
+                    changeTowerSelected(3);
                     break;
                 case  M:
-                    towerSelected=4;
-                    System.out.println("Placement mode activated: Mage");
+                    changeTowerSelected(4);;
                     break;
                 case S:
-                    towerSelected=5;
-                    System.out.println("Placement mode activated: Earthquake");
+                    changeTowerSelected(5);
                     break;
                 case E:
                     destinationTestMode = true;
                     System.out.println("Destination test activated: Destination test mode");
                     break;
 
-
-
                 case ESCAPE:
                     towerSelected=0;
-                    System.out.println("Placement annulé");
                     break;
             }
         });
 
         gamePane.requestFocus();
+    }
+
+    private void displayTowerInfos(int towerId) {
+        Tower tower = game.getTowerByTypeId(towerId);
+        if (tower != null) {
+            towerInfoLabel.setText(
+                    "Price : " + tower.getCost() + "\n" +
+                            "Damage : " + tower.getDamage() + "\n" +
+                            "Range : " + tower.getRange() + "\n" +
+                            "Role : " + tower.getDescription()
+            );
+            towerInfoLabel.setVisible(true);
+        }
     }
 
     private void initTowerPlacementControls() {
@@ -249,7 +234,7 @@ public class GameController implements Initializable {
                 selectTower(x, y);
                 event.consume();
             } else if(towerSelected!=0) {
-                boolean placed = false;
+                boolean placed;
                 placed = game.placeTower(x, y, towerSelected);
 
                 if (placed) {
@@ -354,7 +339,6 @@ public class GameController implements Initializable {
     }
 
     private void initAnimation() {
-        time = 0;
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -383,7 +367,6 @@ public class GameController implements Initializable {
                             alliesListener.animations(deltaTime);
                             enemiesListener.animations(deltaTime);
 
-                            time++;
                         }
                     }
                 }
