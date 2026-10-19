@@ -61,11 +61,6 @@ public abstract class Tower extends Entity {
         hpProperty().set(0);
     }
 
-    //METHODE DE TEST
-    public void kill() {
-        hpProperty().set(0);
-    }
-
     public int getTowerTypeId() {
         return towerTypeId;
     }

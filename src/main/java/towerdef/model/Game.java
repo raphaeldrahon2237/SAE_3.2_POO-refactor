@@ -8,6 +8,7 @@ import towerdef.model.entity.Base;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
 import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.tower.TowerCharacteristics;
 import towerdef.model.entity.troop.Enemy;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
@@ -168,8 +169,8 @@ public class Game {
         return towerManager.placeTower(x, y, idTower);
     }
 
-    public Tower getTowerByTypeId(int towerTypeId) {
-        return towerManager.getTowerByTypeId(towerTypeId);
+    public TowerCharacteristics getTowerCharacteristics(int towerTypeId) {
+        return towerManager.getTowerCharacteristics(towerTypeId);
     }
 
     public Tower getTowerAt(int x, int y) {

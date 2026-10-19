@@ -81,6 +81,7 @@ public class Progression {
 
     public void towerPlaced() {
         gameStats.towerPlaced();
+        addScore(10);
     }
 
     public void projectileFired() {

@@ -4,6 +4,7 @@ import towerdef.model.entity.Entity;
 import towerdef.model.entity.EntityType;
 import towerdef.model.entity.tower.Barrack;
 import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.tower.TowerCharacteristics;
 import towerdef.model.entity.tower.TowerFactory;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
@@ -73,15 +74,8 @@ public class TowerManager {
         return true;
     }
 
-    public Tower getTowerByTypeId(int towerTypeId) {
-        EntityType type = EntityType.fromId(towerTypeId);
-        Tower tower = null;
-
-        if (type != null) {
-            tower = TowerFactory.createTower(type, 0, 0);
-        }
-
-        return tower;
+    public TowerCharacteristics getTowerCharacteristics(int towerTypeId) {
+        return TowerCharacteristics.fromId(towerTypeId);
     }
 
     public Tower getTowerAt(int x, int y) {

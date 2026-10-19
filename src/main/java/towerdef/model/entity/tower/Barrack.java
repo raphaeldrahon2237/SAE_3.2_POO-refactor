@@ -8,13 +8,17 @@ import towerdef.model.entity.troop.Troop;
 import towerdef.model.entity.troop.Veteran;
 
 public class Barrack extends Tower {
+
+    private static final TowerCharacteristics CHARACTERISTICS = TowerCharacteristics.BARRACK;
     public static final int RESPAWN_WAVE_DELAY = 1;
 
     private int recruitedTroopId;
     private int recruitedTroopDeathWave;
 
     public Barrack(int x, int y){
-        super(3,"Defensive Tower, spawns troops to block the enemies path, little damage",80, 0, 8, 0, 0, x, y, AttackType.NORMAL, 0, 180, 1, 130, 0, 15, 0, 2);
+        super(CHARACTERISTICS.getTypeId(), CHARACTERISTICS.getDescription(), 80, CHARACTERISTICS.getDamage(),
+                8, 0, CHARACTERISTICS.getRange(), x, y, AttackType.NORMAL, 0, CHARACTERISTICS.getCost(), 1,
+                130, 0, 15, 0, 2);
     }
 
 
