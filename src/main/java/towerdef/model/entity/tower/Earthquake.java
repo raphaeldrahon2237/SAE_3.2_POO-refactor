@@ -1,7 +1,6 @@
 package towerdef.model.entity.tower;
 
 import towerdef.model.Game;
-import towerdef.model.entity.AttackType;
 import towerdef.model.entity.UpgradeStats;
 import towerdef.model.entity.troop.Enemy;
 
@@ -10,14 +9,11 @@ import java.util.ArrayList;
 public class Earthquake extends Tower {
 
     private static final UpgradeStats UPGRADES = new UpgradeStats(180, 2, 10, 1, 1);
-    private static final TowerCharacteristics CHARACTERISTICS = TowerCharacteristics.EARTHQUAKE;
 
     private int slowSpeed;
 
     public Earthquake(int x, int y, int slowSpeed) {
-        super(CHARACTERISTICS.getTypeId(), CHARACTERISTICS.getDescription(), 60, CHARACTERISTICS.getDamage(),
-                3, 1, CHARACTERISTICS.getRange(), x, y, AttackType.EARTHQUAKE, 0, CHARACTERISTICS.getCost(), 1,
-                UPGRADES);
+        super(TowerCharacteristics.EARTHQUAKE, x, y, UPGRADES);
         this.slowSpeed = slowSpeed;
     }
 

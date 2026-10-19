@@ -23,14 +23,14 @@ public abstract class Tower extends Entity {
     private IntegerProperty level;
     private int upgradeCost;
 
-    public Tower(int towerTypeId, String description, int hp, int damage, int armor, int attackSpeed, int range, double x, double y,
-                 AttackType attackType, int zone, int cost, int level, UpgradeStats upgradeStats) {
-        super(hp, damage, armor, attackSpeed, range, x, y, attackType, zone);
-        this.towerTypeId = towerTypeId;
-        this.description = description;
-        this.cost = cost;
+    public Tower(TowerCharacteristics characteristics, double x, double y, UpgradeStats upgradeStats) {
+        super(characteristics.getHp(), characteristics.getDamage(), characteristics.getArmor(), characteristics.getAttackSpeed(),
+                characteristics.getRange(), x, y, characteristics.getAttackType(), characteristics.getZone());
+        this.towerTypeId = characteristics.getTypeId();
+        this.description = characteristics.getDescription();
+        this.cost = characteristics.getCost();
         this.sellValue = cost / 2;
-        this.level = new SimpleIntegerProperty(level);
+        this.level = new SimpleIntegerProperty(characteristics.getLevel());
         this.upgradeStats=upgradeStats;
         upgradeCost= upgradeStats.getCost();
     }
