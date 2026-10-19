@@ -6,9 +6,14 @@ import javafx.geometry.Point2D;
 import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
+import towerdef.model.entity.UpgradeStats;
 import towerdef.model.entity.troop.Enemy;
 
 public abstract class Tower extends Entity {
+
+    public static final int MAX_LEVEL=5;
+
+    private final UpgradeStats upgradeStats;
 
     private int towerTypeId;
     private String description;
@@ -18,36 +23,24 @@ public abstract class Tower extends Entity {
     private IntegerProperty level;
     private int upgradeCost;
 
-    private int damageUpgrade;
-    private int hpUpgrade;
-    private int attackSpeedUpgrade;
-    private int armorUpgrade;
-
     public Tower(int towerTypeId, String description, int hp, int damage, int armor, int attackSpeed, int range, double x, double y,
-                 AttackType attackType, int zone, int cost, int level,
-                 int upgradeCost, int damageUpgrade, int hpUpgrade, int attackSpeedUpgrade, int armorUpgrade) {
+                 AttackType attackType, int zone, int cost, int level, UpgradeStats upgradeStats) {
         super(hp, damage, armor, attackSpeed, range, x, y, attackType, zone);
         this.towerTypeId = towerTypeId;
         this.description = description;
         this.cost = cost;
         this.sellValue = cost / 2;
         this.level = new SimpleIntegerProperty(level);
-        this.upgradeCost = upgradeCost;
-        this.damageUpgrade = damageUpgrade;
-        this.hpUpgrade = hpUpgrade;
-        this.attackSpeedUpgrade = attackSpeedUpgrade;
-        this.armorUpgrade = armorUpgrade;
+        this.upgradeStats=upgradeStats;
+        upgradeCost= upgradeStats.getCost();
     }
 
     public void upgrade() {
-        if (level.get() < 5) {
+        if (level.get() < MAX_LEVEL) {
             level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;
-            setHp(getHp() + hpUpgrade);
-            setDamage(getDamage() + damageUpgrade);
-            setArmor(getArmor() + armorUpgrade);
-            setAttackSpeed(getAttackSpeed() + attackSpeedUpgrade);
+            upgradeStats.applyUpgradeTo(this);
         }
     }
 
@@ -58,11 +51,6 @@ public abstract class Tower extends Entity {
     }
 
     public void killTower(){
-        hpProperty().set(0);
-    }
-
-    //METHODE DE TEST
-    public void kill() {
         hpProperty().set(0);
     }
 

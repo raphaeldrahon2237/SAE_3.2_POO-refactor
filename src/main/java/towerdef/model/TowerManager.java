@@ -99,7 +99,7 @@ public class TowerManager {
     public boolean upgradeTower(Tower tower) {
         boolean upgraded = false;
 
-        if (tower != null && tower.isAlive() && tower.levelProperty().get() < 5 && progression.getGold() >= tower.getUpgradeCost()) {
+        if (tower != null && tower.isAlive() && tower.levelProperty().get() < tower.MAX_LEVEL && progression.getGold() >= tower.getUpgradeCost()) {
             progression.spendGold(tower.getUpgradeCost());
             tower.upgrade();
             upgraded = true;

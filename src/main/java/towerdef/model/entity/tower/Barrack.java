@@ -2,6 +2,7 @@ package towerdef.model.entity.tower;
 
 import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
+import towerdef.model.entity.UpgradeStats;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Soldier;
 import towerdef.model.entity.troop.Troop;
@@ -9,12 +10,13 @@ import towerdef.model.entity.troop.Veteran;
 
 public class Barrack extends Tower {
     public static final int RESPAWN_WAVE_DELAY = 1;
+    private static final UpgradeStats UPGRADES = new UpgradeStats(130, 0, 15, 0, 2);
 
     private int recruitedTroopId;
     private int recruitedTroopDeathWave;
 
     public Barrack(int x, int y){
-        super(3,"Defensive Tower, spawns troops to block the enemies path, little damage",80, 0, 8, 0, 0, x, y, AttackType.NORMAL, 0, 180, 1, 130, 0, 15, 0, 2);
+        super(3,"Defensive Tower, spawns troops to block the enemies path, little damage",80, 0, 8, 0, 0, x, y, AttackType.NORMAL, 0, 180, 1, UPGRADES);
     }
 
 
