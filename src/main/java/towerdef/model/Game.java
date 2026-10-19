@@ -43,7 +43,7 @@ public class Game {
         projectileManager = new ProjectileManager(gameEntities, rangeChecker, progression);
         towerManager = new TowerManager(mapGrid, gameEntities, progression);
         miniQuestManager = new MiniQuestManager();
-        combat = new Combat(this, gameEntities, base, progression, miniQuestManager);
+        combat = new Combat(this, base, progression, miniQuestManager);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression);
         gameOver = false;
     }

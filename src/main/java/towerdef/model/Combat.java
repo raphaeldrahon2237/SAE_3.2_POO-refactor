@@ -13,7 +13,7 @@ public class Combat {
     private Progression progression;
     private MiniQuestManager miniQuestManager;
 
-    public Combat(Game game, GameEntities gameEntities, Base base, Progression progression, MiniQuestManager miniQuestManager) {
+    public Combat(Game game, Base base, Progression progression, MiniQuestManager miniQuestManager) {
         this.game = game;
         this.base = base;
         this.progression = progression;
