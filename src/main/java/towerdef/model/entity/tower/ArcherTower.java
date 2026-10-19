@@ -1,26 +1,21 @@
 package towerdef.model.entity.tower;
 
-import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.UpgradeStats;
-import towerdef.model.entity.troop.Enemy;
 
 
-public class ArcherTower extends Tower {
+public class ArcherTower extends ProjectileTower {
     private static final UpgradeStats UPGRADES = new UpgradeStats(80,3, 5, 3, 1);
 
+
+    private static final TowerCharacteristics CHARACTERISTICS = TowerCharacteristics.ARCHER;
+
     public ArcherTower(int x, int y) {
-        super(1,"Rapid fire tower, ideal for eliminating many weaker enemies",35, 8, 2, 3, 4, x, y,
-                AttackType.NORMAL, 0, 120, 1, UPGRADES);
+        super(CHARACTERISTICS.getTypeId(), CHARACTERISTICS.getDescription(), 35, CHARACTERISTICS.getDamage(),
+                2, 3, CHARACTERISTICS.getRange(), x, y, AttackType.NORMAL, 0, CHARACTERISTICS.getCost(), 1,
+               UPGRADES);
     }
 
-    public void attack(Game game){
-        if (canAttack()){
-            Enemy targetEnemy = game.findEnemyInRange(this.getX(), this.getY(), this.getRange());
-            if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, this.getAttackType());
-            this.resetAttackTimer();
-        }
-    }
 
 
     @Override

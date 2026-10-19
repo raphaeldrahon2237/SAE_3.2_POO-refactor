@@ -10,10 +10,14 @@ import java.util.ArrayList;
 public class Earthquake extends Tower {
 
     private static final UpgradeStats UPGRADES = new UpgradeStats(180, 2, 10, 1, 1);
+    private static final TowerCharacteristics CHARACTERISTICS = TowerCharacteristics.EARTHQUAKE;
+
     private int slowSpeed;
 
     public Earthquake(int x, int y, int slowSpeed) {
-        super(5,"Slows down enemies and deals small continuous damage ",60, 4, 3, 1, 4, x, y, AttackType.EARTHQUAKE, 0, 260, 1, UPGRADES);
+        super(CHARACTERISTICS.getTypeId(), CHARACTERISTICS.getDescription(), 60, CHARACTERISTICS.getDamage(),
+                3, 1, CHARACTERISTICS.getRange(), x, y, AttackType.EARTHQUAKE, 0, CHARACTERISTICS.getCost(), 1,
+                UPGRADES);
         this.slowSpeed = slowSpeed;
     }
 

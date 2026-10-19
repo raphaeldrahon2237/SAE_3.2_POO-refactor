@@ -25,6 +25,7 @@ import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.GameStats;
 import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.tower.TowerCharacteristics;
 
 import java.io.IOException;
 import java.net.URL;
@@ -177,6 +178,19 @@ public class GameController implements Initializable {
         buttonSell.setOnAction(event -> sellSelectedTower());
     }
 
+    private void displayTowerInfos(int towerId) {
+        TowerCharacteristics characteristics = game.getTowerCharacteristics(towerId);
+        if (characteristics != null) {
+            towerInfoLabel.setText(
+                    "Price : " + characteristics.getCost() + "\n" +
+                    "Damage : " + characteristics.getDamage() + "\n" +
+                    "Range : " + characteristics.getRange() + "\n" +
+                    "Role : " + characteristics.getDescription()
+            );
+            towerInfoLabel.setVisible(true);
+        }
+    }
+
     private void initKeyboardControls() {
         gamePane.setFocusTraversable(true);
 
@@ -212,19 +226,6 @@ public class GameController implements Initializable {
         gamePane.requestFocus();
     }
 
-    private void displayTowerInfos(int towerId) {
-        Tower tower = game.getTowerByTypeId(towerId);
-        if (tower != null) {
-            towerInfoLabel.setText(
-                    "Price : " + tower.getCost() + "\n" +
-                            "Damage : " + tower.getDamage() + "\n" +
-                            "Range : " + tower.getRange() + "\n" +
-                            "Role : " + tower.getDescription()
-            );
-            towerInfoLabel.setVisible(true);
-        }
-    }
-
     private void initTowerPlacementControls() {
         gamePane.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / TILESIZE);
@@ -239,7 +240,6 @@ public class GameController implements Initializable {
 
                 if (placed) {
                     System.out.println("Tower placed in : " + x + ", " + y);
-                    game.addScore(10);
                     towerSelected=0;
                 } else {
                     System.out.println("Tower placement impossible : " + x + ", " + y);
