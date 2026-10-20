@@ -8,9 +8,9 @@ import towerdef.model.entity.Projectile;
 import towerdef.model.entity.tower.ArcherTower;
 import towerdef.model.entity.tower.Artillery;
 import towerdef.model.entity.tower.Mage;
-import towerdef.model.entity.troop.Archer;
-import towerdef.model.entity.troop.Catapult;
-import towerdef.model.entity.troop.ShadowArcher;
+import towerdef.model.entity.troop.enemy.Archer;
+import towerdef.model.entity.troop.enemy.Catapult;
+import towerdef.model.entity.troop.enemy.ShadowArcher;
 
 import static towerdef.model.map.TileType.TILESIZE;
 

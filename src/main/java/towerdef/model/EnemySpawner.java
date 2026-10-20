@@ -2,7 +2,7 @@ package towerdef.model;
 
 import javafx.geometry.Point2D;
 import towerdef.model.entity.Base;
-import towerdef.model.entity.troop.*;
+import towerdef.model.entity.troop.enemy.*;
 import towerdef.model.map.MapGrid;
 
 import java.util.ArrayList;

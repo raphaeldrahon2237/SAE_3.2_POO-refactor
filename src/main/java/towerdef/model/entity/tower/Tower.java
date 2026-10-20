@@ -7,7 +7,7 @@ import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.UpgradeStats;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 public abstract class Tower extends Entity {
 

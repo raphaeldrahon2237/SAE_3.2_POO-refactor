@@ -1,7 +1,6 @@
 package towerdef.model.entity.tower;
 
 import towerdef.model.entity.UpgradeStats;
-import towerdef.model.entity.troop.Enemy;
 
 public class Artillery extends ProjectileTower {
 

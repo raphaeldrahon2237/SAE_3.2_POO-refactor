@@ -1,4 +1,4 @@
-package towerdef.model.entity.troop;
+package towerdef.model.entity.troop.enemy;
 
 public class Catapult extends RangedEnemy {
 

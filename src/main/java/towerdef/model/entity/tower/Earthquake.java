@@ -2,7 +2,7 @@ package towerdef.model.entity.tower;
 
 import towerdef.model.Game;
 import towerdef.model.entity.UpgradeStats;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 import java.util.ArrayList;
 

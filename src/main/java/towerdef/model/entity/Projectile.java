@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import towerdef.model.RangeChecker;
 import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package towerdef.model.entity.troop;
+package towerdef.model.entity.troop.enemy;
 
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
@@ -9,8 +9,9 @@ import towerdef.model.entity.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.troop.Troop;
 
-public class Enemy extends Troop {
+public abstract class Enemy extends Troop {
 
     private List<Point2D> path;
     private int currentTileIndex;
@@ -137,31 +138,11 @@ public class Enemy extends Troop {
         return null;
     }
 
-    public void attack(Game game){
-        if (!game.isGameOver() && getDamage() > 0 && !attackAlliedTroopInRange(game)) {
-            attackBaseInRange(game);
-        }
-    }
+    public abstract void attack(Game game);
 
-    public boolean isInCombat(Game game) {
-        return game.isAlliedTroopInRange(getX(), getY(), getRange()) || game.isBaseInRange(this);
-    }
+    public abstract boolean isInCombat(Game game);
 
-    protected boolean attackTowerInRange(Game game) {
-        boolean hasTarget = false;
-        Tower targetTower = game.findTowerInRange(getX(), getY(), getRange());
 
-        if (targetTower != null) {
-            hasTarget = true;
-
-            if (canAttack()) {
-                shootProjectileAtTarget(targetTower, game, getAttackType());
-                resetAttackTimer();
-            }
-        }
-
-        return hasTarget;
-    }
 
     protected boolean attackAlliedTroopInRange(Game game) {
         boolean hasTarget = false;

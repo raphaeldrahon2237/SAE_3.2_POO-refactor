@@ -3,6 +3,7 @@ package towerdef.model.entity.troop;
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
 import towerdef.model.entity.Entity;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 public abstract class Troop extends Entity {
 

@@ -3,7 +3,7 @@ package towerdef.model;
 import javafx.geometry.Point2D;
 import towerdef.model.core.AStar;
 import towerdef.model.entity.Base;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.map.MapGrid;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
 import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 public class GameEntities {
 

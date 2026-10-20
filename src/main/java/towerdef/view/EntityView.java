@@ -10,6 +10,8 @@ import towerdef.model.entity.troop.*;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import towerdef.model.entity.troop.enemy.*;
+
 import static towerdef.model.map.TileType.TILESIZE;
 
 public class EntityView {

@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.Archer;
-import towerdef.model.entity.troop.Enemy;
-import towerdef.model.entity.troop.ShadowSoldier;
-import towerdef.model.entity.troop.Wolf;
+import towerdef.model.entity.troop.enemy.Archer;
+import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.entity.troop.enemy.ShadowSoldier;
+import towerdef.model.entity.troop.enemy.Wolf;
 import towerdef.model.quest.MiniQuest;
 
 public class MiniQuestManager {

@@ -3,7 +3,7 @@ package towerdef.model;
 import javafx.collections.ObservableList;
 import towerdef.model.entity.Base;
 import towerdef.model.entity.Entity;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.quest.MiniQuest;
 
 public class Combat {

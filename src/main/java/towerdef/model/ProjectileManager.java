@@ -4,7 +4,7 @@ import javafx.geometry.Point2D;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;

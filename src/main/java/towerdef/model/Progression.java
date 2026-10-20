@@ -2,7 +2,7 @@ package towerdef.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import towerdef.model.entity.troop.Enemy;
+import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.quest.MiniQuest;
 
 public class Progression {
