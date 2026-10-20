@@ -107,6 +107,7 @@ public class GameController implements Initializable {
     private int towerSelected=0;
     private boolean destinationTestMode = false;
     private Timeline gameLoop;
+    private int time;
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
@@ -114,6 +115,7 @@ public class GameController implements Initializable {
     private ProjectileListener projectileListener;
     private EntListener alliesListener;
     private EntListener enemiesListener;
+    private HashMap<Integer, String> description;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -148,30 +150,35 @@ public class GameController implements Initializable {
 
     }
 
-    private void changeTowerSelected(int TowerId){
-        towerSelected= TowerId;
-        displayTowerInfos(TowerId);
-    }
-
     private void initButtonControls() {
         buttonArcherTower.setOnAction(event -> {
-            changeTowerSelected(1);
+            towerSelected = 1;
+            displayTowerInfos(towerSelected);
+            System.out.println("Placement mode activated: Archer Tower");
         });
 
         buttonArtillery.setOnAction(event -> {
-            changeTowerSelected(2);
+            towerSelected = 2;
+            displayTowerInfos(towerSelected);
+            System.out.println("Placement mode activated: Artillery");
         });
 
         buttonBarracks.setOnAction(event -> {
-            changeTowerSelected(3);
+            towerSelected = 3;
+            displayTowerInfos(towerSelected);
+            System.out.println("Placement mode activated: Barracks");
         });
 
         buttonMage.setOnAction(event -> {
-            changeTowerSelected(4);
+            towerSelected = 4;
+            displayTowerInfos(towerSelected);
+            System.out.println("Placement mode activated: Earthquake");
         });
 
         buttonEarthquake.setOnAction(event -> {
-            changeTowerSelected(5);
+            towerSelected = 5;
+            displayTowerInfos(towerSelected);
+            System.out.println("Placement mode activated: Earthquake");
         });
 
         buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
@@ -197,28 +204,36 @@ public class GameController implements Initializable {
         gamePane.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case A:
-                    changeTowerSelected(1);
+                    towerSelected=1;
+                    System.out.println("Placement mode activated: Archer Tower");
                     break;
 
                 case T:
-                    changeTowerSelected(2);
+                    towerSelected=2;
+                    System.out.println("Placement mode activated: Artillery");
                     break;
                 case B:
-                    changeTowerSelected(3);
+                    towerSelected=3;
+                    System.out.println("Placement mode activated: Barracks");
                     break;
                 case  M:
-                    changeTowerSelected(4);;
+                    towerSelected=4;
+                    System.out.println("Placement mode activated: Mage");
                     break;
                 case S:
-                    changeTowerSelected(5);
+                    towerSelected=5;
+                    System.out.println("Placement mode activated: Earthquake");
                     break;
                 case E:
                     destinationTestMode = true;
                     System.out.println("Destination test activated: Destination test mode");
                     break;
 
+
+
                 case ESCAPE:
                     towerSelected=0;
+                    System.out.println("Placement annulé");
                     break;
             }
         });
@@ -228,14 +243,14 @@ public class GameController implements Initializable {
 
     private void initTowerPlacementControls() {
         gamePane.setOnMouseClicked(event -> {
-            int x = (int) (event.getX() / TILESIZE);
-            int y = (int) (event.getY() / TILESIZE);
+            int x = convertCoordinate(event.getX());
+            int y = convertCoordinate(event.getY());
 
             if (event.getButton() == MouseButton.SECONDARY) {
                 selectTower(x, y);
                 event.consume();
             } else if(towerSelected!=0) {
-                boolean placed;
+                boolean placed = false;
                 placed = game.placeTower(x, y, towerSelected);
 
                 if (placed) {
@@ -320,8 +335,8 @@ public class GameController implements Initializable {
 
 
             if (destinationTestMode){
-                int x = (int) (event.getX() / TILESIZE);
-                int y = (int) (event.getY() / TILESIZE);
+                int x = convertCoordinate(event.getX());
+                int y = convertCoordinate(event.getY());
 
                 game.changeEnemiesDestination(new Point2D(x, y));
 
@@ -339,36 +354,22 @@ public class GameController implements Initializable {
     }
 
     private void initAnimation() {
+        time = 0;
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame keyFrame = new KeyFrame(
                 Duration.seconds(0.017),
-                ev -> {
-                    long now = System.nanoTime();
+                (ev) -> {
 
-                    if (lastFrameTime == 0) {
-                       lastFrameTime = now;
+                    if (lastFrameTime != 0) {
+                        calculateDeltaTime();
+                        updateGame(deltaTime);
                     } else {
-
-                        deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
-
-                        lastFrameTime = now;
-
-                        game.updateStates(deltaTime);
-                        waveLabel.setText("Vague : " + game.getCurrentWave());
-                        refreshMiniQuestDisplay();
-
-                        if (game.isGameOver()) {
-                            showGameOverScreen();
-                        } else {
-
-                            alliesListener.animations(deltaTime);
-                            enemiesListener.animations(deltaTime);
-
-                        }
+                        calculateDeltaTime();
                     }
+
                 }
         );
 
@@ -423,6 +424,19 @@ public class GameController implements Initializable {
 
     // Updates the quest display.
     private void refreshMiniQuestDisplay() {
+       initMiniQuestDisplay();
+       updateMiniQuestDisplay();
+    }
+
+    public void onClose() {
+        game.resetScore();
+    }
+
+    private int convertCoordinate(double pixel){
+        return (int) (pixel / TILESIZE);
+    }
+
+    private void initMiniQuestDisplay() {
         if (miniQuestBox.getChildren().isEmpty()) {
             Label titleLabel = new Label("Mini-quest bonus");
             titleLabel.setWrapText(true);
@@ -435,7 +449,9 @@ public class GameController implements Initializable {
                 miniQuestBox.getChildren().add(questLabel);
             }
         }
+    }
 
+    private void updateMiniQuestDisplay() {
         for (int i = 0; i < game.getMiniQuestManager().getQuests().size(); i++) {
             MiniQuest quest = game.getMiniQuestManager().getQuests().get(i);
             Label questLabel = (Label) miniQuestBox.getChildren().get(i + 1);
@@ -449,7 +465,39 @@ public class GameController implements Initializable {
         }
     }
 
-    public void onClose() {
-        game.resetScore();
+    private double calculateDeltaTime(){
+        long now = System.nanoTime();
+
+        if (lastFrameTime == 0) {
+            lastFrameTime = now;
+        } else {
+
+            deltaTime = (now - lastFrameTime) / 1_000_000_000.0;
+
+            lastFrameTime = now;
+
+        }
+        return deltaTime;
+    }
+
+    private void updateGame(double deltaTime) {
+        game.updateStates(deltaTime);
+        waveLabel.setText("Vague : " + game.getCurrentWave());
+        refreshMiniQuestDisplay();
+
+        if (game.isGameOver()) {
+            showGameOverScreen();
+        } else {
+
+            alliesListener.animations(deltaTime);
+            enemiesListener.animations(deltaTime);
+
+            time++;
+        }
     }
 }
+
+
+
+
+
