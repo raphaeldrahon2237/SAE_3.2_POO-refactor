@@ -150,35 +150,31 @@ public class GameController implements Initializable {
 
     }
 
+    private void changeTowerSelected(int towerId){
+        towerSelected = towerId;
+        displayTowerInfos(towerId);
+        System.out.println("Placement mode activated");
+    }
+
     private void initButtonControls() {
         buttonArcherTower.setOnAction(event -> {
-            towerSelected = 1;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Archer Tower");
+            changeTowerSelected(1);
         });
 
         buttonArtillery.setOnAction(event -> {
-            towerSelected = 2;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Artillery");
+            changeTowerSelected(2);
         });
 
         buttonBarracks.setOnAction(event -> {
-            towerSelected = 3;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Barracks");
+            changeTowerSelected(3);
         });
 
         buttonMage.setOnAction(event -> {
-            towerSelected = 4;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Earthquake");
+            changeTowerSelected(4);
         });
 
         buttonEarthquake.setOnAction(event -> {
-            towerSelected = 5;
-            displayTowerInfos(towerSelected);
-            System.out.println("Placement mode activated: Earthquake");
+            changeTowerSelected(5);
         });
 
         buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
@@ -204,32 +200,25 @@ public class GameController implements Initializable {
         gamePane.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case A:
-                    towerSelected=1;
-                    System.out.println("Placement mode activated: Archer Tower");
+                    changeTowerSelected(1);
                     break;
 
                 case T:
-                    towerSelected=2;
-                    System.out.println("Placement mode activated: Artillery");
+                    changeTowerSelected(2);
                     break;
                 case B:
-                    towerSelected=3;
-                    System.out.println("Placement mode activated: Barracks");
+                    changeTowerSelected(3);
                     break;
                 case  M:
-                    towerSelected=4;
-                    System.out.println("Placement mode activated: Mage");
+                    changeTowerSelected(4);
                     break;
                 case S:
-                    towerSelected=5;
-                    System.out.println("Placement mode activated: Earthquake");
+                    changeTowerSelected(5);
                     break;
                 case E:
                     destinationTestMode = true;
                     System.out.println("Destination test activated: Destination test mode");
                     break;
-
-
 
                 case ESCAPE:
                     towerSelected=0;

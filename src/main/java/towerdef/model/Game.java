@@ -132,13 +132,7 @@ public class Game {
         return progression.scoreProperty();
     }
 
-    public void addScore(int amount) {
-        progression.addScore(amount);
-    }
 
-    public void updateScore(double deltaTime) {
-        progression.updateScore(deltaTime);
-    }
 
     public void resetScore() {
         progression.resetScore();
@@ -161,9 +155,7 @@ public class Game {
         return enemySpawner.getCurrentWave();
     }
 
-    public boolean canPlaceTower(int x, int y) {
-        return towerManager.canPlaceTower(x, y);
-    }
+
 
     public boolean placeTower(int x, int y, int idTower) {
         return towerManager.placeTower(x, y, idTower);
