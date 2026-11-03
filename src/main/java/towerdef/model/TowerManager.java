@@ -52,22 +52,15 @@ public class TowerManager {
 
         Tower tower = TowerFactory.createTower(entityType, x, y);
 
-        if (tower == null || progression.getGold() < tower.getCost()) {
+        if (!canBuyTower(tower)) {
             return false;
         }
+        ;
 
         progression.spendGold(tower.getCost());
         gameEntities.addTower(tower);
 
-        if (entityType == EntityType.BARRACK) {
-            Barrack barrack = (Barrack) tower;
-            Troop recruitedTroop = createTroopNextToBarrack(barrack);
-
-            if (recruitedTroop != null) {
-                gameEntities.addAlly(recruitedTroop);
-                barrack.setRecruitedTroop(recruitedTroop);
-            }
-        }
+        recruitTroopBarrack(tower, entityType);
 
         progression.towerPlaced();
 
@@ -91,15 +84,13 @@ public class TowerManager {
     }
 
     public boolean upgradeTower(Tower tower) {
-        boolean upgraded = false;
-
-        if (tower != null && tower.isAlive() && tower.levelProperty().get() < tower.MAX_LEVEL && progression.getGold() >= tower.getUpgradeCost()) {
-            progression.spendGold(tower.getUpgradeCost());
-            tower.upgrade();
-            upgraded = true;
+        if (!canUpgradeTower(tower)) {
+            return false;
         }
+        progression.spendGold(tower.getUpgradeCost());
+        tower.upgrade();
 
-        return upgraded;
+        return true;
     }
 
     public boolean sellTower(Tower tower) {
@@ -113,7 +104,6 @@ public class TowerManager {
 
         return sold;
     }
-
 
 
     // Updates the respawn of recruited troops for all barracks.
@@ -139,6 +129,7 @@ public class TowerManager {
             }
         }
     }
+
     // Marks the barrack troop as dead if missing, then respawns it when allowed.
     private Troop findRecruitedTroopById(int recruitedTroopId) {
         for (Entity ally : gameEntities.getAllies()) {
@@ -172,5 +163,26 @@ public class TowerManager {
         }
 
         return null;
+    }
+
+    private void recruitTroopBarrack(Tower tower, EntityType entityType) {
+        if (entityType == EntityType.BARRACK) {
+            Barrack barrack = (Barrack) tower;
+            Troop recruitedTroop = createTroopNextToBarrack(barrack);
+
+            if (recruitedTroop != null) {
+                gameEntities.addAlly(recruitedTroop);
+                barrack.setRecruitedTroop(recruitedTroop);
+            }
+        }
+    }
+
+    private boolean canBuyTower(Tower tower) {
+        return tower != null && progression.getGold() >= tower.getCost();
+
+    }
+
+    private boolean canUpgradeTower(Tower tower) {
+        return tower != null && tower.isAlive() && tower.levelProperty().get() < tower.MAX_LEVEL && progression.getGold() >= tower.getUpgradeCost();
     }
 }

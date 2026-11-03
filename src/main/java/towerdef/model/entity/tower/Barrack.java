@@ -69,4 +69,6 @@ public class Barrack extends Tower {
                 && recruitedTroopDeathWave != -1
                 && currentWave - recruitedTroopDeathWave >= RESPAWN_WAVE_DELAY;
     }
+
+
 }
