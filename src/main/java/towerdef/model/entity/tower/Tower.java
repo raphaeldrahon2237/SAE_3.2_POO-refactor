@@ -79,6 +79,10 @@ public abstract class Tower extends Entity {
         return upgradeCost;
     }
 
+    public boolean canUpgrade(){
+        return (level.get() < MAX_LEVEL);
+    }
+
     @Override
     public String toString() {
         return "" + super.toString();

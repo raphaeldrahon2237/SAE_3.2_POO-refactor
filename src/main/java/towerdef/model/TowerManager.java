@@ -183,6 +183,6 @@ public class TowerManager {
     }
 
     private boolean canUpgradeTower(Tower tower) {
-        return tower != null && tower.isAlive() && tower.levelProperty().get() < tower.MAX_LEVEL && progression.getGold() >= tower.getUpgradeCost();
+        return tower != null && tower.isAlive() && tower.canUpgrade() && progression.getGold() >= tower.getUpgradeCost();
     }
 }
