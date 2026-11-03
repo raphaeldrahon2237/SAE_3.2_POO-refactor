@@ -6,14 +6,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import towerdef.model.RangeChecker;
-import towerdef.model.entity.tower.Tower;
-import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.entity.impact.ImpactStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static towerdef.model.entity.AttackType.AOE;
-import static towerdef.model.entity.AttackType.MAGIC;
 
 public class Projectile {
 
@@ -26,9 +22,10 @@ public class Projectile {
     private Entity target;
     private Entity source;
     private boolean finished;
-    private AttackType projectyleType;
+    private final ImpactStrategy impactStrategy;
 
-    public Projectile(List<Point2D> trajectory, Entity target, Entity source, double speed, AttackType  projectyleType) {
+    public Projectile(List<Point2D> trajectory, Entity target, Entity source,
+                      double speed, ImpactStrategy impactStrategy) {
         this.trajectory = new ArrayList<>(trajectory);
         this.target = target;
         this.source = source;
@@ -37,7 +34,7 @@ public class Projectile {
         this.progressToNextTile.set(0.0);
         updateCoordinates();
         this.finished = trajectory.size() <= 1;
-        this.projectyleType = projectyleType;
+        this.impactStrategy = impactStrategy;
     }
 
     public void act(double deltaTime, RangeChecker rangeChecker) {
@@ -53,35 +50,8 @@ public class Projectile {
             }
         }
         updateCoordinates();
-        if(this.finished){
-            if(projectyleType==AOE) dealDamageInAoe(rangeChecker);
-            else dealDamage();
-        }
-    }
-
-    public void dealDamage(){
-        if (target instanceof Enemy enemy && source instanceof Tower tower) {
-            enemy.setLastDamagingTower(tower);
-        }
-
-        if(projectyleType==MAGIC) target.takeMagicDamage(getDamage());
-        else target.takeDamage(source.getDamage());
-    }
-
-    public void dealDamageInAoe(RangeChecker rangeChecker){
-        ArrayList<Enemy> enemiesImpacted;
-        Point2D impactTile = this.getImpactTile();
-        double impactX = impactTile.getX();
-        double impactY = impactTile.getY();
-
-        enemiesImpacted= rangeChecker.findEnemiesInRange(impactX,impactY, 2);
-
-        for(Enemy enemy: enemiesImpacted) {
-            if (source instanceof Tower tower) {
-                enemy.setLastDamagingTower(tower);
-            }
-
-            enemy.takeDamage(source.getDamage());
+        if (finished) {
+            impactStrategy.applyImpact(this, rangeChecker);
         }
     }
 
@@ -128,5 +98,9 @@ public class Projectile {
 
     public Entity getSource() {
         return source;
+    }
+
+    public Entity getTarget() {
+        return target;
     }
 }

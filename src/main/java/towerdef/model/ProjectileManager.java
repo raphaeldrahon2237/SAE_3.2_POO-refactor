@@ -4,6 +4,10 @@ import javafx.geometry.Point2D;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
+import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.impact.NormalImpact;
+import towerdef.model.entity.impact.MagicImpact;
+import towerdef.model.entity.impact.AreaImpact;
 import towerdef.model.entity.troop.enemy.Enemy;
 
 import java.util.ArrayList;
@@ -49,7 +53,24 @@ public class ProjectileManager {
                 (int) impactTile.getY()
         );
 
-        Projectile projectile = new Projectile(trajectory, target, source, PROJECTILE_SPEED, projectileType);
+        ImpactStrategy impactStrategy;
+
+        switch (projectileType) {
+            case MAGIC:
+                impactStrategy = new MagicImpact();
+                break;
+
+            case AOE:
+                impactStrategy = new AreaImpact();
+                break;
+
+            default:
+                impactStrategy = new NormalImpact();
+                break;
+        }
+
+        Projectile projectile = new Projectile(
+                trajectory, target, source, PROJECTILE_SPEED, impactStrategy);
         progression.projectileFired();
         gameEntities.addProjectile(projectile);
     }
