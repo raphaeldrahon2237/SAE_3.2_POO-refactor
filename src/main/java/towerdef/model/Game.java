@@ -12,6 +12,7 @@ import towerdef.model.entity.tower.TowerCharacteristics;
 import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
+import towerdef.model.spawn.WaveGenerationStrategy;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,7 +46,8 @@ public class Game {
         towerManager = new TowerManager(mapGrid, gameEntities, progression);
         miniQuestManager = new MiniQuestManager();
         combat = new Combat(this, base, progression, miniQuestManager);
-        enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression);
+        enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression,
+                new WaveGenerationStrategy());
         gameOver = false;
     }
 

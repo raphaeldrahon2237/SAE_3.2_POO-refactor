@@ -2,7 +2,9 @@ package towerdef.model;
 
 import javafx.geometry.Point2D;
 import towerdef.model.entity.Base;
-import towerdef.model.entity.troop.enemy.*;
+import towerdef.model.entity.troop.enemy.Boss;
+import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.spawn.EnemyGenerationStrategy;
 import towerdef.model.map.MapGrid;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class EnemySpawner {
     private Path path;
     private GameEntities gameEntities;
     private Progression progression;
+    private EnemyGenerationStrategy generationStrategy;
     private int currentWave;
     private int enemiesRemainingInWave;
     private double waveTimer;
@@ -34,13 +37,15 @@ public class EnemySpawner {
     private boolean waveInProgress;
     private boolean bossSpawnedThisWave = false;
 
-    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities, Progression progression) {
+    public EnemySpawner(MapGrid mapGrid, Base base, Random random, Path path, GameEntities gameEntities, Progression progression,
+                        EnemyGenerationStrategy generationStrategy) {
         this.mapGrid = mapGrid;
         this.base = base;
         this.random = random;
         this.path = path;
         this.gameEntities = gameEntities;
         this.progression = progression;
+        this.generationStrategy = generationStrategy;
         currentWave = 0;
         enemiesRemainingInWave = 0;
         waveTimer = 0.0;
@@ -151,49 +156,7 @@ public class EnemySpawner {
     }
     // Creates a random enemy based on the current wave difficulty.
     private Enemy createEnemyForCurrentWave(int x, int y) {
-        int wave = Math.max(1, currentWave);
-        int rand = random.nextInt(100);
-
-        if (wave < 3) {
-            return rand < 80 ? new Wolf(x, y) : new Archer(x, y);
-        }
-
-        if (wave < 5) {
-            if (rand < 55) {
-                return new Wolf(x, y);
-            }
-            if (rand < 90) {
-                return new Archer(x, y);
-            }
-            return new ShadowSoldier(x, y);
-        }
-
-        if (wave < 8) {
-            if (rand < 35) {
-                return new Wolf(x, y);
-            }
-            if (rand < 65) {
-                return new Archer(x, y);
-            }
-            if (rand < 85) {
-                return new ShadowSoldier(x, y);
-            }
-            if (rand < 95) {
-                return new ShadowArcher(x, y);
-            }
-            return new Catapult(x, y);
-        }
-
-        if (rand < 30) return new Wolf(x, y);
-
-        else if (rand < 55) return new Archer(x, y);
-
-        else if (rand < 75) return new ShadowSoldier(x, y);
-
-        else if (rand < 90) return new ShadowArcher(x, y);
-
-        else return new Catapult(x, y);
-
+        return generationStrategy.createEnemy(x, y, random.nextInt(100), currentWave);
     }
 
     private void spawnEnemy(Enemy enemy) {
