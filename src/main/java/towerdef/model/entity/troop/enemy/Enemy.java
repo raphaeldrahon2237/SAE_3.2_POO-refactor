@@ -50,34 +50,7 @@ public abstract class Enemy extends Troop {
         }
 
         if (currentTarget != null) {
-            double currentX = getX();
-            double currentY = getY();
-
-            double targetX = currentTarget.getX();
-            double targetY = currentTarget.getY();
-
-            double directionX = targetX - currentX;
-            double directionY = targetY - currentY;
-
-            double distance = Math.sqrt(directionX * directionX + directionY * directionY);
-
-            if (distance == 0) {
-                currentTarget = null;
-            } else {
-                double movementDistance = getMooveSpeed() * deltaTime;
-
-                if (movementDistance >= distance) {
-                    setX(targetX);
-                    setY(targetY);
-                    currentTarget = null;
-                } else {
-                    double normalizedX = directionX / distance;
-                    double normalizedY = directionY / distance;
-
-                    setX(currentX + normalizedX * movementDistance);
-                    setY(currentY + normalizedY * movementDistance);
-                }
-            }
+           moveTowardsTarget(deltaTime);
         }
     }
 
@@ -91,16 +64,13 @@ public abstract class Enemy extends Troop {
 
         if (target == null) {
             targetIndex++;
+            target = getTargetAtIndex(targetIndex);
 
-            if (targetIndex < path.size()) {
-                target = path.get(targetIndex);
-            }
         }
-
         while (target != null && remainingDistance > 0) {
-            double directionX = target.getX() - predictionX;
-            double directionY = target.getY() - predictionY;
-            double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+            double directionX = calculateDirection(target.getX(), predictionX);
+            double directionY = calculateDirection(target.getY(), predictionY);
+            double distance = calculateDistance(directionX, directionY);
 
             if (distance == 0) {
                 targetIndex++;
@@ -110,21 +80,13 @@ public abstract class Enemy extends Troop {
                 remainingDistance -= distance;
                 targetIndex++;
             } else {
-                double normalizedX = directionX / distance;
-                double normalizedY = directionY / distance;
-
-                predictionX += normalizedX * remainingDistance;
-                predictionY += normalizedY * remainingDistance;
+               Point2D nextPosition = calculateNextPosition(predictionX, predictionY, directionX, directionY, distance, remainingDistance);
+                predictionX = nextPosition.getX();
+                predictionY = nextPosition.getY();
                 remainingDistance = 0;
             }
-
-            if (targetIndex < path.size()) {
-                target = path.get(targetIndex);
-            } else {
-                target = null;
-            }
+           target = getTargetAtIndex(targetIndex);
         }
-
         return new Point2D(predictionX, predictionY);
     }
 
@@ -204,5 +166,62 @@ public abstract class Enemy extends Troop {
     }
     public Tower getLastDamagingTower() {
         return lastDamagingTower;
+    }
+
+    private void moveTowardsTarget(double deltaTime){
+        double currentX = getX();
+        double currentY = getY();
+
+        double targetX = currentTarget.getX();
+        double targetY = currentTarget.getY();
+
+        double directionX = calculateDirection(targetX, currentX);
+        double directionY = calculateDirection(targetY, currentY);
+
+        double distance = calculateDistance(directionX, directionY);
+
+        if (distance == 0) {
+            currentTarget = null;
+        } else {
+            double movementDistance = getMooveSpeed() * deltaTime;
+
+            if (movementDistance >= distance) {
+                setX(targetX);
+                setY(targetY);
+                currentTarget = null;
+            } else {
+                double normalizedX = calculateNomalized(directionX, distance);
+                double normalizedY = calculateNomalized(directionY, distance);
+
+                setX(currentX + normalizedX * movementDistance);
+                setY(currentY + normalizedY * movementDistance);
+            }
+        }
+    }
+
+    private Point2D getTargetAtIndex(int index){
+        if (index < path.size()) {
+           return path.get(index);
+        }
+        return null;
+    }
+
+    private Point2D calculateNextPosition(double x, double y, double directionX, double directionY, double distance, double movementDistance){
+        double normalizedX = calculateNomalized(directionX, distance);
+        double normalizedY = calculateNomalized(directionY, distance);
+
+        return new Point2D(x + normalizedX * movementDistance, y + normalizedY * movementDistance);
+    }
+
+    private double calculateDirection(double target, double position){
+        return target - position;
+    }
+
+    private double calculateDistance(double directionX, double directionY){
+        return Math.sqrt(directionX * directionX + directionY * directionY);
+    }
+
+    private double calculateNomalized(double directionX, double distance) {
+        return directionX / distance;
     }
 }

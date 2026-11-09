@@ -36,7 +36,7 @@ public abstract class Tower extends Entity {
     }
 
     public void upgrade() {
-        if (level.get() < MAX_LEVEL) {
+        if (canUpgrade()) {
             level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;

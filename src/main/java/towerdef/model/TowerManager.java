@@ -67,6 +67,7 @@ public class TowerManager {
         return true;
     }
 
+
     public TowerCharacteristics getTowerCharacteristics(int towerTypeId) {
         return TowerCharacteristics.fromId(towerTypeId);
     }
