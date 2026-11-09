@@ -55,7 +55,7 @@ public class TowerManager {
         if (!canBuyTower(tower)) {
             return false;
         }
-        ;
+
 
         progression.spendGold(tower.getCost());
         gameEntities.addTower(tower);
