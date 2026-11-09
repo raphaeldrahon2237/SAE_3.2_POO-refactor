@@ -13,6 +13,12 @@ import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.map.MapGrid;
 import towerdef.model.spawn.WaveGenerationStrategy;
+import towerdef.model.power.PowerManager;
+import towerdef.model.power.Power;
+import towerdef.model.power.HealingPower;
+import towerdef.model.power.DamagePower;
+import towerdef.model.power.SlowPower;
+import towerdef.model.power.CombinedPower;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,6 +37,11 @@ public class Game {
     private MiniQuestManager miniQuestManager;
     private Combat combat;
     private EnemySpawner enemySpawner;
+    private PowerManager powerManager;
+    private final Power healingPower = new HealingPower();
+    private final Power damagePower = new DamagePower();
+    private final Power slowPower = new SlowPower();
+    private final Power combinedPower = new CombinedPower();
     private boolean gameOver;
 
     public Game() {
@@ -48,6 +59,12 @@ public class Game {
         combat = new Combat(this, base, progression, miniQuestManager);
         enemySpawner = new EnemySpawner(mapGrid, base, new Random(), path, gameEntities, progression,
                 new WaveGenerationStrategy());
+        ArrayList<Power> powers = new ArrayList<>();
+        powers.add(healingPower);
+        powers.add(damagePower);
+        powers.add(slowPower);
+        powers.add(combinedPower);
+        powerManager = new PowerManager(this, new Random(), powers);
         gameOver = false;
     }
 
@@ -56,7 +73,11 @@ public class Game {
     public void updateStates(double deltaTime) {
         if (!gameOver) {
             progression.addSurvivalTime(deltaTime);
+            int previousWave = enemySpawner.getCurrentWave();
             progression.increaseScoreRate(enemySpawner.update(deltaTime));
+            if (enemySpawner.getCurrentWave() > previousWave) {
+                powerManager.gainRandomPower();
+            }
             progression.updateMaxWaveReached(enemySpawner.getCurrentWave());
 
             combat.update(gameEntities.getEnemies(), gameEntities.getAllies(),deltaTime);
@@ -70,6 +91,30 @@ public class Game {
         }
 
 
+    }
+
+    public Power getHealingPower() {
+        return healingPower;
+    }
+
+    public Power getDamagePower() {
+        return damagePower;
+    }
+
+    public Power getSlowPower() {
+        return slowPower;
+    }
+
+    public Power getCombinedPower() {
+        return combinedPower;
+    }
+
+    public IntegerProperty powerQuantityProperty(Power power) {
+        return powerManager.quantityProperty(power);
+    }
+
+    public boolean usePower(Power power) {
+        return powerManager.usePower(power);
     }
 
     public boolean isGameOver() {

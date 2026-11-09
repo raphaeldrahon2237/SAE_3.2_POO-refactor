@@ -8,13 +8,15 @@ import java.util.ArrayList;
 
 public class Earthquake extends Tower {
 
+    public static final int SLOW_SPEED = 1;
+
     private static final UpgradeStats UPGRADES = new UpgradeStats(180, 2, 10, 1, 1);
 
     private int slowSpeed;
 
-    public Earthquake(int x, int y, int slowSpeed) {
+    public Earthquake(int x, int y) {
         super(TowerCharacteristics.EARTHQUAKE, x, y, UPGRADES);
-        this.slowSpeed = slowSpeed;
+        this.slowSpeed = SLOW_SPEED;
     }
 
 

@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -24,6 +25,7 @@ import javafx.util.Duration;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.GameStats;
+import towerdef.model.power.Power;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerCharacteristics;
 
@@ -64,6 +66,18 @@ public class GameController implements Initializable {
 
     @FXML
     private Button buttonSell;
+
+    @FXML
+    private Button buttonHealingPower;
+
+    @FXML
+    private Button buttonDamagePower;
+
+    @FXML
+    private Button buttonSlowPower;
+
+    @FXML
+    private Button buttonCombinedPower;
 
     @FXML
     private Label scoreLabel;
@@ -133,6 +147,7 @@ public class GameController implements Initializable {
 
         initKeyboardControls();
         initButtonControls();
+        initPowerControls();
         initTowerPlacementControls();
 
         initDestinationTest();
@@ -179,6 +194,28 @@ public class GameController implements Initializable {
 
         buttonUpgrade.setOnAction(event -> upgradeSelectedTower());
         buttonSell.setOnAction(event -> sellSelectedTower());
+    }
+
+    private void initPowerControls() {
+        initPowerButton(buttonHealingPower, game.getHealingPower(), "Soin",
+                "Restaure tous les PV des tours encore en vie.");
+        initPowerButton(buttonDamagePower, game.getDamagePower(), "Dégâts",
+                "Retire la moitié des PV actuels de chaque ennemi, sans tenir compte de son armure.");
+        initPowerButton(buttonSlowPower, game.getSlowPower(), "Ralentissement",
+                "Ralentit les ennemis présents comme la tour Earthquake.");
+        initPowerButton(buttonCombinedPower, game.getCombinedPower(), "Combiné",
+                "Active le soin, les dégâts et le ralentissement avec une seule charge.");
+    }
+
+    private void initPowerButton(Button button, Power power, String name, String description) {
+        button.textProperty().bind(game.powerQuantityProperty(power).asString(name + " (%d)"));
+        button.disableProperty().bind(game.powerQuantityProperty(power).lessThanOrEqualTo(0)
+                .or(gameOverPane.visibleProperty()));
+        button.setTooltip(new Tooltip(description));
+        button.setOnAction(event -> {
+            game.usePower(power);
+            gamePane.requestFocus();
+        });
     }
 
     private void displayTowerInfos(int towerId) {
