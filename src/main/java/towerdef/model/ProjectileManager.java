@@ -45,29 +45,13 @@ public class ProjectileManager {
         return Utils.toTilePosition(predictedPosition.getX(), predictedPosition.getY());
     }
 
-    public void createProjectile(Entity source, Entity target, Point2D impactTile, AttackType projectileType) {
+    public void createProjectile(Entity source, Entity target, Point2D impactTile, ImpactStrategy impactStrategy) {
         List<Point2D> trajectory = computeLineTiles(
                 (int) source.getX(),
                 (int) source.getY(),
                 (int) impactTile.getX(),
                 (int) impactTile.getY()
         );
-
-        ImpactStrategy impactStrategy;
-
-        switch (projectileType) {
-            case MAGIC:
-                impactStrategy = new MagicImpact();
-                break;
-
-            case AOE:
-                impactStrategy = new AreaImpact();
-                break;
-
-            default:
-                impactStrategy = new NormalImpact();
-                break;
-        }
 
         Projectile projectile = new Projectile(
                 trajectory, target, source, PROJECTILE_SPEED, impactStrategy);

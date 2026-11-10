@@ -7,6 +7,7 @@ import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Base;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.Projectile;
+import towerdef.model.entity.impact.ImpactStrategy;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.tower.TowerCharacteristics;
 import towerdef.model.entity.troop.enemy.Enemy;
@@ -260,8 +261,8 @@ public class Game {
         return projectileManager.computePreshotTile(sourceX, sourceY, target);
     }
 
-    public void createProjectile(Entity source, Entity target, Point2D impactTile, AttackType projectileType) {
-        projectileManager.createProjectile(source, target, impactTile, projectileType);
+    public void createProjectile(Entity source, Entity target, Point2D impactTile, ImpactStrategy impactStrategy) {
+        projectileManager.createProjectile(source, target, impactTile, impactStrategy);
     }
 
     public void changeEnemiesDestination(Point2D newDestination) {

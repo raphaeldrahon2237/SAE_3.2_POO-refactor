@@ -8,6 +8,9 @@ import towerdef.model.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.impact.NormalImpact;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Troop;
 
@@ -131,7 +134,7 @@ public abstract class Enemy extends Troop {
             hasTarget = true;
 
             if (canAttack()) {
-                shootProjectileAtTarget(targetTroop, game, getAttackType());
+                shootProjectileAtTarget(targetTroop, game);
                 resetAttackTimer();
             }
         }
@@ -148,10 +151,11 @@ public abstract class Enemy extends Troop {
         }
     }
 
-    protected void shootProjectileAtTarget(Entity target, Game game, AttackType projectileType) {
+    protected void shootProjectileAtTarget(Entity target, Game game) {
         Point2D targetTile = Utils.toTilePosition(target.getX(), target.getY());
         incrementAttackCounter();
-        game.createProjectile(this, target, targetTile, projectileType);
+        ImpactStrategy impactStrategy = new NormalImpact();
+        game.createProjectile(this, target, targetTile, impactStrategy);
     }
 
     public int getReward() {

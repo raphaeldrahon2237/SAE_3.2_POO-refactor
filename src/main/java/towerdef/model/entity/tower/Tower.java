@@ -39,6 +39,7 @@ public abstract class Tower extends Entity {
         this.level = new SimpleIntegerProperty(1);
         this.upgradePath= upgradePath;
         this.upgradeCost= upgradeCost;
+        this.impactStrategy= characteristics.getImpactStrategy();
     }
 
     public void upgrade() {
@@ -52,10 +53,10 @@ public abstract class Tower extends Entity {
         }
     }
 
-    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
+    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, ImpactStrategy impactStrategy){
         Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
         this.incrementAttackCounter();
-        game.createProjectile(this,targetEnemy, targetTile, projectileType);
+        game.createProjectile(this,targetEnemy, targetTile, impactStrategy);
     }
 
     public void killTower(){

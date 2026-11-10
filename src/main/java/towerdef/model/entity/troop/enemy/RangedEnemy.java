@@ -26,7 +26,7 @@ public class RangedEnemy extends Enemy {
             hasTarget = true;
 
             if (canAttack()) {
-                shootProjectileAtTarget(targetTower, game, getAttackType());
+                shootProjectileAtTarget(targetTower, game);
                 resetAttackTimer();
             }
         }

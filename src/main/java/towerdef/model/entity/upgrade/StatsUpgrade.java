@@ -24,7 +24,4 @@ public class StatsUpgrade implements Upgrade{
         tower.setAttackSpeed(tower.getAttackSpeed() + attackSpeed);
     }
 
-    public int getCost(){
-        return cost;
-    }
 }
