@@ -1,13 +1,17 @@
 package towerdef.model.entity.tower;
 
 import towerdef.model.Game;
-import towerdef.model.entity.upgrade.statsUpgrade;
+import towerdef.model.entity.upgrade.StatsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.entity.upgrade.Upgrade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ProjectileTower extends Tower {
 
-    public ProjectileTower(TowerCharacteristics characteristics, double x, double y, statsUpgrade statsUpgrade) {
-        super(characteristics, x, y, statsUpgrade);
+    public ProjectileTower(TowerCharacteristics characteristics, double x, double y, List<Upgrade> upgradePath, int upgradeCost) {
+        super(characteristics, x, y, upgradePath, upgradeCost);
     }
 
     @Override

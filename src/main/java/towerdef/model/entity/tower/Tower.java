@@ -7,14 +7,17 @@ import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.impact.ImpactStrategy;
-import towerdef.model.entity.upgrade.statsUpgrade;
+import towerdef.model.entity.upgrade.StatsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.entity.upgrade.Upgrade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Tower extends Entity {
 
-    public static final int MAX_LEVEL=5;
 
-    private final statsUpgrade statsUpgrade;
+    private final List<Upgrade> upgradePath;
 
     private int towerTypeId;
     private String description;
@@ -26,7 +29,7 @@ public abstract class Tower extends Entity {
 
     private ImpactStrategy impactStrategy;
 
-    public Tower(TowerCharacteristics characteristics, double x, double y, statsUpgrade statsUpgrade) {
+    public Tower(TowerCharacteristics characteristics, double x, double y, List<Upgrade> upgradePath, int upgradeCost){
         super(characteristics.getHp(), characteristics.getDamage(), characteristics.getArmor(), characteristics.getAttackSpeed(),
                 characteristics.getRange(), x, y);
         this.towerTypeId = characteristics.getTypeId();
@@ -34,16 +37,18 @@ public abstract class Tower extends Entity {
         this.cost = characteristics.getCost();
         this.sellValue = cost / 2;
         this.level = new SimpleIntegerProperty(1);
-        this.statsUpgrade = statsUpgrade;
-        upgradeCost= statsUpgrade.getCost();
+        this.upgradePath= upgradePath;
+        this.upgradeCost= upgradeCost;
     }
 
     public void upgrade() {
         if (canUpgrade()) {
+            int lvl= levelProperty().get();
+            upgradePath.get(lvl-1).applyUpgradeTo(this);
             level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;
-            statsUpgrade.applyUpgradeTo(this);
+
         }
     }
 
@@ -83,7 +88,7 @@ public abstract class Tower extends Entity {
     }
 
     public boolean canUpgrade(){
-        return (level.get() < MAX_LEVEL);
+        return (level.get() < upgradePath.size()+1);
     }
 
     public ImpactStrategy getImpactStrategy() {
@@ -93,6 +98,7 @@ public abstract class Tower extends Entity {
     public void setImpactStrategy(ImpactStrategy impactStrategy) {
         this.impactStrategy = impactStrategy;
     }
+
 
     @Override
     public String toString() {
