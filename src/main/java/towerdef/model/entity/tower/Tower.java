@@ -6,14 +6,15 @@ import javafx.geometry.Point2D;
 import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
-import towerdef.model.entity.UpgradeStats;
+import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.upgrade.statsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
 
 public abstract class Tower extends Entity {
 
     public static final int MAX_LEVEL=5;
 
-    private final UpgradeStats upgradeStats;
+    private final statsUpgrade statsUpgrade;
 
     private int towerTypeId;
     private String description;
@@ -23,16 +24,18 @@ public abstract class Tower extends Entity {
     private IntegerProperty level;
     private int upgradeCost;
 
-    public Tower(TowerCharacteristics characteristics, double x, double y, UpgradeStats upgradeStats) {
+    private ImpactStrategy impactStrategy;
+
+    public Tower(TowerCharacteristics characteristics, double x, double y, statsUpgrade statsUpgrade) {
         super(characteristics.getHp(), characteristics.getDamage(), characteristics.getArmor(), characteristics.getAttackSpeed(),
-                characteristics.getRange(), x, y, characteristics.getAttackType(), characteristics.getZone());
+                characteristics.getRange(), x, y);
         this.towerTypeId = characteristics.getTypeId();
         this.description = characteristics.getDescription();
         this.cost = characteristics.getCost();
         this.sellValue = cost / 2;
-        this.level = new SimpleIntegerProperty(characteristics.getLevel());
-        this.upgradeStats=upgradeStats;
-        upgradeCost= upgradeStats.getCost();
+        this.level = new SimpleIntegerProperty(1);
+        this.statsUpgrade = statsUpgrade;
+        upgradeCost= statsUpgrade.getCost();
     }
 
     public void upgrade() {
@@ -40,7 +43,7 @@ public abstract class Tower extends Entity {
             level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;
-            upgradeStats.applyUpgradeTo(this);
+            statsUpgrade.applyUpgradeTo(this);
         }
     }
 
@@ -81,6 +84,14 @@ public abstract class Tower extends Entity {
 
     public boolean canUpgrade(){
         return (level.get() < MAX_LEVEL);
+    }
+
+    public ImpactStrategy getImpactStrategy() {
+        return impactStrategy;
+    }
+
+    public void setImpactStrategy(ImpactStrategy impactStrategy) {
+        this.impactStrategy = impactStrategy;
     }
 
     @Override

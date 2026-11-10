@@ -1,8 +1,8 @@
-package towerdef.model.entity;
+package towerdef.model.entity.upgrade;
 
 import towerdef.model.entity.tower.Tower;
 
-public class UpgradeStats {
+public class statsUpgrade implements Upgrade{
 
     private int cost;
     private int hp;
@@ -11,7 +11,7 @@ public class UpgradeStats {
     private int attackSpeed;
 
 
-    public UpgradeStats(int cost, int hp, int damage, int armor, int attackSpeed){
+    public statsUpgrade(int cost, int hp, int damage, int armor, int attackSpeed){
         this.cost=cost;
         this.hp=hp;
         this.damage=damage;

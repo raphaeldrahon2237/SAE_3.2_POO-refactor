@@ -1,7 +1,7 @@
 package towerdef.model.entity.tower;
 
 import towerdef.model.Game;
-import towerdef.model.entity.UpgradeStats;
+import towerdef.model.entity.upgrade.statsUpgrade;
 import towerdef.model.entity.troop.Recruit;
 import towerdef.model.entity.troop.Soldier;
 import towerdef.model.entity.troop.Troop;
@@ -10,7 +10,7 @@ import towerdef.model.entity.troop.Veteran;
 public class Barrack extends Tower {
 
     public static final int RESPAWN_WAVE_DELAY = 1;
-    private static final UpgradeStats UPGRADES = new UpgradeStats(130, 0, 15, 0, 2);
+    private static final statsUpgrade UPGRADES = new statsUpgrade(130, 0, 15, 0, 2);
 
     private int recruitedTroopId;
     private int recruitedTroopDeathWave;

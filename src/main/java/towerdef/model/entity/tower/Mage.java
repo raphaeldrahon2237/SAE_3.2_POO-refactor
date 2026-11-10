@@ -1,11 +1,11 @@
 package towerdef.model.entity.tower;
 
-import towerdef.model.entity.UpgradeStats;
+import towerdef.model.entity.upgrade.statsUpgrade;
 
 public class Mage extends ProjectileTower {
 
 
-    private static final UpgradeStats UPGRADES = new UpgradeStats(120, 5, 5, 2, 1);
+    private static final statsUpgrade UPGRADES = new statsUpgrade(120, 5, 5, 2, 1);
     public Mage( int x, int y){
         super(TowerCharacteristics.MAGE, x, y, UPGRADES);
     }

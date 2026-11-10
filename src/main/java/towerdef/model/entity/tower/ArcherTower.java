@@ -1,10 +1,10 @@
 package towerdef.model.entity.tower;
 
-import towerdef.model.entity.UpgradeStats;
+import towerdef.model.entity.upgrade.statsUpgrade;
 
 
 public class ArcherTower extends ProjectileTower {
-    private static final UpgradeStats UPGRADES = new UpgradeStats(80,3, 5, 3, 1);
+    private static final statsUpgrade UPGRADES = new statsUpgrade(80,3, 5, 3, 1);
 
 
 
