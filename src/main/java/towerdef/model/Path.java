@@ -5,6 +5,7 @@ import towerdef.model.core.AStar;
 import towerdef.model.entity.Base;
 import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.map.MapGrid;
+import towerdef.model.core.movement.TilePenaltyStrategy;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ public class Path {
     private MapGrid mapGrid;
     private Base base;
     private AStar[] aStarList;
+    private TilePenaltyStrategy cachedTilePenaltyStrategy;
     private GameEntities gameEntities;
 
     public Path(MapGrid mapGrid, Base base, GameEntities gameEntities) {
         this.mapGrid = mapGrid;
         this.base = base;
         this.gameEntities = gameEntities;
-        aStarList = createPaths();
     }
 
     public boolean assignMovement(Enemy enemy) {
@@ -27,7 +28,8 @@ public class Path {
 
         if (path == null) {
             Point2D source = new Point2D(enemy.getX(), enemy.getY());
-            AStar aStar = new AStar(mapGrid, source, enemy.getDestination(), gameEntities.getTowers());
+            AStar aStar = new AStar(mapGrid, source, enemy.getDestination(), gameEntities.getTowers(),
+                    enemy.getTilePenaltyStrategy());
             path = aStar.getPath();
         }
 
@@ -37,13 +39,14 @@ public class Path {
         return !path.isEmpty();
     }
 
-    private AStar[] createPaths() {
+    private AStar[] createPaths(TilePenaltyStrategy tilePenaltyStrategy) {
         List<Point2D> spawnPoints = EnemySpawner.getWalkableEdgeTiles(mapGrid);
         AStar[] aStarList = new AStar[spawnPoints.size()];
         Point2D baseTile = new Point2D(base.getX(), base.getY());
 
         for (int i = 0; i < aStarList.length; i++) {
-            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile, gameEntities.getTowers());
+            aStarList[i] = new AStar(mapGrid, spawnPoints.get(i), baseTile, gameEntities.getTowers(),
+                    tilePenaltyStrategy);
         }
 
         return aStarList;
@@ -56,6 +59,11 @@ public class Path {
 
         if (!new Point2D(base.getX(), base.getY()).equals(enemy.getDestination())) {
             return null;
+        }
+
+        if (aStarList == null || cachedTilePenaltyStrategy != enemy.getTilePenaltyStrategy()) {
+            cachedTilePenaltyStrategy = enemy.getTilePenaltyStrategy();
+            aStarList = createPaths(cachedTilePenaltyStrategy);
         }
 
         for (AStar aStar : aStarList) {

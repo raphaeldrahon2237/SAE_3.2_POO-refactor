@@ -2,10 +2,9 @@ package towerdef.model.core;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import towerdef.model.GameEntities;
-import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.map.MapGrid;
+import towerdef.model.core.movement.TilePenaltyStrategy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,22 +12,22 @@ import java.util.PriorityQueue;
 
 public class AStar {
 
-    private static final int TOWER_PATH_PENALTY = 30;
-    private static final int TOWER_INFLUENCE_RADIUS = 3;
-
     private MapGrid mapGrid;
     private Point2D source;
     private Point2D target;
     private ObservableList<Tower> towers;
+    private TilePenaltyStrategy tilePenaltyStrategy;
 
     private Map<Point2D, Double> costs;
     private Map<Point2D, Point2D> predecessors;
 
-    public AStar(MapGrid mapGrid, Point2D source, Point2D target, ObservableList<Tower> towers) {
+    public AStar(MapGrid mapGrid, Point2D source, Point2D target, ObservableList<Tower> towers,
+                 TilePenaltyStrategy tilePenaltyStrategy) {
         this.mapGrid = mapGrid;
         this.source = source;
         this.target = target;
         this.towers = towers;
+        this.tilePenaltyStrategy = tilePenaltyStrategy;
         costs = new HashMap<>();
         predecessors = new HashMap<>();
         runAStar();
@@ -89,18 +88,7 @@ public class AStar {
     }
 
     private double movementCost(Point2D tile) {
-        double cost = 1;
-
-        for (Tower tower : towers) {
-            double distance = Math.abs(tile.getX() - tower.getX())
-                    + Math.abs(tile.getY() - tower.getY());
-
-            if (distance <= TOWER_INFLUENCE_RADIUS) {
-                cost += TOWER_PATH_PENALTY;
-            }
-        }
-
-        return cost;
+        return 1 + tilePenaltyStrategy.getPenalty(tile, towers);
     }
 
     private static class TileCost implements Comparable<TileCost> {
