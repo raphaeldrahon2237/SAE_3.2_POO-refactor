@@ -224,4 +224,5 @@ public abstract class Enemy extends Troop {
     private double calculateNomalized(double directionX, double distance) {
         return directionX / distance;
     }
+
 }
