@@ -6,14 +6,18 @@ import javafx.geometry.Point2D;
 import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
-import towerdef.model.entity.UpgradeStats;
+import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.upgrade.StatsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
+import towerdef.model.entity.upgrade.Upgrade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Tower extends Entity {
 
-    public static final int MAX_LEVEL=5;
 
-    private final UpgradeStats upgradeStats;
+    private final List<Upgrade> upgradePath;
 
     private int towerTypeId;
     private String description;
@@ -23,31 +27,36 @@ public abstract class Tower extends Entity {
     private IntegerProperty level;
     private int upgradeCost;
 
-    public Tower(TowerCharacteristics characteristics, double x, double y, UpgradeStats upgradeStats) {
+    private ImpactStrategy impactStrategy;
+
+    public Tower(TowerCharacteristics characteristics, double x, double y, List<Upgrade> upgradePath, int upgradeCost){
         super(characteristics.getHp(), characteristics.getDamage(), characteristics.getArmor(), characteristics.getAttackSpeed(),
-                characteristics.getRange(), x, y, characteristics.getAttackType(), characteristics.getZone());
+                characteristics.getRange(), x, y);
         this.towerTypeId = characteristics.getTypeId();
         this.description = characteristics.getDescription();
         this.cost = characteristics.getCost();
         this.sellValue = cost / 2;
-        this.level = new SimpleIntegerProperty(characteristics.getLevel());
-        this.upgradeStats=upgradeStats;
-        upgradeCost= upgradeStats.getCost();
+        this.level = new SimpleIntegerProperty(1);
+        this.upgradePath= upgradePath;
+        this.upgradeCost= upgradeCost;
+        this.impactStrategy= characteristics.getImpactStrategy();
     }
 
     public void upgrade() {
         if (canUpgrade()) {
+            int lvl= levelProperty().get();
+            upgradePath.get(lvl-1).applyUpgradeTo(this);
             level.set(level.get() + 1);
             sellValue += upgradeCost / 2;
             upgradeCost += 0.25 * upgradeCost;
-            upgradeStats.applyUpgradeTo(this);
+
         }
     }
 
-    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, AttackType projectileType){
+    public void shootProjectileAtEnemy(Enemy targetEnemy, Game game, ImpactStrategy impactStrategy){
         Point2D targetTile = game.computePreshotTile(this.getX(),this.getY(),targetEnemy);
         this.incrementAttackCounter();
-        game.createProjectile(this,targetEnemy, targetTile, projectileType);
+        game.createProjectile(this,targetEnemy, targetTile, impactStrategy);
     }
 
     public void killTower(){
@@ -80,8 +89,17 @@ public abstract class Tower extends Entity {
     }
 
     public boolean canUpgrade(){
-        return (level.get() < MAX_LEVEL);
+        return (level.get() < upgradePath.size()+1);
     }
+
+    public ImpactStrategy getImpactStrategy() {
+        return impactStrategy;
+    }
+
+    public void setImpactStrategy(ImpactStrategy impactStrategy) {
+        this.impactStrategy = impactStrategy;
+    }
+
 
     @Override
     public String toString() {

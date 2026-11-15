@@ -14,22 +14,13 @@ public abstract class Entity {
     private int armor;
     private int attackSpeed;
     private int range;
-    private Entity target;
     private double attackTimer;
-    private AttackType attackType;
-    private int zone;
-
-    //private Game game;
 
     private DoubleProperty x = new SimpleDoubleProperty();
     private DoubleProperty y = new SimpleDoubleProperty();
     private IntegerProperty attackCounter = new SimpleIntegerProperty();
 
     public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y) {
-        this(hp, damage, armor, attackSpeed, range, x, y, AttackType.NORMAL, 0);
-    }
-
-    public Entity(int hp, int damage, int armor, int attackSpeed, int range, double x, double y, AttackType attackType, int zone) {
         this.id = nextId;
         nextId++;
 
@@ -45,10 +36,7 @@ public abstract class Entity {
         this.attackCounter.set(0);
 
         this.attackTimer = 0.0;
-        this.attackType = attackType;
-        this.zone = zone;
 
-        //this.game= game;
     }
 
     public abstract void attack(Game game);
@@ -169,14 +157,6 @@ public abstract class Entity {
 
     public int getRange() {
         return range;
-    }
-
-    public AttackType getAttackType() {
-        return attackType;
-    }
-
-    public int getZone() {
-        return zone;
     }
 
     public String toString() {
