@@ -18,21 +18,9 @@ public class RangeChecker {
         this.base = base;
     }
 
-    // Finds and returns the closest alive enemy within the given range.
     public Enemy findEnemyInRange(double x, double y, int range) {
-        Enemy closestEnemy = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (Enemy enemy : gameEntities.getEnemies()) {
-            double distance = Utils.distance(enemy.getX(), enemy.getY(), x, y);
-
-            if (enemy.isAlive() && distance <= range && distance < closestDistance) {
-                closestEnemy = enemy;
-                closestDistance = distance;
-            }
-        }
-
-        return closestEnemy;
+        ArrayList<Entity> enemies = new ArrayList<>(gameEntities.getEnemies());
+        return (Enemy) findClosestInRange(enemies, x, y, range);
     }
 
     public ArrayList<Enemy> findEnemiesInRange(double x, double y, int range) {
@@ -43,43 +31,40 @@ public class RangeChecker {
                 enemiesInRange.add(enemy);
             }
         }
-
         return enemiesInRange;
     }
 
     public Tower findTowerInRange(double x, double y, int range) {
-        Tower closestTower = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (Tower tower : gameEntities.getTowers()) {
-            double distance = Utils.distance(tower.getX(), tower.getY(), x, y);
-
-            if (tower.isAlive() && distance <= range && distance < closestDistance) {
-                closestTower = tower;
-                closestDistance = distance;
-            }
-        }
-
-        return closestTower;
+        ArrayList<Entity> towers = new ArrayList<>(gameEntities.getTowers());
+        return (Tower) findClosestInRange(towers, x, y, range);
     }
 
     public Troop findAlliedTroopInRange(double x, double y, int range) {
-        Troop closestTroop = null;
-        double closestDistance = Double.MAX_VALUE;
+        ArrayList<Entity> troops = new ArrayList<>();
 
         for (Entity ally : gameEntities.getAllies()) {
-            if (ally instanceof Troop troop) {
-                double distance = Utils.distance(troop.getX(), troop.getY(), x, y);
-
-                if (troop.isAlive() && distance <= range && distance < closestDistance) {
-                    closestTroop = troop;
-                    closestDistance = distance;
-                }
+            if (ally instanceof Troop) {
+               troops.add(ally);
             }
         }
-
-        return closestTroop;
+        return (Troop) findClosestInRange(troops, x, y , range);
     }
+
+    private Entity findClosestInRange(ArrayList<Entity> entities, double x, double y, int range) {
+        Entity closestEntity = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity entity : entities) {
+            double distance = Utils.distance(entity.getX(), entity.getY(), x, y);
+
+            if (entity.isAlive() && distance <= range && distance < closestDistance) {
+                closestEntity = entity;
+                closestDistance = distance;
+            }
+        }
+        return closestEntity;
+    }
+
 
     public boolean isBaseInRange(Enemy enemy) {
         return Utils.isInRange(base.getX(), base.getY(), enemy.getX(), enemy.getY(), enemy.getRange());
