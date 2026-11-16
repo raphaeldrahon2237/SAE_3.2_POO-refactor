@@ -12,7 +12,6 @@ public class MiniQuest {
     private final String title;
     private final Class<? extends Enemy> enemyType;
     private final int towerTypeId;
-    private final String towerName;
     private final int targetAmount;
     private final int rewardGold;
     private final int rewardScore;
@@ -25,7 +24,6 @@ public class MiniQuest {
         this.title = title;
         this.enemyType = enemyType;
         this.towerTypeId = towerTypeId;
-        this.towerName = towerName;
         this.targetAmount = targetAmount;
         this.rewardGold = rewardGold;
         this.rewardScore = rewardScore;
@@ -54,14 +52,6 @@ public class MiniQuest {
         }
     }
 
-    // Returns the text displayed for this mini quest.
-    public String getDisplayText() {
-        String status = completed.get() ? "COMPLETED" : currentAmount.get() + "/" + targetAmount;
-
-        return "• " + title + " : " + status
-                + " (Bonus +" + rewardGold + " gold, +" + rewardScore + " score)";
-    }
-
     public String getTitle() {
         return title;
     }
@@ -86,7 +76,6 @@ public class MiniQuest {
         return completed.get();
     }
 
-
     public boolean isRewardClaimed() {
         return rewardClaimed;
     }
@@ -94,5 +83,9 @@ public class MiniQuest {
     // Marks the reward as claimed to prevent giving it multiple times.
     public void claimReward() {
         rewardClaimed = true;
+    }
+
+    public int getTargetAmount(){
+        return targetAmount;
     }
 }
