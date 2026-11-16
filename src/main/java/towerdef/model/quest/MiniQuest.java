@@ -19,7 +19,7 @@ public class MiniQuest {
     private final BooleanProperty completed;
     private boolean rewardClaimed;
 
-    public MiniQuest(String title, Class<? extends Enemy> enemyType, int towerTypeId, String towerName,
+    public MiniQuest(String title, Class<? extends Enemy> enemyType, int towerTypeId,
                      int targetAmount, int rewardGold, int rewardScore) {
         this.title = title;
         this.enemyType = enemyType;

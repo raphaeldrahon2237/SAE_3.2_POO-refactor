@@ -30,7 +30,6 @@ public class MiniQuestManager {
                 "Kill 10 wolves with the Archer Tower",
                 Wolf.class,
                 1,
-                "Archer Tower",
                 10,
                 80,
                 50
@@ -40,7 +39,6 @@ public class MiniQuestManager {
                 "Kill 8 archers with the Mage Tower",
                 Archer.class,
                 4,
-                "Mage Tower",
                 8,
                 100,
                 70
@@ -50,7 +48,6 @@ public class MiniQuestManager {
                 "Kill 6 shadow soldiers with the Artillery Tower",
                 ShadowSoldier.class,
                 2,
-                "Artillery Tower",
                 6,
                 120,
                 90
