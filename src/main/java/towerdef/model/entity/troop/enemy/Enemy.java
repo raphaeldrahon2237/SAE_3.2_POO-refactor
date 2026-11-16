@@ -69,8 +69,7 @@ public abstract class Enemy extends Troop {
     }
 
     public Point2D predictPositionAfter(double duration) {
-        double predictionX = getX();
-        double predictionY = getY();
+        Point2D prediction = new Point2D(getX(), getY());
         double remainingDistance = getMooveSpeed() * duration;
 
         int targetIndex = currentTileIndex;
@@ -82,26 +81,19 @@ public abstract class Enemy extends Troop {
 
         }
         while (target != null && remainingDistance > 0) {
-            double directionX = calculateDirection(target.getX(), predictionX);
-            double directionY = calculateDirection(target.getY(), predictionY);
-            double distance = calculateDistance(directionX, directionY);
+            double distance = calculateDistanceBetween(prediction, target);
 
-            if (distance == 0) {
-                targetIndex++;
-            } else if (remainingDistance >= distance) {
-                predictionX = target.getX();
-                predictionY = target.getY();
+           if (remainingDistance >= distance) {
+                prediction = target;
                 remainingDistance -= distance;
                 targetIndex++;
             } else {
-               Point2D nextPosition = calculateNextPosition(predictionX, predictionY, directionX, directionY, distance, remainingDistance);
-                predictionX = nextPosition.getX();
-                predictionY = nextPosition.getY();
+              prediction = calculateNextPosition(prediction, target, remainingDistance);
                 remainingDistance = 0;
             }
            target = getTargetAtIndex(targetIndex);
         }
-        return new Point2D(predictionX, predictionY);
+        return prediction;
     }
 
     private Point2D getNextTarget() {
@@ -184,35 +176,21 @@ public abstract class Enemy extends Troop {
     }
 
     private void moveTowardsTarget(double deltaTime){
-        double currentX = getX();
-        double currentY = getY();
+        Point2D position = new Point2D(getX(), getY());
+        double distance = calculateDistanceBetween(position, currentTarget);
+        double movementDistance = getMooveSpeed() * deltaTime;
 
-        double targetX = currentTarget.getX();
-        double targetY = currentTarget.getY();
-
-        double directionX = calculateDirection(targetX, currentX);
-        double directionY = calculateDirection(targetY, currentY);
-
-        double distance = calculateDistance(directionX, directionY);
-
-        if (distance == 0) {
+        if(movementDistance >= distance) {
+            setX(currentTarget.getX());
+            setY(currentTarget.getY());
             currentTarget = null;
         } else {
-            double movementDistance = getMooveSpeed() * deltaTime;
-
-            if (movementDistance >= distance) {
-                setX(targetX);
-                setY(targetY);
-                currentTarget = null;
-            } else {
-                double normalizedX = calculateNomalized(directionX, distance);
-                double normalizedY = calculateNomalized(directionY, distance);
-
-                setX(currentX + normalizedX * movementDistance);
-                setY(currentY + normalizedY * movementDistance);
-            }
+            Point2D nextPosition = calculateNextPosition(position,currentTarget, movementDistance);
+            setX(nextPosition.getX());
+            setY(nextPosition.getY());
         }
     }
+
 
     private Point2D getTargetAtIndex(int index){
         if (index < path.size()) {
@@ -221,11 +199,15 @@ public abstract class Enemy extends Troop {
         return null;
     }
 
-    private Point2D calculateNextPosition(double x, double y, double directionX, double directionY, double distance, double movementDistance){
-        double normalizedX = calculateNomalized(directionX, distance);
-        double normalizedY = calculateNomalized(directionY, distance);
+    private Point2D calculateNextPosition(Point2D position, Point2D target, double movementDistance){
+        double directionX = calculateDirection(target.getX(), position.getX());
+        double directionY = calculateDirection(target.getY(), position.getY());
+        double distance = calculateDistance(directionX, directionY);
+        double normalizedX = calculateNormalized(directionX, distance);
+        double normalizedY = calculateNormalized(directionX, distance);
 
-        return new Point2D(x + normalizedX * movementDistance, y + normalizedY * movementDistance);
+        return new Point2D( position.getX() + normalizedX * movementDistance,
+                position.getY() + normalizedY * movementDistance);
     }
 
     private double calculateDirection(double target, double position){
@@ -236,8 +218,15 @@ public abstract class Enemy extends Troop {
         return Math.sqrt(directionX * directionX + directionY * directionY);
     }
 
-    private double calculateNomalized(double directionX, double distance) {
-        return directionX / distance;
+    private double calculateNormalized(double direction, double distance) {
+        return direction / distance;
+    }
+
+    private double calculateDistanceBetween(Point2D position, Point2D target){
+        double directionX = calculateDirection(target.getX(), position.getX());
+        double directionY = calculateDirection(target.getY(), position.getY());
+        return calculateDistance(directionX, directionY);
+
     }
 
 }
