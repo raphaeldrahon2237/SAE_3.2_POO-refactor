@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import towerdef.view.MiniQuestView;
 import towerdef.view.TerrainView;
 import towerdef.model.Game;
 import towerdef.model.GameStats;
@@ -481,7 +482,7 @@ public class GameController implements Initializable {
         for (int i = 0; i < game.getMiniQuestManager().getQuests().size(); i++) {
             MiniQuest quest = game.getMiniQuestManager().getQuests().get(i);
             Label questLabel = (Label) miniQuestBox.getChildren().get(i + 1);
-            questLabel.setText(quest.getDisplayText());
+            questLabel.setText(MiniQuestView.displayText(quest));
 
             if (quest.isCompleted()) {
                 questLabel.setStyle("-fx-text-fill: #5cff78; -fx-font-weight: bold;");
