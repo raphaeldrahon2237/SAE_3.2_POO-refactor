@@ -30,6 +30,7 @@ public class RangeChecker {
             if (enemy.isAlive() && Utils.isInRange(enemy.getX(), enemy.getY(), x, y, range)) {
                 enemiesInRange.add(enemy);
             }
+
         }
         return enemiesInRange;
     }
