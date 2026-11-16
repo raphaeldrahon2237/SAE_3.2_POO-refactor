@@ -2,14 +2,11 @@ package towerdef.model.entity.troop.enemy;
 
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
-import towerdef.model.Utils;
 import towerdef.model.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import towerdef.model.entity.impact.ImpactStrategy;
-import towerdef.model.entity.impact.NormalImpact;
 import towerdef.model.entity.tower.Tower;
 import towerdef.model.entity.troop.Troop;
 import towerdef.model.core.movement.AvoidTowersPenalty;
@@ -113,52 +110,34 @@ public abstract class Enemy extends Troop {
 
 
     protected boolean attackAlliedTroopInRange(Game game) {
-        boolean hasTarget = false;
         Troop targetTroop = game.findAlliedTroopInRange(getX(), getY(), getRange());
+        return attackTarget(targetTroop, game);
+    }
 
-        if (targetTroop != null) {
+    protected boolean attackTarget(Entity target, Game game){
+        boolean hasTarget = false;
+
+        if (target != null) {
             hasTarget = true;
 
             if (canAttack()) {
-                targetTroop.takeDamage(getDamage());
-                incrementAttackCounter();
+                hitTarget(target, game);
                 resetAttackTimer();
             }
         }
 
         return hasTarget;
+
     }
 
-    protected boolean shootProjectileAtAlliedTroopInRange(Game game) {
-        boolean hasTarget = false;
-        Troop targetTroop = game.findAlliedTroopInRange(getX(), getY(), getRange());
+    protected abstract void hitTarget(Entity target, Game game);
 
-        if (targetTroop != null) {
-            hasTarget = true;
-
-            if (canAttack()) {
-                shootProjectileAtTarget(targetTroop, game);
-                resetAttackTimer();
-            }
-        }
-
-        return hasTarget;
-    }
 
     protected void attackBaseInRange(Game game) {
-        if (game.isBaseInRange(this)) {
-            if (canAttack()) {
+        if (game.isBaseInRange(this) && canAttack()) {
                 game.damageBase(getDamage());
                 resetAttackTimer();
-            }
         }
-    }
-
-    protected void shootProjectileAtTarget(Entity target, Game game) {
-        Point2D targetTile = Utils.toTilePosition(target.getX(), target.getY());
-        incrementAttackCounter();
-        ImpactStrategy impactStrategy = new NormalImpact();
-        game.createProjectile(this, target, targetTile, impactStrategy);
     }
 
     public int getReward() {
@@ -203,8 +182,9 @@ public abstract class Enemy extends Troop {
         double directionX = calculateDirection(target.getX(), position.getX());
         double directionY = calculateDirection(target.getY(), position.getY());
         double distance = calculateDistance(directionX, directionY);
+
         double normalizedX = calculateNormalized(directionX, distance);
-        double normalizedY = calculateNormalized(directionX, distance);
+        double normalizedY = calculateNormalized(directionY, distance);
 
         return new Point2D( position.getX() + normalizedX * movementDistance,
                 position.getY() + normalizedY * movementDistance);

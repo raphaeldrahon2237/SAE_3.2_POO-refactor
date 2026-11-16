@@ -1,6 +1,7 @@
 package towerdef.model.entity.troop.enemy;
 
 import towerdef.model.Game;
+import towerdef.model.entity.Entity;
 
 public class MeleeEnemy extends Enemy {
 
@@ -18,6 +19,12 @@ public class MeleeEnemy extends Enemy {
     @Override
     public boolean isInCombat(Game game) {
         return game.isAlliedTroopInRange(getX(), getY(), getRange()) || game.isBaseInRange(this);
+    }
+
+    @Override
+    protected void hitTarget(Entity target, Game game){
+        target.takeDamage(getDamage());
+        incrementAttackCounter();
     }
 
 
