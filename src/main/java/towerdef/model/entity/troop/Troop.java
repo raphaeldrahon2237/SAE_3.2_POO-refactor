@@ -9,14 +9,12 @@ import towerdef.model.entity.troop.enemy.Enemy;
 public abstract class Troop extends Entity {
 
     private int moveSpeed;
-    private int baseMooveSpeed;
     private Point2D destination;
     private AttackType attackType;
 
     public Troop(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y) {
         super(hp, damage, armor, attackSpeed, range, x, y);
         this.moveSpeed = mvSpeed;
-        this.baseMooveSpeed = mvSpeed;
         this.attackType= AttackType.NORMAL;
     }
 
