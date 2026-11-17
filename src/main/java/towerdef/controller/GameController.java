@@ -122,7 +122,6 @@ public class GameController implements Initializable {
     private int towerSelected=0;
     private boolean destinationTestMode = false;
     private Timeline gameLoop;
-    private int time;
     private long lastFrameTime = 0;
     private double deltaTime;
     private Game game;
@@ -381,8 +380,6 @@ public class GameController implements Initializable {
     }
 
     private void initAnimation() {
-        time = 0;
-
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
@@ -518,8 +515,6 @@ public class GameController implements Initializable {
 
             alliesListener.animations(deltaTime);
             enemiesListener.animations(deltaTime);
-
-            time++;
         }
     }
 }
