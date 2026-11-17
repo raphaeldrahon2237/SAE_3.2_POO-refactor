@@ -17,7 +17,8 @@ public abstract class ProjectileTower extends Tower {
     @Override
     public void attack(Game game){
         if (canAttack()){
-            Enemy targetEnemy = game.findEnemyInRange(this.getX(), this.getY(), this.getRange());
+            ArrayList<Enemy> enemiesInRange = game.findEnemiesInRange(this.getX(), this.getY(),this.getRange());
+            Enemy targetEnemy = getTargetStrategy().chooseTarget(enemiesInRange, this);
             if(targetEnemy!=null) shootProjectileAtEnemy(targetEnemy, game, this.getImpactStrategy());
             this.resetAttackTimer();
         }

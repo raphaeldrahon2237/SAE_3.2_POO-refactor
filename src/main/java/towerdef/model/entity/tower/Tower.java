@@ -7,6 +7,8 @@ import towerdef.model.Game;
 import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.target.ClosestTarget;
+import towerdef.model.entity.target.TargetStrategy;
 import towerdef.model.entity.upgrade.StatsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.entity.upgrade.Upgrade;
@@ -28,6 +30,7 @@ public abstract class Tower extends Entity {
     private int upgradeCost;
 
     private ImpactStrategy impactStrategy;
+    private TargetStrategy targetStrategy;
 
     public Tower(TowerCharacteristics characteristics, double x, double y, List<Upgrade> upgradePath, int upgradeCost){
         super(characteristics.getHp(), characteristics.getDamage(), characteristics.getArmor(), characteristics.getAttackSpeed(),
@@ -40,6 +43,7 @@ public abstract class Tower extends Entity {
         this.upgradePath= upgradePath;
         this.upgradeCost= upgradeCost;
         this.impactStrategy= characteristics.getImpactStrategy();
+        this.targetStrategy = new ClosestTarget();
     }
 
     public void upgrade() {
@@ -100,6 +104,13 @@ public abstract class Tower extends Entity {
         this.impactStrategy = impactStrategy;
     }
 
+    public TargetStrategy getTargetStrategy() {
+        return targetStrategy;
+    }
+
+    public void setTargetStrategy(TargetStrategy targetStrategy) {
+        this.targetStrategy = targetStrategy;
+    }
 
     @Override
     public String toString() {
