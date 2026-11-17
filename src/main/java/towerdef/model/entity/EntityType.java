@@ -4,11 +4,11 @@ import towerdef.model.entity.tower.*;
 
 public enum EntityType {
 
-    ARCHERTOWER(1, new ArcherTowerCreator()),
-    ARTILLERY(2, new ArtilleryCreator()),
-    BARRACK(3, new BarrackCreator()),
-    MAGE(4, new MageCreator()),
-    EARTHQUAKE(5, new EarthquakeCreator()),
+    ARCHERTOWER(1, (x,y) -> new ArcherTower(x,y)),
+    ARTILLERY(2, (x,y) -> new Artillery(x, y)),
+    BARRACK(3, (x,y) -> new Barrack(x, y)),
+    MAGE(4, (x,y) -> new Mage(x, y)),
+    EARTHQUAKE(5, (x,y) -> new Earthquake(x, y)),
     RECRUIT(6, null ),
     WOLF(10, null),
     BOSS(11, null);
