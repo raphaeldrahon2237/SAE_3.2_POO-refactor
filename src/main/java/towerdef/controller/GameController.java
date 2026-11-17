@@ -129,7 +129,7 @@ public class GameController implements Initializable {
     private ProjectileListener projectileListener;
     private EntListener alliesListener;
     private EntListener enemiesListener;
-    private HashMap<Integer, String> description;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -489,7 +489,7 @@ public class GameController implements Initializable {
         }
     }
 
-    private double calculateDeltaTime(){
+    private void calculateDeltaTime(){
         long now = System.nanoTime();
 
         if (lastFrameTime == 0) {
@@ -501,7 +501,6 @@ public class GameController implements Initializable {
             lastFrameTime = now;
 
         }
-        return deltaTime;
     }
 
     private void updateGame(double deltaTime) {
