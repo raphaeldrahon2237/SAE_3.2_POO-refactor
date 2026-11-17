@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import towerdef.model.RangeChecker;
 import towerdef.model.entity.impact.ImpactStrategy;
+import towerdef.model.entity.tower.Tower;
+import towerdef.model.entity.troop.enemy.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,12 @@ public class Projectile {
             if (currentTileIndex.get() == trajectory.size() - 1) {
                 finished = true;
             }
+        }
+    }
+
+    public void registerDamagingTower(Enemy enemy){
+        if (source instanceof Tower tower) {
+            enemy.setLastDamagingTower(tower);
         }
     }
 
