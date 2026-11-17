@@ -38,7 +38,14 @@ public class Projectile {
     }
 
     public void act(double deltaTime, RangeChecker rangeChecker) {
+        move(deltaTime);
+        updateCoordinates();
+        if (finished) {
+            impactStrategy.applyImpact(this, rangeChecker);
+        }
+    }
 
+    private void move(double deltaTime){
         progressToNextTile.set(progressToNextTile.get() + speed * deltaTime);
 
         while (progressToNextTile.get() >= 1.0 && !finished) {
@@ -48,10 +55,6 @@ public class Projectile {
             if (currentTileIndex.get() == trajectory.size() - 1) {
                 finished = true;
             }
-        }
-        updateCoordinates();
-        if (finished) {
-            impactStrategy.applyImpact(this, rangeChecker);
         }
     }
 
