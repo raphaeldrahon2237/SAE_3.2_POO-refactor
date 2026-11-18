@@ -5,6 +5,9 @@ import javafx.scene.layout.Pane;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.tower.Tower;
 import towerdef.view.EntityView;
+import towerdef.view.TowerView;
+import towerdef.view.TroopView;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +29,9 @@ public class EntListener implements ListChangeListener<Entity> {
 
             if (change.wasAdded()) {
                 for (Entity entity : change.getAddedSubList()) {
-                    EntityView eV = new     EntityView(gamePane, entity);
+                    EntityView eV;
+                    if(entity instanceof Tower) eV= new TowerView(gamePane, (Tower) entity);
+                    else  eV = new TroopView(gamePane, entity);
                     eV.createEntityView();
                     mapEntityView.put(entity, eV);
 

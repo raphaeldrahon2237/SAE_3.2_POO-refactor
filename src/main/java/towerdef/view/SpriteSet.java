@@ -7,14 +7,12 @@ public record SpriteSet(Image initial, Image idle, Image attack) {
         return new SpriteSet(load(initial),load(idle),load(attack));
     }
     public static Image load(String name){
-        if(name == null) return null;
-
-        Image img= new Image(SpriteSet.class.getResourceAsStream("/images/"+name+".png"));
-
-        return img;
+        if (name== null) return null;
+        else {
+            Image img= new Image(SpriteSet.class.getResourceAsStream("/images/"+name+".png"));
+            return img;
+        }
 
     }
 
-    public Image idleOrInitial(){ return idle != null ? idle : initial;}
-    public Image atatckOrInitial(){ return attack != null ? attack : initial;}
 }
