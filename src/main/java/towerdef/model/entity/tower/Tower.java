@@ -4,16 +4,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
-import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.impact.ImpactStrategy;
 import towerdef.model.entity.target.ClosestTarget;
 import towerdef.model.entity.target.TargetStrategy;
-import towerdef.model.entity.upgrade.StatsUpgrade;
 import towerdef.model.entity.troop.enemy.Enemy;
 import towerdef.model.entity.upgrade.Upgrade;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tower extends Entity {

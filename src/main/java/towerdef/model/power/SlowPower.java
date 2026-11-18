@@ -10,7 +10,7 @@ public class SlowPower implements Power {
     public void activate(Game game) {
         for (Enemy enemy : game.getEnemies()) {
             if (enemy.isAlive()) {
-                enemy.setMooveSpeed(Earthquake.SLOW_SPEED);
+                enemy.setMoveSpeed(Earthquake.SLOW_SPEED);
             }
         }
     }

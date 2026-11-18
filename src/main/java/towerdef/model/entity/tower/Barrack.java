@@ -13,7 +13,7 @@ import java.util.List;
 public class Barrack extends Tower {
 
     public static final int RESPAWN_WAVE_DELAY = 1;
-    private static final StatsUpgrade UPGRADES = new StatsUpgrade(0, 15, 0, 2);
+    private static final StatsUpgrade UPGRADES = new StatsUpgrade(15, 0, 2, 0);
     private static final List<Upgrade> upgradePath = List.of(UPGRADES, UPGRADES, UPGRADES, UPGRADES);
 
     private int recruitedTroopId;
@@ -53,16 +53,12 @@ public class Barrack extends Tower {
         return recruitedTroopId;
     }
 
-    public int getRecruitedTroopDeathWave() {
-        return recruitedTroopDeathWave;
-    }
-
     public void setRecruitedTroop(Troop troop) {
         recruitedTroopId = troop.getId();
         recruitedTroopDeathWave = -1;
     }
 
-    //stock quand est ce que la recruite est morte
+    //stock quand est ce que la recruit est morte
     public void markRecruitedTroopDead(int currentWave) {
         recruitedTroopId = -1;
         recruitedTroopDeathWave = currentWave;

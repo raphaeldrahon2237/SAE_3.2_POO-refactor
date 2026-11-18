@@ -1,6 +1,5 @@
 package towerdef.model.entity.tower;
 
-import towerdef.model.entity.AttackType;
 import towerdef.model.entity.impact.AreaImpact;
 import towerdef.model.entity.impact.ImpactStrategy;
 import towerdef.model.entity.impact.MagicImpact;
@@ -21,7 +20,7 @@ public enum TowerCharacteristics {
     private final int hp;
     private final int armor;
     private final int attackSpeed;
-    ImpactStrategy impactStrategy;
+    private ImpactStrategy impactStrategy;
     private final String description;
 
     TowerCharacteristics(int typeId, int cost, int damage, int range, int hp, int armor, int attackSpeed, ImpactStrategy impactStrategy, String description) {

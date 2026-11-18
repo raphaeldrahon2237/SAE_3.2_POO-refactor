@@ -2,7 +2,6 @@ package towerdef.model.entity.troop;
 
 import javafx.geometry.Point2D;
 import towerdef.model.Game;
-import towerdef.model.entity.AttackType;
 import towerdef.model.entity.Entity;
 import towerdef.model.entity.troop.enemy.Enemy;
 
@@ -10,12 +9,10 @@ public abstract class Troop extends Entity {
 
     private int moveSpeed;
     private Point2D destination;
-    private AttackType attackType;
 
     public Troop(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y) {
         super(hp, damage, armor, attackSpeed, range, x, y);
         this.moveSpeed = mvSpeed;
-        this.attackType= AttackType.NORMAL;
     }
 
     public Point2D getDestination() {
@@ -30,8 +27,8 @@ public abstract class Troop extends Entity {
         return moveSpeed;
     }
 
-    public void setMooveSpeed(int mooveSpeed) {
-        this.moveSpeed = mooveSpeed;
+    public void setMoveSpeed(int moveSpeed) {
+        this.moveSpeed = moveSpeed;
     }
 
     @Override
@@ -49,9 +46,5 @@ public abstract class Troop extends Entity {
                 resetAttackTimer();
             }
         }
-    }
-
-    public AttackType getAttackType() {
-        return attackType;
     }
 }

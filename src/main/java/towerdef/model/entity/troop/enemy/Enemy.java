@@ -21,6 +21,8 @@ public abstract class Enemy extends Troop {
     private Tower lastDamagingTower;
     private TilePenaltyStrategy tilePenaltyStrategy;
 
+
+
     public Enemy(int hp, int damage, int armor, int attackSpeed, int range, int mvSpeed, int x, int y, int reward) {
         super(hp, damage, armor, attackSpeed, range, mvSpeed, x, y);
         this.path = new ArrayList<>();

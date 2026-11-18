@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class ArcherTower extends ProjectileTower {
-    private static final StatsUpgrade UPGRADES = new StatsUpgrade(3, 5, 3, 1);
+    private static final StatsUpgrade UPGRADES = new StatsUpgrade(5, 3, 3, 1);
     private static final List<Upgrade> upgradePath = List.of(UPGRADES, UPGRADES, UPGRADES, UPGRADES);
 
 

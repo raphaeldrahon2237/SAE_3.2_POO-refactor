@@ -25,9 +25,9 @@ public class EntityView {
 
     private static final Image BuildingImg = new Image(EntityView.class.getResourceAsStream("/images/building.png"));
 
-    private static final Image RecruitInitialImg = new Image(EntityView.class.getResourceAsStream("/images/recruit1.png"));
-    private static final Image RecruitIdleImg = new Image(EntityView.class.getResourceAsStream("/images/recruit2.png"));
-    private static final Image RecruitAttackImg = new Image(EntityView.class.getResourceAsStream("/images/recruit3.png"));
+    private static final Image RecruitInitialImg = new Image(EntityView.class.getResourceAsStream("/images/recruitInitial.png"));
+    private static final Image RecruitIdleImg = new Image(EntityView.class.getResourceAsStream("/images/recruitIdle.png"));
+    private static final Image RecruitAttackImg = new Image(EntityView.class.getResourceAsStream("/images/recruitAttack.png"));
 
     private static final Image SoldierInitialImg = new Image(EntityView.class.getResourceAsStream("/images/soldierInitial.png"));
     private static final Image SoldierIdleImg = new Image(EntityView.class.getResourceAsStream("/images/soldierIdle.png"));
@@ -45,20 +45,20 @@ public class EntityView {
     private static final Image ArcherTower3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower3Initial.png"));
     private static final Image ArcherTower3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerTower3Attack.png"));
 
-    private static final Image Barrack1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1.png"));
-    private static final Image Barrack1IdleImg = new Image(EntityView.class.getResourceAsStream("/images/barrack2.png"));
+    private static final Image Barrack1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1initial.png"));
+    private static final Image Barrack1IdleImg = new Image(EntityView.class.getResourceAsStream("/images/barrack1Idle.png"));
 
-    private static final Image Earthquake1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1Initial.png"));
-    private static final Image Earthquake1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake1Attack.png"));
-    private static final Image Earthquake2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2Initial.png"));
-    private static final Image Earthquake2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake2Attack.png"));
-    private static final Image Earthquake3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake3Initial.png"));
-    private static final Image Earthquake3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquake3Attack.png"));
+    private static final Image Earthquake1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower1Initial.png"));
+    private static final Image Earthquake1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower1Attack.png"));
+    private static final Image Earthquake2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower2Initial.png"));
+    private static final Image Earthquake2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower2Attack.png"));
+    private static final Image Earthquake3InitialImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower3Initial.png"));
+    private static final Image Earthquake3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/earthquakeTower3Attack.png"));
 
-    private static final Image ArtilleryTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1.png"));
-    private static final Image ArtilleryTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower2.png"));
+    private static final Image ArtilleryTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1Initial.png"));
+    private static final Image ArtilleryTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/artilleryTower1Attack.png"));
 
-    private static final Image MageTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1initial.png"));
+    private static final Image MageTower1InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1Initial.png"));
     private static final Image MageTower1AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower1Attack.png"));
     private static final Image MageTower2InitialImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2initial.png"));
     private static final Image MageTower2AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower2Attack.png"));
@@ -66,24 +66,24 @@ public class EntityView {
     private static final Image MageTower3AttackImg = new Image(EntityView.class.getResourceAsStream("/images/mageTower3Attack.png"));
 
 
-    private static final Image WolfInitialImg = new Image(EntityView.class.getResourceAsStream("/images/wolf1.png"));
-    private static final Image WolfIdleImg = new Image(EntityView.class.getResourceAsStream("/images/wolf2.png"));
+    private static final Image WolfInitialImg = new Image(EntityView.class.getResourceAsStream("/images/wolfIntial.png"));
+    private static final Image WolfIdleImg = new Image(EntityView.class.getResourceAsStream("/images/wolfIdle.png"));
 
-    private static final Image CatapultInitialImg = new Image(EntityView.class.getResourceAsStream("/images/catapult1.png"));
-    private static final Image CatapultIdleImg = new Image(EntityView.class.getResourceAsStream("/images/catapult2.png"));
-    private static final Image CatapultAttackImg = new Image(EntityView.class.getResourceAsStream("/images/catapult3.png"));
+    private static final Image CatapultInitialImg = new Image(EntityView.class.getResourceAsStream("/images/catapultInitial.png"));
+    private static final Image CatapultIdleImg = new Image(EntityView.class.getResourceAsStream("/images/catapultIdle.png"));
+    private static final Image CatapultAttackImg = new Image(EntityView.class.getResourceAsStream("/images/catapultAttack.png"));
 
-    private static final Image ShadowSoldierInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier1.png"));
-    private static final Image ShadowSoldierIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier2.png"));
-    private static final Image ShadowSoldierAttackingImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldier3.png"));
+    private static final Image ShadowSoldierInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldierInitial.png"));
+    private static final Image ShadowSoldierIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldierIdle.png"));
+    private static final Image ShadowSoldierAttackingImg = new Image(EntityView.class.getResourceAsStream("/images/shadowSoldierAttack.png"));
 
-    private static final Image ArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/archer1.png"));
-    private static final Image ArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/archer2.png"));
-    private static final Image ArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/archer3.png"));
+    private static final Image ArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/archerInitial.png"));
+    private static final Image ArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/archerIdle.png"));
+    private static final Image ArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/archerAttack.png"));
 
-    private static final Image ShadowArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher1.png"));
-    private static final Image ShadowArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher2.png"));
-    private static final Image ShadowArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcher3.png"));
+    private static final Image ShadowArcherInitialImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcherInitial.png"));
+    private static final Image ShadowArcherIdleImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcherIdle.png"));
+    private static final Image ShadowArcherAttackImg = new Image(EntityView.class.getResourceAsStream("/images/shadowArcherAttack.png"));
 
 
     public EntityView(Pane gamePane, Entity entity) {

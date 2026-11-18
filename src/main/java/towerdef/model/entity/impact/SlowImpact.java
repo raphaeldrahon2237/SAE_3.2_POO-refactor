@@ -17,7 +17,7 @@ public class SlowImpact extends ImpactDecorator {
 
         if (projectile.getTarget() instanceof Enemy enemy
                 && enemy.isAlive()) {
-            enemy.setMooveSpeed(Earthquake.SLOW_SPEED);
+            enemy.setMoveSpeed(Earthquake.SLOW_SPEED);
         }
     }
 }

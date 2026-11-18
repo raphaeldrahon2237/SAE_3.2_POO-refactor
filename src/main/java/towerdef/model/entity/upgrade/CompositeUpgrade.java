@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class CompositeUpgrade implements Upgrade{
     private ArrayList<Upgrade> composition;
 
-    public CompositeUpgrade(StatsUpgrade statsupgrade, ImpactUpgrade impactUpgrade){
+    public CompositeUpgrade(Upgrade upgrade1, Upgrade upgrade2){
         this.composition= new ArrayList<>();
-        composition.add(statsupgrade);
-        composition.add(impactUpgrade);
+        composition.add(upgrade1);
+        composition.add(upgrade2);
     }
 
     @Override
